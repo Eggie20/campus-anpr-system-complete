@@ -1,0 +1,124 @@
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+@media (max-width: 1024px) {
+    .premium-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform var(--premium-trans-slow);
+        display: flex; /* Ensure it stays as a flex container */
+    }
+
+    .premium-sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    /* Override any specific collapsed styles on mobile */
+    .premium-sidebar.collapsed:not(.mobile-open) {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+
+    .search-container {
+        display: none;
+    }
+
+    .premium-sidebar-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .dashboard-content {
+        padding: var(--space-md);
+        border-top-left-radius: 0;
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-content {
+        padding: var(--space-base);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-table-container {
+        overflow-x: auto;
+    }
+
+    .vehicles-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-card-add {
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Better Mobile Quick Actions */
+    .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--space-sm) !important;
+    }
+
+    .quick-action-btn {
+        flex-direction: column;
+        padding: var(--space-md) !important;
+        /* Smaller buttons */
+        text-align: center;
+        gap: var(--space-xs);
+    }
+
+    /* Reduce Card Paddings */
+    .stat-card,
+    .chart-card,
+    .dashboard-table-container,
+    .vehicle-card-pro,
+    .guidelines-card,
+    .dashboard-widget-content,
+    /* Assuming similar class for generic widgets */
+    .dashboard-widget-header {
+        padding: var(--space-md);
+    }
+
+    /* Adjust Header */
+    .dashboard-header {
+        padding: 0 var(--space-md);
+    }
+
+    /* Font Size Tweaks */
+    .stat-card-value {
+        font-size: var(--text-3xl);
+        /* Slightly smaller on mobile */
+    }
+
+    .dashboard-header-title {
+        font-size: var(--text-lg);
+    }
+
+    .dashboard-table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+}

@@ -1,0 +1,303 @@
+/*
+ * Security CCTV Animations
+ * Live status indicators, alerts, and camera-specific animations
+ */
+
+/* ===== LIVE RECORDING INDICATOR ===== */
+@keyframes recording {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+}
+
+.recording-indicator {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 12px;
+  height: 12px;
+  background: var(--color-danger);
+  border-radius: 50%;
+  animation: recording 1.5s ease-in-out infinite;
+}
+
+.recording-indicator::before {
+  content: 'REC';
+  position: absolute;
+  left: calc(100% + 4px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger);
+  white-space: nowrap;
+}
+
+/* ===== ALERT ANIMATIONS ===== */
+@keyframes alertPulse {
+  0%, 100% {
+    background-color: var(--color-danger);
+    transform: scale(1);
+  }
+  50% {
+    background-color: #ff6b6b;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes alertBorder {
+  0%, 100% {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+  50% {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+  }
+}
+
+@keyframes warningPulse {
+  0%, 100% {
+    background-color: var(--color-warning);
+  }
+  50% {
+    background-color: #fbbf24;
+  }
+}
+
+.alert-pulse {
+  animation: alertPulse 0.8s ease-in-out infinite;
+}
+
+.alert-border {
+  animation: alertBorder 1s ease-in-out infinite;
+}
+
+.warning-pulse {
+  animation: warningPulse 1s ease-in-out infinite;
+}
+
+/* ===== CAMERA SCAN LINE ===== */
+@keyframes scanLine {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.camera-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  animation: scanLine 3s linear infinite;
+}
+
+/* ===== DETECTION BOX ===== */
+@keyframes detectionBox {
+  0%, 100% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    opacity: 0.8;
+    stroke-dashoffset: 10;
+  }
+}
+
+.detection-box {
+  position: absolute;
+  border: 2px solid var(--color-success);
+  border-radius: var(--radius-sm);
+  animation: detectionBox 0.5s linear infinite;
+}
+
+.detection-box.unregistered {
+  border-color: var(--color-danger);
+  animation: alertBorder 0.5s linear infinite;
+}
+
+.detection-box-label {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-success);
+  color: white;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
+}
+
+.detection-box.unregistered .detection-box-label {
+  background: var(--color-danger);
+}
+
+/* ===== VEHICLE COUNTER ANIMATION ===== */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.count-animate {
+  animation: countUp 0.3s ease-out;
+}
+
+/* ===== CAMERA SWITCHING ===== */
+@keyframes cameraSwitch {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.camera-switching {
+  animation: cameraSwitch 0.3s ease-out;
+}
+
+/* ===== NO SIGNAL EFFECT ===== */
+@keyframes noSignal {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes staticNoise {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+.no-signal {
+  position: relative;
+  background: #1a1a1a;
+}
+
+.no-signal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  animation: noSignal 0.5s linear infinite;
+}
+
+.no-signal::after {
+  content: 'NO SIGNAL';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: rgba(255, 255, 255, 0.5);
+  animation: noSignal 1s ease-in-out infinite;
+}
+
+/* ===== FULLSCREEN TRANSITION ===== */
+@keyframes fullscreenIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.camera-fullscreen {
+  animation: fullscreenIn 0.3s ease-out;
+}
+
+/* ===== NOTIFICATION SLIDE IN ===== */
+@keyframes notificationSlide {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.notification-item {
+  animation: notificationSlide 0.3s ease-out;
+}
+
+/* ===== DUTY TIMER WARNINGS ===== */
+@keyframes timerWarning {
+  0%, 100% {
+    color: var(--color-warning);
+  }
+  50% {
+    color: var(--text-primary);
+  }
+}
+
+@keyframes timerCritical {
+  0%, 100% {
+    color: var(--color-danger);
+    text-shadow: 0 0 10px var(--color-danger);
+  }
+  50% {
+    color: #ff6b6b;
+    text-shadow: 0 0 20px var(--color-danger);
+  }
+}
+
+.timer-warning {
+  animation: timerWarning 1s ease-in-out infinite;
+}
+
+.timer-critical {
+  animation: timerCritical 0.5s ease-in-out infinite;
+}
+
+/* ===== GRID LAYOUT TRANSITIONS ===== */
+.camera-grid-item {
+  transition: 
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    z-index 0s;
+}
+
+.camera-grid-item:hover {
+  transform: scale(1.02);
+  z-index: 10;
+  box-shadow: var(--shadow-xl);
+}
+
+.camera-grid-item.active {
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 0 20px var(--color-primary-light);
+}

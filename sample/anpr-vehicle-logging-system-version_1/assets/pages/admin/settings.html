@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="System Settings - Campus Security ANPR System">
+  <title>Settings | CampusSecure</title>
+  
+  <link rel="stylesheet" href="../../css/shared/reset.css">
+  <link rel="stylesheet" href="../../css/shared/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/themes.css">
+  <link rel="stylesheet" href="../../css/shared/layout.flex.css">
+  <link rel="stylesheet" href="../../css/shared/components.base.css">
+  <link rel="stylesheet" href="../../css/shared/dashboard.widgets.css">
+  <link rel="stylesheet" href="../../animations/shared.animations.css">
+  <link rel="stylesheet" href="../../css/admin/admin.dashboard.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout admin-dashboard">
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon role-admin">⚙️</div>
+          <span class="sidebar-logo-text">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul class="sidebar-menu">
+          <li class="sidebar-item"><a href="dashboard.html" class="sidebar-link"><span class="sidebar-icon">📊</span><span class="sidebar-text">Dashboard</span></a></li>
+          <li class="sidebar-item"><a href="users.html" class="sidebar-link"><span class="sidebar-icon">👥</span><span class="sidebar-text">Users</span></a></li>
+          <li class="sidebar-item"><a href="vehicles.html" class="sidebar-link"><span class="sidebar-icon">🚗</span><span class="sidebar-text">Vehicles</span></a></li>
+          <li class="sidebar-item"><a href="cameras.html" class="sidebar-link"><span class="sidebar-icon">📹</span><span class="sidebar-text">Cameras</span></a></li>
+          <li class="sidebar-item"><a href="security.html" class="sidebar-link"><span class="sidebar-icon">🛡️</span><span class="sidebar-text">Security Staff</span></a></li>
+          <li class="sidebar-item"><a href="analytics.html" class="sidebar-link"><span class="sidebar-icon">📈</span><span class="sidebar-text">Analytics</span></a></li>
+          <li class="sidebar-item"><a href="logs.html" class="sidebar-link"><span class="sidebar-icon">📋</span><span class="sidebar-text">System Logs</span></a></li>
+          <li class="sidebar-item active"><a href="settings.html" class="sidebar-link"><span class="sidebar-icon">⚙️</span><span class="sidebar-text">Settings</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="../../../index.html" class="sidebar-link"><span class="sidebar-icon">🚪</span><span class="sidebar-text">Back to Home</span></a>
+      </div>
+    </aside>
+    
+    <div class="sidebar-overlay"></div>
+    
+    <main class="app-main">
+      <header class="app-header app-header--styled">
+        <div class="header-content flex items-center justify-between px-6">
+          <div class="header-left flex items-center gap-4">
+            <button class="btn btn-ghost btn-icon menu-toggle-btn" data-mobile-menu-toggle aria-label="Toggle menu">
+              <div class="menu-toggle"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="header-right flex items-center gap-3">
+            <button class="btn btn-ghost btn-icon" data-theme-toggle><span class="theme-icon">🌙</span></button>
+            <div class="dropdown">
+              <button class="btn btn-ghost" data-dropdown-trigger><div class="avatar avatar-sm role-admin">AD</div></button>
+              <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">👤 Profile</a>
+                <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="../../../index.html" class="dropdown-item">🚪 Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="app-content">
+        <div class="mb-6">
+          <h1 class="page-title">System Settings</h1>
+          <nav class="admin-breadcrumb"><a href="dashboard.html">Dashboard</a> / <span>Settings</span></nav>
+        </div>
+        <div class="dashboard-grid dashboard-grid--2col">
+          <!-- General Settings -->
+          <div class="settings-panel fade-in-up">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">⚙️ General Settings</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="form-group">
+                <label class="form-label">System Name</label>
+                <input type="text" class="form-input" value="CampusSecure ANPR">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Institution Name</label>
+                <input type="text" class="form-input" value="Caraga State University">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Time Zone</label>
+                <select class="form-select">
+                  <option value="Asia/Manila" selected>Asia/Manila (UTC+8)</option>
+                  <option value="UTC">UTC</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date Format</label>
+                <select class="form-select">
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="settings-panel fade-in-up delay-50">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">🔔 Notifications</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Unregistered Vehicle Alerts</div>
+                  <div class="settings-row__description">Get notified when unregistered vehicles are detected</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Camera Offline Alerts</div>
+                  <div class="settings-row__description">Get notified when a camera goes offline</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Daily Summary Email</div>
+                  <div class="settings-row__description">Receive daily traffic summary reports</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Sound Alerts</div>
+                  <div class="settings-row__description">Play sound for high-priority alerts</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Settings -->
+          <div class="settings-panel fade-in-up delay-100">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">🔒 Security</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Two-Factor Authentication</div>
+                  <div class="settings-row__description">Require 2FA for admin accounts</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Session Timeout</div>
+                  <div class="settings-row__description">Auto logout after inactivity</div>
+                </div>
+                <select class="form-select w-auto">
+                  <option value="15">15 minutes</option>
+                  <option value="30" selected>30 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="never">Never</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Log Retention</div>
+                  <div class="settings-row__description">How long to keep system logs</div>
+                </div>
+                <select class="form-select w-auto">
+                  <option value="30">30 days</option>
+                  <option value="90" selected>90 days</option>
+                  <option value="180">180 days</option>
+                  <option value="365">1 year</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANPR Settings -->
+          <div class="settings-panel fade-in-up delay-150">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">📷 ANPR Configuration</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="form-group">
+                <label class="form-label">Detection Sensitivity</label>
+                <select class="form-select">
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Capture Mode</label>
+                <select class="form-select">
+                  <option value="auto" selected>Automatic</option>
+                  <option value="motion">Motion Triggered</option>
+                  <option value="continuous">Continuous</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Store Vehicle Images</div>
+                  <div class="settings-row__description">Save captured images for review</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Enable Entry/Exit Matching</div>
+                  <div class="settings-row__description">Track vehicle duration on campus</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Actions -->
+        <div class="flex justify-end gap-3 mt-6 fade-in-up delay-200">
+          <button class="btn btn-outline">Reset to Defaults</button>
+          <button class="btn btn-primary">💾 Save Changes</button>
+        </div>
+      </div>
+      
+      <footer class="app-footer app-footer--styled">
+        <div class="app-footer__content flex items-center justify-between px-6">
+          <p class="app-footer__copyright">© 2026 CampusSecure ANPR System</p>
+          <span class="app-footer__version">v1.0.0</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+  
+  <div class="toast-container"></div>
+  
+  <script src="../../js/shared/app.state.js"></script>
+  <script src="../../js/shared/theme.toggle.js"></script>
+  <script src="../../js/shared/responsive.helper.js"></script>
+  <script src="../../js/shared/mock-api.js"></script>
+  <script src="../../js/shared/dashboard.widgets.js"></script>
+  <script src="../../js/shared/app.init.js"></script>
+  <script src="../../js/admin/settings.js"></script>
+</body>
+</html>

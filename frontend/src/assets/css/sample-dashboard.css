@@ -1,0 +1,33 @@
+/*
+ * Sample Dashboard Design CSS - MODULARIZED
+ * Imports from assets/css/dashboard-theme/
+ * 
+ * This file serves as the entry point for the dashboard theme.
+ * All actual styles are now located in the dashboard-theme directory.
+ */
+
+/* 1. Variables & Base */
+@import './dashboard-theme/variables.css';
+
+/* 2. Layout Structure */
+@import './dashboard-theme/layout.css';
+@import './dashboard-theme/sidebar-premium.css';
+@import './dashboard-theme/header-premium.css';
+@import './dashboard-theme/dashboard-premium.css';
+
+/* 3. Component Styles */
+@import './dashboard-theme/components.css';
+
+/* 4. Table Styles */
+@import './dashboard-theme/tables.css';
+
+/* 5. Feature-Specific Styles */
+@import './dashboard-theme/features.css';
+@import './dashboard-theme/vehicles-management-premium.css';
+@import './dashboard-theme/pages-premium.css';
+
+/* 6. Utilities & Animations */
+@import './dashboard-theme/utilities.css';
+
+/* 7. Responsive Overrides */
+@import './dashboard-theme/responsive.css';

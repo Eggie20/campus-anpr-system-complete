@@ -1,0 +1,4 @@
+/* Navigation Styles Placeholder */
+.nav { display: flex; gap: var(--spacing-4); }
+.nav-link { color: var(--text-secondary); transition: color var(--transition-fast); }
+.nav-link:hover, .nav-link--active { color: var(--color-primary); }

@@ -1,0 +1,180 @@
+/*
+ * Themes CSS
+ * Light and Dark mode color schemes
+ */
+
+/* ===== LIGHT THEME (Default) ===== */
+:root,
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-elevated: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.4);
+  
+  /* Text Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-inverse: #ffffff;
+  
+  /* Border Colors */
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --border-focus: var(--color-primary);
+  
+  /* Surface Colors */
+  --surface-hover: rgba(0, 0, 0, 0.04);
+  --surface-active: rgba(0, 0, 0, 0.08);
+  --surface-selected: var(--color-primary-light);
+  
+  /* Scrollbar */
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #94a3b8;
+  
+  /* Code */
+  --code-bg: #f1f5f9;
+  --code-text: #1e293b;
+  
+  /* Table */
+  --table-row-odd: #ffffff;
+  --table-row-even: #f8fafc;
+  --table-row-hover: #f1f5f9;
+  
+  /* Card */
+  --card-bg: #ffffff;
+  --card-border: var(--border-primary);
+  --card-shadow: var(--shadow-sm);
+  
+  /* Input */
+  --input-bg: #ffffff;
+  --input-border: var(--border-secondary);
+  --input-focus-ring: rgba(59, 130, 246, 0.25);
+  
+  /* Sidebar */
+  --sidebar-bg: #ffffff;
+  --sidebar-border: var(--border-primary);
+  --sidebar-item-hover: var(--surface-hover);
+  --sidebar-item-active: var(--color-primary-light);
+  
+  /* Header */
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --header-border: var(--border-primary);
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-elevated: #1e293b;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  
+  /* Text Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --text-inverse: #0f172a;
+  
+  /* Border Colors */
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  --border-focus: var(--color-primary);
+  
+  /* Surface Colors */
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --surface-active: rgba(255, 255, 255, 0.1);
+  --surface-selected: rgba(59, 130, 246, 0.2);
+  
+  /* Scrollbar */
+  --scrollbar-track: #1e293b;
+  --scrollbar-thumb: #475569;
+  --scrollbar-thumb-hover: #64748b;
+  
+  /* Code */
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
+  
+  /* Table */
+  --table-row-odd: #0f172a;
+  --table-row-even: #1e293b;
+  --table-row-hover: #334155;
+  
+  /* Card */
+  --card-bg: #1e293b;
+  --card-border: var(--border-primary);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  
+  /* Input */
+  --input-bg: #1e293b;
+  --input-border: var(--border-primary);
+  --input-focus-ring: rgba(59, 130, 246, 0.3);
+  
+  /* Sidebar */
+  --sidebar-bg: #1e293b;
+  --sidebar-border: var(--border-primary);
+  --sidebar-item-hover: var(--surface-hover);
+  --sidebar-item-active: rgba(59, 130, 246, 0.2);
+  
+  /* Header */
+  --header-bg: rgba(15, 23, 42, 0.95);
+  --header-border: var(--border-primary);
+  
+  /* Adjusted semantic colors for dark mode */
+  --color-primary-light: rgba(59, 130, 246, 0.2);
+  --color-secondary-light: rgba(139, 92, 246, 0.2);
+  --color-success-light: rgba(16, 185, 129, 0.2);
+  --color-warning-light: rgba(245, 158, 11, 0.2);
+  --color-danger-light: rgba(239, 68, 68, 0.2);
+  --color-info-light: rgba(6, 182, 212, 0.2);
+}
+
+/* System preference detection (fallback) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* Apply dark theme variables */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    --border-primary: #334155;
+  }
+}
+
+/* Custom scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Theme transition */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: 
+    background-color var(--transition-normal),
+    color var(--transition-normal);
+}

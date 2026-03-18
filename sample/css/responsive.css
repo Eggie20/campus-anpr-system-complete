@@ -1,0 +1,57 @@
+/* ============================================
+   Premium School Vehicle Access - Responsive
+   ============================================ */
+
+/* Mobile First (Default) */
+/* Stacked layout is default in styles.css */
+
+/* Tablet & Desktop */
+@media (min-width: 1024px) {
+  .visual-panel {
+    display: flex; /* Show left panel on desktop */
+  }
+  
+  .form-header-mobile {
+    display: none; /* Hide mobile-only header on desktop */
+  }
+  
+  .form-panel {
+    justify-content: center;
+  }
+  
+  /* Desktop Header in form panel */
+  .desktop-header-controls {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+/* Large Screens */
+@media (min-width: 1440px) {
+  .visual-heading {
+    font-size: 4rem;
+  }
+  
+  .form-container {
+    max-width: 480px;
+  }
+}
+
+/* Dark Mode Overrides */
+.dark-mode {
+  --color-background: #020617; /* Very dark navy */
+  --color-surface: #0F172A; /* Slate 900 */
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-input-bg: #1E293B;
+  --color-border: #334155;
+  --color-accent: #FBBF24;
+}
+
+.dark-mode .visual-panel::after {
+  background: linear-gradient(to bottom, rgba(2, 6, 23, 0.7), rgba(2, 6, 23, 0.95));
+}

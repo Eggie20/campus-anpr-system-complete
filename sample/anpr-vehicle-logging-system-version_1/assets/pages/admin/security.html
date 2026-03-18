@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Security Staff - Campus Security ANPR System">
+  <title>Security Staff | CampusSecure</title>
+  
+  <link rel="stylesheet" href="../../css/shared/reset.css">
+  <link rel="stylesheet" href="../../css/shared/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/themes.css">
+  <link rel="stylesheet" href="../../css/shared/layout.flex.css">
+  <link rel="stylesheet" href="../../css/shared/components.base.css">
+  <link rel="stylesheet" href="../../css/shared/dashboard.widgets.css">
+  <link rel="stylesheet" href="../../animations/shared.animations.css">
+  <link rel="stylesheet" href="../../css/admin/admin.dashboard.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout admin-dashboard">
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon role-admin">⚙️</div>
+          <span class="sidebar-logo-text">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul class="sidebar-menu">
+          <li class="sidebar-item"><a href="dashboard.html" class="sidebar-link"><span class="sidebar-icon">📊</span><span class="sidebar-text">Dashboard</span></a></li>
+          <li class="sidebar-item"><a href="users.html" class="sidebar-link"><span class="sidebar-icon">👥</span><span class="sidebar-text">Users</span></a></li>
+          <li class="sidebar-item"><a href="vehicles.html" class="sidebar-link"><span class="sidebar-icon">🚗</span><span class="sidebar-text">Vehicles</span></a></li>
+          <li class="sidebar-item"><a href="cameras.html" class="sidebar-link"><span class="sidebar-icon">📹</span><span class="sidebar-text">Cameras</span></a></li>
+          <li class="sidebar-item active"><a href="security.html" class="sidebar-link"><span class="sidebar-icon">🛡️</span><span class="sidebar-text">Security Staff</span></a></li>
+          <li class="sidebar-item"><a href="analytics.html" class="sidebar-link"><span class="sidebar-icon">📈</span><span class="sidebar-text">Analytics</span></a></li>
+          <li class="sidebar-item"><a href="logs.html" class="sidebar-link"><span class="sidebar-icon">📋</span><span class="sidebar-text">System Logs</span></a></li>
+          <li class="sidebar-item"><a href="settings.html" class="sidebar-link"><span class="sidebar-icon">⚙️</span><span class="sidebar-text">Settings</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="../../../index.html" class="sidebar-link"><span class="sidebar-icon">🚪</span><span class="sidebar-text">Back to Home</span></a>
+      </div>
+    </aside>
+    
+    <div class="sidebar-overlay"></div>
+    
+    <main class="app-main">
+      <header class="app-header app-header--styled">
+        <div class="header-content flex items-center justify-between px-6">
+          <div class="header-left flex items-center gap-4">
+            <button class="btn btn-ghost btn-icon menu-toggle-btn" data-mobile-menu-toggle aria-label="Toggle menu">
+              <div class="menu-toggle"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="header-right flex items-center gap-3">
+            <button class="btn btn-ghost btn-icon" data-theme-toggle><span class="theme-icon">🌙</span></button>
+            <div class="dropdown">
+              <button class="btn btn-ghost" data-dropdown-trigger><div class="avatar avatar-sm role-admin">AD</div></button>
+              <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">👤 Profile</a>
+                <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="../../../index.html" class="dropdown-item">🚪 Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="app-content">
+        <div class="mb-6">
+          <h1 class="page-title">Security Staff</h1>
+          <nav class="admin-breadcrumb"><a href="dashboard.html">Dashboard</a> / <span>Security</span></nav>
+        </div>
+        <!-- Stats -->
+        <section class="dashboard-grid dashboard-grid--4col mb-6 fade-in-up">
+          <div class="stat-widget stat-widget--security">
+            <div class="stat-widget__header"><div class="stat-widget__icon">🛡️</div></div>
+            <div class="stat-widget__value" data-count="8">0</div>
+            <div class="stat-widget__label">Total Staff</div>
+          </div>
+          <div class="stat-widget stat-widget--success">
+            <div class="stat-widget__header"><div class="stat-widget__icon">✅</div></div>
+            <div class="stat-widget__value" data-count="3">0</div>
+            <div class="stat-widget__label">On Duty</div>
+          </div>
+          <div class="stat-widget stat-widget--muted">
+            <div class="stat-widget__header"><div class="stat-widget__icon">💤</div></div>
+            <div class="stat-widget__value" data-count="5">0</div>
+            <div class="stat-widget__label">Off Duty</div>
+          </div>
+          <div class="stat-widget stat-widget--info">
+            <div class="stat-widget__header"><div class="stat-widget__icon">📅</div></div>
+            <div class="stat-widget__value" data-count="2">0</div>
+            <div class="stat-widget__label">Shifts Today</div>
+          </div>
+        </section>
+
+        <!-- Section Header -->
+        <div class="section-header mb-4 fade-in-up delay-50">
+          <h2 class="section-title">Security Personnel</h2>
+          <button class="btn btn-primary">+ Add Staff</button>
+        </div>
+
+        <!-- Staff Grid -->
+        <div class="dashboard-grid dashboard-grid--auto fade-in-up delay-100">
+          <div class="staff-card">
+            <div class="staff-card__header">
+              <div class="staff-card__avatar">PG</div>
+              <div>
+                <div class="staff-card__name">Pedro Garcia</div>
+                <div class="staff-card__badge">Badge: SEC-001</div>
+                <div class="staff-card__status">
+                  <span class="status-dot status-dot--online"></span>
+                  <span class="text-sm text-success">On Duty</span>
+                </div>
+              </div>
+            </div>
+            <div class="staff-card__details">
+              <div>
+                <div class="staff-card__detail-label">Shift</div>
+                <div class="staff-card__detail-value">6:00 AM - 2:00 PM</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Post</div>
+                <div class="staff-card__detail-value">Main Gate</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Phone</div>
+                <div class="staff-card__detail-value">+63 912 345 6789</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Started</div>
+                <div class="staff-card__detail-value">6:02 AM Today</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-card__header">
+              <div class="staff-card__avatar">JR</div>
+              <div>
+                <div class="staff-card__name">Juan Reyes</div>
+                <div class="staff-card__badge">Badge: SEC-002</div>
+                <div class="staff-card__status">
+                  <span class="status-dot status-dot--online"></span>
+                  <span class="text-sm text-success">On Duty</span>
+                </div>
+              </div>
+            </div>
+            <div class="staff-card__details">
+              <div>
+                <div class="staff-card__detail-label">Shift</div>
+                <div class="staff-card__detail-value">6:00 AM - 2:00 PM</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Post</div>
+                <div class="staff-card__detail-value">Back Gate</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Phone</div>
+                <div class="staff-card__detail-value">+63 923 456 7890</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Started</div>
+                <div class="staff-card__detail-value">5:58 AM Today</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-card__header">
+              <div class="staff-card__avatar">MC</div>
+              <div>
+                <div class="staff-card__name">Mario Cruz</div>
+                <div class="staff-card__badge">Badge: SEC-003</div>
+                <div class="staff-card__status">
+                  <span class="status-dot status-dot--online"></span>
+                  <span class="text-sm text-success">On Duty</span>
+                </div>
+              </div>
+            </div>
+            <div class="staff-card__details">
+              <div>
+                <div class="staff-card__detail-label">Shift</div>
+                <div class="staff-card__detail-value">6:00 AM - 2:00 PM</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Post</div>
+                <div class="staff-card__detail-value">Roving</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Phone</div>
+                <div class="staff-card__detail-value">+63 934 567 8901</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Started</div>
+                <div class="staff-card__detail-value">6:05 AM Today</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-card opacity-70">
+            <div class="staff-card__header">
+              <div class="staff-card__avatar bg-muted">RS</div>
+              <div>
+                <div class="staff-card__name">Ricardo Santos</div>
+                <div class="staff-card__badge">Badge: SEC-004</div>
+                <div class="staff-card__status">
+                  <span class="status-dot status-dot--away"></span>
+                  <span class="text-sm text-muted">Off Duty</span>
+                </div>
+              </div>
+            </div>
+            <div class="staff-card__details">
+              <div>
+                <div class="staff-card__detail-label">Next Shift</div>
+                <div class="staff-card__detail-value">2:00 PM - 10:00 PM</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Post</div>
+                <div class="staff-card__detail-value">Main Gate</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Phone</div>
+                <div class="staff-card__detail-value">+63 945 678 9012</div>
+              </div>
+              <div>
+                <div class="staff-card__detail-label">Last Shift</div>
+                <div class="staff-card__detail-value">Yesterday</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="app-footer app-footer--styled">
+        <div class="app-footer__content flex items-center justify-between px-6">
+          <p class="app-footer__copyright">© 2026 CampusSecure ANPR System</p>
+          <span class="app-footer__version">v1.0.0</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+  
+  <div class="toast-container"></div>
+  
+  <script src="../../js/shared/app.state.js"></script>
+  <script src="../../js/shared/theme.toggle.js"></script>
+  <script src="../../js/shared/responsive.helper.js"></script>
+  <script src="../../js/shared/mock-api.js"></script>
+  <script src="../../js/shared/dashboard.widgets.js"></script>
+  <script src="../../js/shared/app.init.js"></script>
+  <script src="../../js/admin/security.js"></script>
+</body>
+</html>

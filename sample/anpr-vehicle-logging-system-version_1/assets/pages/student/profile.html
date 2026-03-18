@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Profile - Student Portal">
+  <title>Profile | CampusSecure</title>
+  
+  <link rel="stylesheet" href="../../css/shared/reset.css">
+  <link rel="stylesheet" href="../../css/shared/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/themes.css">
+  <link rel="stylesheet" href="../../css/shared/layout.flex.css">
+  <link rel="stylesheet" href="../../css/shared/components.base.css">
+  <link rel="stylesheet" href="../../css/shared/dashboard.widgets.css">
+  <link rel="stylesheet" href="../../animations/shared.animations.css">
+  <link rel="stylesheet" href="../../css/student/student.dashboard.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout student-dashboard">
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon role-student">🎓</div>
+          <span class="sidebar-logo-text">Student Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul class="sidebar-menu">
+          <li class="sidebar-item"><a href="dashboard.html" class="sidebar-link"><span class="sidebar-icon">📊</span><span class="sidebar-text">Dashboard</span></a></li>
+          <li class="sidebar-item"><a href="vehicles.html" class="sidebar-link"><span class="sidebar-icon">🚗</span><span class="sidebar-text">My Vehicles</span></a></li>
+          <li class="sidebar-item"><a href="logs.html" class="sidebar-link"><span class="sidebar-icon">📋</span><span class="sidebar-text">Entry Logs</span></a></li>
+          <li class="sidebar-item"><a href="notifications.html" class="sidebar-link"><span class="sidebar-icon">🔔</span><span class="sidebar-text">Notifications</span><span class="badge badge-danger badge--ml-auto">2</span></a></li>
+          <li class="sidebar-item active"><a href="profile.html" class="sidebar-link"><span class="sidebar-icon">👤</span><span class="sidebar-text">Profile</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="../../../index.html" class="sidebar-link"><span class="sidebar-icon">🚪</span><span class="sidebar-text">Logout</span></a>
+      </div>
+    </aside>
+    
+    <div class="sidebar-overlay"></div>
+    
+    <main class="app-main">
+      <header class="app-header app-header--styled">
+        <div class="header-content flex items-center justify-between px-6">
+          <div class="header-left flex items-center gap-4">
+            <button class="btn btn-ghost btn-icon menu-toggle-btn" data-mobile-menu-toggle aria-label="Toggle menu">
+              <div class="menu-toggle"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="header-right flex items-center gap-3">
+            <button class="btn btn-ghost btn-icon" data-theme-toggle><span class="theme-icon">🌙</span></button>
+            <div class="dropdown">
+              <button class="btn btn-ghost" data-dropdown-trigger><div class="avatar avatar-sm role-student">JD</div></button>
+              <div class="dropdown-menu">
+                <a href="profile.html" class="dropdown-item">👤 Profile</a>
+                <div class="dropdown-divider"></div>
+                <a href="../../../index.html" class="dropdown-item">🚪 Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="app-content">
+        <div class="mb-6">
+          <h1 class="page-title">My Profile</h1>
+          <nav class="admin-breadcrumb"><a href="dashboard.html">Dashboard</a> / <span>Profile</span></nav>
+        </div>
+        <!-- Profile Header -->
+        <div class="profile-header fade-in-up">
+          <div class="profile-header__avatar role-student">JD</div>
+          <div class="profile-header__info">
+            <h2 class="profile-header__name">John Dela Cruz</h2>
+            <p class="profile-header__role">Student • College of Engineering</p>
+            <div class="flex gap-2 mt-2 justify-center items-center">
+              <span class="badge badge-primary">Student</span>
+              <span class="badge badge-success">Verified</span>
+            </div>
+          </div>
+          <button class="btn btn-outline mx-auto mt-4">📷 Change Photo</button>
+        </div>
+
+        <!-- Profile Settings Grid -->
+        <div class="dashboard-grid dashboard-grid--2col">
+          <!-- Personal Information -->
+          <div class="settings-panel fade-in-up delay-50">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">👤 Personal Information</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" value="John Dela Cruz">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" value="student@csu.edu.ph" disabled>
+                <p class="text-xs text-muted mt-1">Contact admin to change email</p>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-input" value="+63 912 345 6789">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Course & Year</label>
+                <input type="text" class="form-input" value="BS Computer Engineering - 3rd Year" disabled>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Information -->
+          <div class="settings-panel fade-in-up delay-100">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">🔐 Account Information</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="form-group">
+                <label class="form-label">Student ID</label>
+                <input type="text" class="form-input" value="2024-0001" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Account Status</label>
+                <div class="flex items-center gap-2">
+                  <span class="status-dot status-dot--online"></span>
+                  <span>Active</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Member Since</label>
+                <input type="text" class="form-input" value="March 10, 2024" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Registered Vehicles</label>
+                <input type="text" class="form-input" value="1 of 2" disabled>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="settings-panel fade-in-up delay-150">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">🔑 Change Password</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-input" placeholder="Enter current password">
+              </div>
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-input" placeholder="Enter new password">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm New Password</label>
+                <input type="password" class="form-input" placeholder="Confirm new password">
+              </div>
+              <button class="btn btn-outline">Update Password</button>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="settings-panel fade-in-up delay-200">
+            <div class="settings-panel__header">
+              <h3 class="settings-panel__title">⚙️ Preferences</h3>
+            </div>
+            <div class="settings-panel__body">
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Email Notifications</div>
+                  <div class="settings-row__description">Receive email alerts</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">Entry/Exit Alerts</div>
+                  <div class="settings-row__description">Notify when vehicle enters/exits</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row__label">System Announcements</div>
+                  <div class="settings-row__description">Receive campus announcements</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Actions -->
+        <div class="flex justify-end gap-3 mt-6 fade-in-up delay-250">
+          <button class="btn btn-outline">Cancel Changes</button>
+          <button class="btn btn-primary">💾 Save Profile</button>
+        </div>
+      </div>
+      
+      <footer class="app-footer app-footer--styled">
+        <div class="app-footer__content flex items-center justify-between px-6">
+          <p class="app-footer__copyright">© 2026 CampusSecure ANPR System</p>
+          <span class="app-footer__version">v1.0.0</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+  
+  <div class="toast-container"></div>
+  
+  <script src="../../js/shared/app.state.js"></script>
+  <script src="../../js/shared/theme.toggle.js"></script>
+  <script src="../../js/shared/responsive.helper.js"></script>
+  <script src="../../js/shared/mock-api.js"></script>
+  <script src="../../js/shared/dashboard.widgets.js"></script>
+  <script src="../../js/shared/app.init.js"></script>
+</body>
+</html>

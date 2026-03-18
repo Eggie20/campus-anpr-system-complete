@@ -1,0 +1,21 @@
+# AI Context & Logs
+.gemini/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+
+# Python
+backend/__pycache__/
+backend/.env
+backend/venv/
+
+# Environment Variables & Secrets
+.env
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db

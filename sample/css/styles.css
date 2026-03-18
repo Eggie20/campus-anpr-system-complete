@@ -1,0 +1,356 @@
+/* ============================================
+   Premium School Vehicle Access - Refined Hybrid
+   ============================================ */
+
+/* CSS Custom Properties - Academic Theme */
+:root {
+  /* Brand Colors */
+  --color-primary: #0F172A; /* Slate 900 */
+  --color-primary-light: #1E293B; /* Slate 800 */
+  --color-accent: #F59E0B; /* Amber 500 */
+  
+  /* UI Colors */
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #64748B;
+  
+  /* Inputs & Borders */
+  --color-input-bg: transparent;
+  --color-border: #94a3b8; /* Slate 400 for visibility */
+  --color-border-focus: #F59E0B;
+  
+  /* Status */
+  --color-error: #EF4444;
+  --color-success: #10B981;
+  
+  /* Dimensions */
+  --radius-md: 0.75rem;
+}
+
+/* Dark Mode Variables */
+.dark-mode {
+  --color-background: #020617;
+  --color-surface: #0F172A;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-input-bg: transparent;
+  --color-border: #475569;
+  --color-border-focus: #FBBF24;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Layout - Split Screen (Restored) */
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Left Visual Panel */
+.visual-panel {
+  display: none; /* Hidden on mobile */
+  flex: 1.2;
+  position: relative;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 4rem;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.visual-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  transition: background-image 0.5s ease;
+}
+
+.visual-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.9) 100%);
+}
+
+.visual-content {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+}
+
+.brand-badge {
+  width: 64px;
+  height: 64px;
+  background: var(--color-accent);
+  color: #000;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  box-shadow: 0 20px 40px rgba(245, 158, 11, 0.2);
+}
+
+.headline {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.subheadline {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+/* Right Form Panel */
+.form-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-surface);
+  padding: 2rem;
+  position: relative;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Header Controls */
+.header-controls {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 20;
+}
+
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-btn:hover {
+  background: var(--color-background);
+}
+
+/* Welcome Section */
+.welcome-text h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+.welcome-text p {
+  color: var(--color-text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+/* =========================================
+   INPUT LABEL ANIMATION (User Requested)
+   Adapted for Split Theme Colors
+   ========================================= */
+
+.input-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.input-field input, .input-field select {
+  width: 100%;
+  height: 60px;
+  border-radius: 6px;
+  font-size: 16px;
+  padding: 0 15px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: all 0.3s;
+}
+
+/* Hover effect */
+.input-field input:hover, .input-field select:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.input-field label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.3s;
+  padding: 0 5px;
+  background: transparent;
+}
+
+/* Focus & Valid States */
+.input-field input:focus,
+.input-field input:valid,
+.input-field select:focus,
+.input-field select:valid {
+  border: 2px solid var(--color-accent);
+}
+
+.input-field input:focus ~ label,
+.input-field input:valid ~ label,
+.input-field select:focus ~ label,
+.input-field select:valid ~ label {
+  top: 0;
+  left: 15px;
+  font-size: 14px;
+  padding: 0 5px;
+  background: var(--color-surface); /* Matches bg to hide line */
+  color: var(--color-accent);
+  font-weight: 600;
+  z-index: 2;
+}
+
+.input-field select {
+  appearance: none;
+  cursor: pointer;
+}
+.input-field select option {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+/* Button */
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 3.5rem;
+  margin-top: 1rem;
+}
+
+.btn-submit:hover {
+  background: var(--color-primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Footer Links */
+.footer-nav {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.footer-nav a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-nav a:hover {
+  color: var(--color-accent);
+}
+
+/* Dark Mode Icon States */
+.icon-moon { display: none; }
+.dark-mode .icon-sun { display: none; }
+.dark-mode .icon-moon { display: block; }
+
+/* Responsive */
+@media (min-width: 1024px) {
+  .login-wrapper {
+    flex-direction: row;
+  }
+  
+  .visual-panel {
+    display: flex; /* Restores visibility on desktop */
+    height: auto;
+    align-items: flex-start;
+    text-align: left;
+    padding: 4rem;
+  }
+}
+
+/* Role Specific Overrides */
+body.role-admin {
+  --color-primary: #7F1D1D;
+  --color-primary-light: #991B1B;
+  --color-accent: #EF4444;
+}
+
+body.role-security {
+  --color-primary: #78350F;
+  --color-primary-light: #92400E;
+  --color-accent: #F59E0B;
+}
+
+/* Badge Pulse Animation */
+@keyframes badgePulse {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+.brand-badge {
+  animation: badgePulse 3s infinite;
+}
+
+/* Toggle Password Button */
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+}

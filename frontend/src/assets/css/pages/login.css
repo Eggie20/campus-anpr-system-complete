@@ -1,0 +1,599 @@
+/* ============================================
+   Login Page Styles - CSUCC Premium Theme
+   ============================================ */
+
+/* CSUCC Deep Green Overrides */
+.login-wrapper {
+  --csucc-green: #064e3b;
+  --csucc-green-light: #047857;
+  --csucc-gold: #fbbf24;
+}
+
+/* Layout - Split Screen */
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ============================================
+   LEFT: Visual Panel (CSUCC Branding)
+   ============================================ */
+.visual-panel {
+  display: none;
+  flex: 1.2;
+  position: relative;
+  background-color: var(--csucc-green);
+  color: white;
+  padding: 4rem;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Subtle texture pattern */
+.visual-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.3;
+}
+
+.visual-content {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+}
+
+/* Logo */
+.logo-container {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.csucc-logo-main {
+  width: 160px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1)) drop-shadow(0 0 5px rgba(255, 255, 255, 1));
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.csucc-logo-main:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
+}
+
+/* University Name */
+.uni-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Campus Name - Golden Accent */
+.campus-name {
+  font-size: 2.75rem;
+  color: var(--csucc-gold);
+  font-weight: 800;
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Description Text */
+.desc-text {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 500px;
+  line-height: 1.6;
+  border-left: 4px solid var(--csucc-gold);
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Info Section */
+.info-section {
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 500px;
+}
+
+.info-section p {
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.info-section ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.info-section li {
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.info-section li svg {
+  color: var(--csucc-gold);
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   RIGHT: Form Panel
+   ============================================ */
+.form-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-elevated);
+  padding: 2rem;
+  position: relative;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Header Controls - Theme Toggle */
+.header-controls {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 20;
+}
+
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-btn:hover {
+  background: var(--bg-secondary);
+}
+
+/* Dark Mode Icon Toggle */
+.icon-moon {
+  display: none;
+}
+
+[data-theme="dark"] .icon-sun {
+  display: none;
+}
+
+[data-theme="dark"] .icon-moon {
+  display: block;
+}
+
+/* Welcome Text */
+.welcome-text {
+  margin-bottom: 2rem;
+}
+
+.welcome-text h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.welcome-text p {
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+/* Alert Styles */
+.alert {
+  margin-bottom: 1.5rem;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.alert-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.alert svg {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Form Input Fields - Animated Labels
+   ============================================ */
+.input-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.input-field input,
+.input-field select {
+  width: 100%;
+  height: 60px;
+  border-radius: 6px;
+  font-size: 16px;
+  padding: 0 15px;
+  border: 2px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s;
+}
+
+/* Hover effect */
+.input-field input:hover,
+.input-field select:hover {
+  border-color: var(--text-secondary);
+}
+
+/* Floating Label */
+.input-field label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.3s;
+  padding: 0 5px;
+  background: transparent;
+}
+
+/* Focus & Valid States - CSUCC Green */
+.input-field input:focus,
+.input-field input:valid,
+.input-field select:focus,
+.input-field select[data-valid="true"] {
+  border: 2px solid #059669;
+}
+
+.input-field input:focus~label,
+.input-field input:valid~label,
+.input-field select:focus~label,
+.input-field select[data-valid="true"]~label {
+  top: 0;
+  left: 15px;
+  font-size: 14px;
+  padding: 0 5px;
+  background: var(--bg-elevated);
+  color: #059669;
+  font-weight: 600;
+  z-index: 2;
+}
+
+/* Select Styling */
+.input-field select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3Csvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 18px;
+}
+
+.input-field select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* Password Toggle */
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+}
+
+.password-toggle:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================
+   Login Options Row
+   ============================================ */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.remember-me input {
+  accent-color: var(--csucc-green);
+}
+
+.recovery-link {
+  color: var(--csucc-green);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.recovery-link:hover {
+  color: var(--csucc-green-light);
+  text-decoration: underline;
+}
+
+/* ============================================
+   Submit Button - CSUCC Green
+   ============================================ */
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  background: var(--csucc-green);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 3.5rem;
+  margin-top: 1rem;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: var(--csucc-green-light);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Register Prompt
+   ============================================ */
+.register-prompt {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.register-prompt a {
+  color: var(--csucc-green);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-prompt a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   Footer Navigation
+   ============================================ */
+.footer-nav {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.footer-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-nav a:hover {
+  color: var(--csucc-green);
+}
+
+.footer-nav .divider {
+  color: var(--border-color);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (min-width: 1024px) {
+  .login-wrapper {
+    flex-direction: row;
+  }
+
+  .visual-panel {
+    display: flex;
+    height: auto;
+    align-items: flex-start;
+    text-align: left;
+    padding: 4rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-panel {
+    padding: 1.5rem;
+  }
+
+  .welcome-text h2 {
+    font-size: 1.75rem;
+  }
+
+  .header-controls {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+/* ============================================
+   Role-Specific Login Styles
+   ============================================ */
+
+.brand-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.brand-badge--admin {
+  background: #EF4444;
+  color: white;
+}
+
+.brand-badge--security {
+  background: #F59E0B;
+  color: white;
+}
+
+.headline {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.subheadline {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 300px;
+}
+
+.admin-badge-notice,
+.security-badge-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+.admin-badge-notice {
+  color: #EF4444;
+}
+
+.security-badge-notice {
+  color: #F59E0B;
+}
+
+.btn-submit--admin {
+  background: #6366f1 !important;
+}
+
+.btn-submit--admin:hover:not(:disabled) {
+  background: #4f46e5 !important;
+}
+
+.btn-submit--security {
+  background: #F59E0B !important;
+}
+
+.btn-submit--security:hover:not(:disabled) {
+  background: #D97706 !important;
+}
+
+.keep-active-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.keep-active-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.keep-active-checkbox input {
+  accent-color: #F59E0B;
+}
+
+/* Forgot Password */
+.role-forgot .visual-panel--forgot {
+  background-color: var(--csucc-green);
+}
+
+.btn-submit--forgot {
+  background: var(--csucc-green) !important;
+}
+
+.btn-submit--forgot:hover:not(:disabled) {
+  background: var(--csucc-green-light) !important;
+}
+
+.btn-submit--success {
+  background: #10B981 !important;
+}
+
+.login-redirect {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.login-redirect a {
+  color: var(--csucc-green);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-redirect a:hover {
+  text-decoration: underline;
+}

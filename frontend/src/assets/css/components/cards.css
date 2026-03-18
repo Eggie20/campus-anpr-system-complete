@@ -1,0 +1,7 @@
+/* Card Styles Placeholder */
+.card {
+    background: var(--bg-elevated);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-md);
+}

@@ -1,0 +1,319 @@
+/*
+ * Student Dashboard CSS
+ * Styles for student-specific dashboard layout and components
+ */
+
+/* ===== STUDENT LAYOUT ===== */
+.student-dashboard {
+  --role-color: var(--color-student);
+  --role-color-light: var(--color-info-light);
+}
+
+/* ===== QUICK STATS ===== */
+.student-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: var(--border-width) solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+  flex-shrink: 0;
+}
+
+.stat-icon.primary {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.stat-icon.success {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.stat-icon.warning {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.stat-icon.info {
+  background: var(--color-info-light);
+  color: var(--color-info);
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ===== VEHICLE LOG TABLE ===== */
+.vehicle-log-section {
+  background: var(--card-bg);
+  border: var(--border-width) solid var(--card-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.section-header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--border-width) solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.section-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.log-table {
+  width: 100%;
+}
+
+.log-table th {
+  background: var(--bg-secondary);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+.log-table td {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  border-bottom: var(--border-width) solid var(--border-primary);
+}
+
+.log-table tr:last-child td {
+  border-bottom: none;
+}
+
+.log-plate {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.log-time {
+  color: var(--text-secondary);
+}
+
+.log-type {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.log-type.entry {
+  color: var(--color-success);
+}
+
+.log-type.exit {
+  color: var(--color-info);
+}
+
+/* ===== MY VEHICLES SECTION ===== */
+.my-vehicles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.vehicle-card {
+  background: var(--card-bg);
+  border: var(--border-width) solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.vehicle-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.vehicle-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+}
+
+.vehicle-plate {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.vehicle-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+.vehicle-detail {
+  font-size: var(--font-size-sm);
+}
+
+.vehicle-detail-label {
+  color: var(--text-muted);
+  display: block;
+  font-size: var(--font-size-xs);
+}
+
+.vehicle-detail-value {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.vehicle-status {
+  padding-top: var(--space-3);
+  border-top: var(--border-width) solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== PROFILE SECTION ===== */
+.profile-card {
+  background: var(--card-bg);
+  border: var(--border-width) solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-4);
+  background: var(--color-student);
+  color: white;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.profile-name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.profile-role {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  text-transform: capitalize;
+}
+
+.profile-id {
+  font-family: var(--font-family-mono);
+  background: var(--bg-secondary);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-3);
+  display: inline-block;
+  font-size: var(--font-size-sm);
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Header adjustments */
+.app-header {
+  background: var(--header-bg, var(--bg-secondary));
+  border-bottom: var(--border-width) solid var(--border-primary);
+}
+
+/* Mobile First - Stack everything */
+@media (max-width: 1023px) {
+  .student-dashboard .app-content .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .student-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .student-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .app-content {
+    padding: var(--space-4);
+  }
+  
+  .log-table th,
+  .log-table td {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-xs);
+  }
+  
+  .stat-card {
+    padding: var(--space-4);
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: var(--font-size-lg);
+  }
+  
+  .stat-value {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Tablet and up - Sidebar visible */
+@media (min-width: 768px) {
+  .app-sidebar {
+    transform: translateX(0);
+    position: sticky;
+  }
+}
+

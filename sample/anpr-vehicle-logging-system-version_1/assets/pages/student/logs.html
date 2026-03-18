@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Entry Logs - Student Portal">
+  <title>Entry Logs | CampusSecure</title>
+  
+  <link rel="stylesheet" href="../../css/shared/reset.css">
+  <link rel="stylesheet" href="../../css/shared/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/themes.css">
+  <link rel="stylesheet" href="../../css/shared/layout.flex.css">
+  <link rel="stylesheet" href="../../css/shared/components.base.css">
+  <link rel="stylesheet" href="../../css/shared/dashboard.widgets.css">
+  <link rel="stylesheet" href="../../animations/shared.animations.css">
+  <link rel="stylesheet" href="../../css/student/student.dashboard.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout student-dashboard">
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon role-student">🎓</div>
+          <span class="sidebar-logo-text">Student Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul class="sidebar-menu">
+          <li class="sidebar-item"><a href="dashboard.html" class="sidebar-link"><span class="sidebar-icon">📊</span><span class="sidebar-text">Dashboard</span></a></li>
+          <li class="sidebar-item"><a href="vehicles.html" class="sidebar-link"><span class="sidebar-icon">🚗</span><span class="sidebar-text">My Vehicles</span></a></li>
+          <li class="sidebar-item active"><a href="logs.html" class="sidebar-link"><span class="sidebar-icon">📋</span><span class="sidebar-text">Entry Logs</span></a></li>
+          <li class="sidebar-item"><a href="notifications.html" class="sidebar-link"><span class="sidebar-icon">🔔</span><span class="sidebar-text">Notifications</span><span class="badge badge-danger badge--ml-auto">2</span></a></li>
+          <li class="sidebar-item"><a href="profile.html" class="sidebar-link"><span class="sidebar-icon">👤</span><span class="sidebar-text">Profile</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="../../../index.html" class="sidebar-link"><span class="sidebar-icon">🚪</span><span class="sidebar-text">Logout</span></a>
+      </div>
+    </aside>
+    
+    <div class="sidebar-overlay"></div>
+    
+    <main class="app-main">
+      <header class="app-header app-header--styled">
+        <div class="header-content flex items-center justify-between px-6">
+          <div class="header-left flex items-center gap-4">
+            <button class="btn btn-ghost btn-icon menu-toggle-btn" data-mobile-menu-toggle aria-label="Toggle menu">
+              <div class="menu-toggle"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="header-right flex items-center gap-3">
+            <button class="btn btn-ghost btn-icon" data-theme-toggle><span class="theme-icon">🌙</span></button>
+            <div class="dropdown">
+              <button class="btn btn-ghost" data-dropdown-trigger><div class="avatar avatar-sm role-student">JD</div></button>
+              <div class="dropdown-menu">
+                <a href="profile.html" class="dropdown-item">👤 Profile</a>
+                <div class="dropdown-divider"></div>
+                <a href="../../../index.html" class="dropdown-item">🚪 Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="app-content">
+
+        <div class="page-header-wrapper">
+          <div class="page-header-intro">
+            <h1 class="page-title">Entry Logs</h1>
+            <nav class="admin-breadcrumb"><a href="dashboard.html">Dashboard</a> / <span>Logs</span></nav>
+          </div>
+          <div class="page-header-actions">
+            <div class="filter-bar fade-in-up delay-50">
+              <select class="form-select filter-bar__select">
+                <option value="">All Types</option>
+                <option value="entry">Entry</option>
+                <option value="exit">Exit</option>
+              </select>
+              <input type="date" class="form-input form-input--auto">
+              <button class="btn btn-outline">📥 Export</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <section class="dashboard-grid dashboard-grid--4col mb-6 fade-in-up">
+          <div class="stat-widget stat-widget--success">
+            <div class="stat-widget__header"><div class="stat-widget__icon">📥</div></div>
+            <div class="stat-widget__value" data-count="23">0</div>
+            <div class="stat-widget__label">Total Entries</div>
+          </div>
+          <div class="stat-widget stat-widget--info">
+            <div class="stat-widget__header"><div class="stat-widget__icon">📤</div></div>
+            <div class="stat-widget__value" data-count="22">0</div>
+            <div class="stat-widget__label">Total Exits</div>
+          </div>
+          <div class="stat-widget stat-widget--warning">
+            <div class="stat-widget__header"><div class="stat-widget__icon">⏱️</div></div>
+            <div class="stat-widget__value">6.2h</div>
+            <div class="stat-widget__label">Avg. Duration</div>
+          </div>
+          <div class="stat-widget stat-widget--primary">
+            <div class="stat-widget__header"><div class="stat-widget__icon">📅</div></div>
+            <div class="stat-widget__value" data-count="15">0</div>
+            <div class="stat-widget__label">Days on Campus</div>
+          </div>
+        </section>
+
+        <!-- Logs Table -->
+        <div class="data-table-wrapper fade-in-up delay-100">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Vehicle</th>
+                <th>Type</th>
+                <th>Gate</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="font-medium">Dec 16, 2024</div>
+                  <div class="text-xs text-muted">8:30:15 AM</div>
+                </td>
+                <td><span class="font-medium">XYZ 5678</span></td>
+                <td><span class="badge badge-success">📥 Entry</span></td>
+                <td>Main Gate</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="font-medium">Dec 15, 2024</div>
+                  <div class="text-xs text-muted">4:30:45 PM</div>
+                </td>
+                <td><span class="font-medium">XYZ 5678</span></td>
+                <td><span class="badge badge-info">📤 Exit</span></td>
+                <td>Main Gate</td>
+                <td>8h 45m</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="font-medium">Dec 15, 2024</div>
+                  <div class="text-xs text-muted">7:45:00 AM</div>
+                </td>
+                <td><span class="font-medium">XYZ 5678</span></td>
+                <td><span class="badge badge-success">📥 Entry</span></td>
+                <td>Back Gate</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="font-medium">Dec 14, 2024</div>
+                  <div class="text-xs text-muted">5:00:22 PM</div>
+                </td>
+                <td><span class="font-medium">XYZ 5678</span></td>
+                <td><span class="badge badge-info">📤 Exit</span></td>
+                <td>Main Gate</td>
+                <td>7h 15m</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="font-medium">Dec 14, 2024</div>
+                  <div class="text-xs text-muted">9:45:30 AM</div>
+                </td>
+                <td><span class="font-medium">XYZ 5678</span></td>
+                <td><span class="badge badge-success">📥 Entry</span></td>
+                <td>Main Gate</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="font-medium">Dec 13, 2024</div>
+                  <div class="text-xs text-muted">4:15:00 PM</div>
+                </td>
+                <td><span class="font-medium">XYZ 5678</span></td>
+                <td><span class="badge badge-info">📤 Exit</span></td>
+                <td>Back Gate</td>
+                <td>5h 30m</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 fade-in-up delay-100">
+          <span class="text-sm text-muted">Showing 1-6 of 45 logs</span>
+          <div class="flex flex-wrap justify-center gap-2">
+            <button class="btn btn-outline btn-sm" disabled>← Previous</button>
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-outline btn-sm">2</button>
+            <button class="btn btn-outline btn-sm">3</button>
+            <button class="btn btn-outline btn-sm">Next →</button>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="app-footer app-footer--styled">
+        <div class="app-footer__content flex items-center justify-between px-6">
+          <p class="app-footer__copyright">© 2026 CampusSecure ANPR System</p>
+          <span class="app-footer__version">v1.0.0</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+  
+  <div class="toast-container"></div>
+  
+  <script src="../../js/shared/app.state.js"></script>
+  <script src="../../js/shared/theme.toggle.js"></script>
+  <script src="../../js/shared/responsive.helper.js"></script>
+  <script src="../../js/shared/mock-api.js"></script>
+  <script src="../../js/shared/dashboard.widgets.js"></script>
+  <script src="../../js/shared/app.init.js"></script>
+</body>
+</html>

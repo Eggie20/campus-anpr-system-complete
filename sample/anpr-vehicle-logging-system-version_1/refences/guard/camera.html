@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera Monitor - CSU Security</title>
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/camera.css?v=4">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-small">CSU</div>
+        <div class="header-info">
+          <h1>Security Monitor</h1>
+          <span class="status-badge">System Online</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="duty-timer-container">
+          <span class="timer-label">Shift Remaining:</span>
+          <span id="dutyTimer" class="timer-value">08:00:00</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="detection-controls">
+          <button class="btn btn-primary" id="simulateBtn">
+            <span>Simulate Detection</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="dropdown-menu hidden" id="detectionDropdown">
+            <button class="dropdown-item" data-type="unregistered">Unregistered Vehicle</button>
+            <button class="dropdown-item" data-type="multiple">Multiple Vehicles</button>
+            <button class="dropdown-item" data-type="unauthorized">Unauthorized User</button>
+            <button class="dropdown-item" data-type="exception">Exception Granted</button>
+            <button class="dropdown-item" data-type="verification">Verification Required</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item text-danger" data-type="clear">Clear Detection</button>
+          </div>
+        </div>
+
+        <button class="theme-toggle btn btn-outline icon-btn" aria-label="Toggle Dark Mode">🌙</button>
+        <button class="btn btn-secondary" onclick="window.dutyTimer.logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="camera-layout">
+      <!-- Left Sidebar: Camera Grid -->
+      <aside class="camera-sidebar">
+        <div class="camera-thumbnail active" data-cam="1">
+          <div class="cam-overlay">
+            <span class="cam-name">Gate A</span>
+            <span class="live-badge">LIVE</span>
+          </div>
+          <img src="assets/img/placeholders/cam1.jpg" alt="Gate A Feed" class="cam-img">
+        </div>
+        <div class="camera-thumbnail" data-cam="2">
+          <div class="cam-overlay">
+            <span class="cam-name">Gate B</span>
+            <span class="live-badge">LIVE</span>
+          </div>
+          <img src="assets/img/placeholders/cam2.jpg" alt="Gate B Feed" class="cam-img">
+        </div>
+        <div class="camera-thumbnail" data-cam="3">
+          <div class="cam-overlay">
+            <span class="cam-name">Gate C</span>
+            <span class="live-badge">LIVE</span>
+          </div>
+          <img src="assets/img/placeholders/cam3.jpg" alt="Gate C Feed" class="cam-img">
+        </div>
+        <div class="camera-thumbnail" data-cam="4">
+          <div class="cam-overlay">
+            <span class="cam-name">Gate D</span>
+            <span class="live-badge">LIVE</span>
+          </div>
+          <img src="assets/img/placeholders/cam4.jpg" alt="Gate D Feed" class="cam-img">
+        </div>
+      </aside>
+
+      <!-- Right Column: Main Display + Notifications -->
+      <div class="content-column">
+        <!-- Main Display Area -->
+        <section class="main-display">
+          <div class="main-cam-header">
+            <div class="cam-info">
+              <h2 id="mainCamTitle">Gate A - Main Entrance</h2>
+              <span class="ip-address">IP: 192.168.1.101</span>
+            </div>
+            <div class="cam-controls">
+              <span class="live-indicator pulse-animation">LIVE</span>
+              <button class="icon-btn" title="Fullscreen">⛶</button>
+            </div>
+          </div>
+          
+          <div class="viewport-container">
+            <div class="viewport-overlay" id="detectionOverlay">
+              <!-- Detection boxes will be injected here -->
+            </div>
+            <img src="assets/img/placeholders/cam1-large.jpg" id="mainCamFeed" alt="Main Feed" class="main-feed-img">
+          </div>
+        </section>
+
+        <!-- Notifications Panel (Bottom) -->
+        <section class="notifications-panel">
+          <!-- Left: Notification Feed (70%) -->
+          <div class="notification-feed">
+            <div class="panel-header-full">
+              <div class="header-title">
+                <h3>🔔 Notifications</h3>
+                <span class="status-text">All systems operational</span>
+              </div>
+              <div class="header-controls">
+                <button class="icon-btn-small sound-toggle" title="Mute Sound" aria-label="Toggle Sound">
+                  <svg class="sound-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.26 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div class="feed-list" id="notificationList">
+              <!-- Notifications injected by JS -->
+              <div class="notification-item success fade-in">
+                <div class="notif-icon">✓</div>
+                <div class="notif-content">
+                  <div class="notif-title">No Detection</div>
+                  <div class="notif-desc">Area clear</div>
+                </div>
+                <div class="notif-time">Just now</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Vehicle Counter (30%) -->
+          <div class="vehicle-counter">
+            <div class="vehicle-counter-card">
+              <div class="counter-info">
+                <span class="vehicle-icon">🚗</span>
+                <div class="count-details">
+                  <span class="vehicle-count" id="count-car">245</span>
+                  <span class="vehicle-label">Cars</span>
+                </div>
+              </div>
+              <div class="count-increment" id="inc-car">↑ 12 in last min</div>
+            </div>
+
+            <div class="vehicle-counter-card">
+              <div class="counter-info">
+                <span class="vehicle-icon">🚐</span>
+                <div class="count-details">
+                  <span class="vehicle-count" id="count-van">87</span>
+                  <span class="vehicle-label">Vans</span>
+                </div>
+              </div>
+              <div class="count-increment" id="inc-van">↑ 3 in last min</div>
+            </div>
+
+            <div class="vehicle-counter-card">
+              <div class="counter-info">
+                <span class="vehicle-icon">🏍️</span>
+                <div class="count-details">
+                  <span class="vehicle-count" id="count-motor">156</span>
+                  <span class="vehicle-label">Motors</span>
+                </div>
+              </div>
+              <div class="count-increment" id="inc-motor">↑ 8 in last min</div>
+            </div>
+
+            <div class="vehicle-counter-card">
+              <div class="counter-info">
+                <span class="vehicle-icon">🚚</span>
+                <div class="count-details">
+                  <span class="vehicle-count" id="count-truck">34</span>
+                  <span class="vehicle-label">Trucks</span>
+                </div>
+              </div>
+              <div class="count-increment" id="inc-truck">↑ 1 in last min</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/theme-toggle.js"></script>
+  <script src="assets/js/duty-timer.js"></script>
+  <script src="assets/js/notifications.js"></script>
+  <script src="assets/js/camera.js"></script>
+</body>
+</html>

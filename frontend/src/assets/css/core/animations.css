@@ -1,0 +1,179 @@
+/* ============================================
+   Keyframe Animations
+   ============================================ */
+
+/* Fade In */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide In */
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Scale */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Spin */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Bounce */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* Skeleton Loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* CCTV Scan Line */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* Detection Pulse */
+@keyframes detectionPulse {
+  0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+}
+
+/* Animation Classes */
+.animate-fadeIn { animation: fadeIn var(--transition-normal) ease-out; }
+.animate-fadeOut { animation: fadeOut var(--transition-normal) ease-out; }
+.animate-slideInUp { animation: slideInUp var(--transition-normal) ease-out; }
+.animate-slideInDown { animation: slideInDown var(--transition-normal) ease-out; }
+.animate-slideInLeft { animation: slideInLeft var(--transition-normal) ease-out; }
+.animate-slideInRight { animation: slideInRight var(--transition-normal) ease-out; }
+.animate-scaleIn { animation: scaleIn var(--transition-normal) ease-out; }
+.animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.animate-spin { animation: spin 1s linear infinite; }
+.animate-bounce { animation: bounce 1s infinite; }
+.animate-shake { animation: shake 0.5s ease-in-out; }
+
+/* Skeleton Shimmer Effect */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-secondary) 50%,
+    var(--bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 225, 180, 0.4);
+  box-shadow: 0 0 10px rgba(0, 225, 180, 0.8), 0 0 15px rgba(0, 225, 180, 0.3);
+  z-index: 10;
+  animation: scanline 3s linear infinite;
+}
+
+.detection-box {
+  animation: detectionPulse 2s infinite;
+}
+
+/* Transition Utilities */
+.transition-all { transition: all var(--transition-normal); }
+.transition-colors { transition: color var(--transition-normal), background-color var(--transition-normal), border-color var(--transition-normal); }
+.transition-opacity { transition: opacity var(--transition-normal); }
+.transition-transform { transition: transform var(--transition-normal); }

@@ -1,0 +1,168 @@
+/* ===================================
+   ANIMATIONS
+   =================================== */
+.fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.fade-in-up.delay-50 {
+    animation-delay: 0.05s;
+}
+
+.fade-in-up.delay-100 {
+    animation-delay: 0.1s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 4px 0;
+}
+
+/* Focus Styles */
+*:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-primary);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-border);
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+.toggle-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked+.toggle-switch-slider {
+    background-color: var(--color-primary);
+}
+
+.toggle-switch input:checked+.toggle-switch-slider:before {
+    transform: translateX(22px);
+}
+
+.toggle-switch input:focus+.toggle-switch-slider {
+    box-shadow: 0 0 0 3px var(--color-primary-200);
+}
+
+/* Text Utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+.text-success {
+    color: var(--color-success);
+}
+
+.text-error {
+    color: var(--color-error);
+}
+
+.text-warning {
+    color: var(--color-warning);
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}

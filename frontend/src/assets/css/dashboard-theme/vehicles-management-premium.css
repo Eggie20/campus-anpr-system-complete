@@ -1,0 +1,285 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   PREMIUM VEHICLE MANAGEMENT STYLES
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── STATS OVERRIDE ── */
+/* Reuses dashboard stats styles but ensures compatibility with the vehicles page layout */
+
+/* ── VEHICLE CARD V2 (High-End Design) ── */
+.premium-vehicle-card-v2 {
+    background: var(--p-bg);
+    border: 1px solid var(--h-bd);
+    border-radius: var(--premium-r);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    animation: premium-fadeUp 0.4s ease both;
+}
+
+.premium-vehicle-card-v2:hover {
+    transform: translateY(-5px);
+    border-color: var(--ac-b);
+    box-shadow: var(--p-sh);
+}
+
+.premium-card-v2-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.premium-v2-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--ac-d);
+    border: 1px solid var(--ac-b);
+    border-radius: var(--premium-r-sm);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+}
+
+.premium-v2-status {
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.premium-v2-status.approved {
+    background: var(--ac-d);
+    color: var(--ac);
+    border: 1px solid var(--ac-b);
+}
+
+.premium-v2-status.pending {
+    background: rgba(255, 176, 56, 0.1);
+    color: #ffb038;
+    border: 1px solid rgba(255, 176, 56, 0.2);
+}
+
+.premium-v2-status::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.premium-v2-plate {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--t-1);
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+}
+
+.premium-v2-info {
+    font-size: 14px;
+    color: var(--t-2);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.premium-v2-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 18px;
+    border-top: 1px solid var(--h-bd);
+    margin-bottom: 24px;
+}
+
+.premium-v2-item label {
+    display: block;
+    font-size: 10px;
+    color: var(--t-3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.premium-v2-item span {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--t-1);
+}
+
+.premium-v2-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.premium-v2-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: var(--premium-r-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--t-2);
+}
+
+.premium-v2-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.premium-v2-btn.edit {
+    background: var(--i-bg);
+    border-color: var(--h-bd);
+    color: var(--t-1);
+}
+
+.premium-v2-btn.edit:hover {
+    background: var(--ac-d);
+    border-color: var(--ac-b);
+    color: var(--ac);
+}
+
+.premium-v2-btn.remove {
+    color: var(--t-3);
+}
+
+.premium-v2-btn.remove:hover {
+    background: rgba(255, 92, 92, 0.08);
+    color: #ff5c5c;
+}
+
+/* ── ADD VEHICLE PLACEHOLDER ── */
+.premium-v2-add-card {
+    background: transparent;
+    border: 2px dashed var(--h-bd);
+    border-radius: var(--premium-r);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-height: 280px;
+}
+
+.premium-v2-add-card:hover {
+    border-color: var(--ac-b);
+    background: linear-gradient(135deg, rgba(0, 229, 180, 0.03) 0%, transparent 100%);
+}
+
+.premium-v2-add-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--i-bg);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    color: var(--t-3);
+    margin-bottom: 16px;
+    transition: all 0.3s;
+}
+
+.premium-v2-add-card:hover .premium-v2-add-icon {
+    background: var(--ac-d);
+    color: var(--ac);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.premium-v2-add-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--t-1);
+    margin-bottom: 6px;
+}
+
+.premium-v2-add-card p {
+    font-size: 13px;
+    color: var(--t-3);
+}
+
+/* ── GUIDELINES PANEL ── */
+.premium-info-panel {
+    background: var(--p-bg);
+    border: 1px solid var(--h-bd);
+    border-radius: var(--premium-r);
+    padding: 24px;
+    margin-top: 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-info-panel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--ac);
+}
+
+.premium-info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.premium-info-header svg {
+    width: 20px;
+    height: 20px;
+    color: var(--ac);
+}
+
+.premium-info-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--t-1);
+}
+
+.premium-info-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.premium-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--t-2);
+}
+
+.premium-info-item svg {
+    width: 16px;
+    height: 16px;
+    color: var(--ac);
+    flex-shrink: 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .premium-v2-plate { font-size: 26px; }
+    .premium-info-list { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Access | Westside Academy</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Security Override for Split Panel */
+    .visual-panel::before {
+      background-image: url('https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=2070&auto=format&fit=crop');
+    }
+  </style>
+</head>
+<body class="role-security">
+  
+  <div class="login-wrapper">
+    <!-- Visual Panel -->
+    <div class="visual-panel">
+      <div class="visual-content">
+        <div class="brand-badge" style="background:#F59E0B; color:white;">S</div>
+        <h1 class="headline">Security<br>Control.</h1>
+        <p class="subheadline">Gate & Camera Monitoring System</p>
+      </div>
+    </div>
+
+    <!-- Form Panel -->
+    <div class="form-panel">
+      <div class="header-controls">
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark Mode">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+
+      <div class="form-container">
+        <div style="margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-accent); font-weight: 600; font-size: 0.875rem;">
+           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+           AUTHORIZED PERSONNEL ONLY
+        </div>
+
+        <div class="welcome-text">
+          <h2>Security Login</h2>
+          <p>Access gate controls and live feeds.</p>
+        </div>
+
+        <form id="login-form">
+          <input type="hidden" name="role" value="security">
+
+          <div class="input-field">
+            <input type="email" id="email" required spellcheck="false"> 
+            <label>Officer ID / Email</label>
+          </div>
+
+          <div class="input-field">
+            <input type="password" id="password" required spellcheck="false"> 
+            <label>Secure Key</label>
+            <button type="button" class="password-toggle" id="password-toggle">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <div style="display:flex; align-items:center; margin-bottom:1.5rem;">
+            <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; color:var(--color-text-secondary); cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--color-accent);"> Keep Connection Active
+            </label>
+          </div>
+
+          <button type="submit" class="btn-submit" style="background:var(--color-primary);">Connect</button>
+        </form>
+
+        <div class="footer-nav">
+          <a href="index.html">← Back to Main Portal</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/dark-mode.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

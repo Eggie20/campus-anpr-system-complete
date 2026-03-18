@@ -1,0 +1,370 @@
+/**
+ * Landing Page Styles
+ * 
+ * This file contains all styles specific to the landing/home page (index.html)
+ * 
+ * COMPONENTS:
+ * - .landing-page       : Main container for landing page
+ * - .landing-header     : Fixed navigation header with logo and nav
+ * - .landing-logo       : Logo container with icon and text
+ * - .landing-nav        : Navigation container (hidden on mobile)
+ * - .hero               : Hero section with title, subtitle, and CTA
+ * - .hero-badge         : Status badge showing ANPR system is active
+ * - .hero-title         : Main headline with gradient text
+ * - .hero-subtitle      : Supporting description text
+ * - .hero-actions       : CTA buttons container
+ * - .portals            : Portal cards section
+ * - .portals-grid       : Grid layout for portal cards
+ * - .portal-card        : Individual portal card (Student, Faculty, Admin, Security)
+ * - .portal-icon        : Icon container in portal card
+ * - .features           : Features section
+ * - .features-grid      : Grid layout for feature items
+ * - .feature-item       : Individual feature with icon, title, description
+ * - .landing-footer     : Page footer with copyright
+ */
+
+/* ===== LANDING PAGE CONTAINER ===== */
+.landing-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* ===== HEADER ===== */
+.landing-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: var(--z-fixed);
+}
+
+/* Logo */
+.landing-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.landing-logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.landing-logo-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+/* Navigation */
+.landing-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+@media (max-width: 767px) {
+  .landing-nav {
+    display: none;
+  }
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8);
+  padding-top: calc(var(--header-height) + var(--space-8));
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+    var(--bg-primary);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  margin-bottom: var(--space-6);
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: var(--space-6);
+  max-width: 800px;
+}
+
+.hero-title span {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-actions .btn {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-base);
+}
+
+/* ===== PORTALS SECTION ===== */
+.portals {
+  padding: var(--space-16) var(--space-6);
+  background: var(--bg-secondary);
+}
+
+.portals-title {
+  text-align: center;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.portals-subtitle {
+  text-align: center;
+  font-size: var(--font-size-base);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-10);
+}
+
+.portals-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1023px) {
+  .portals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .portals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Portal Card */
+.portal-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  text-align: center;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+.portal-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--portal-color, var(--color-primary));
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.3);
+}
+
+.portal-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-5);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--portal-bg, rgba(6, 182, 212, 0.15));
+  color: var(--portal-color, var(--color-primary));
+}
+
+.portal-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.portal-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+.portal-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--portal-color, var(--color-primary));
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ===== FEATURES SECTION ===== */
+.features {
+  padding: var(--space-16) var(--space-6);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1023px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-item {
+  text-align: center;
+}
+
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-4);
+  border-radius: var(--radius-xl);
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.feature-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+/* ===== FOOTER ===== */
+.landing-footer {
+  padding: var(--space-8) var(--space-6);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-primary);
+  text-align: center;
+}
+
+.landing-footer-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.landing-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.landing-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===== LIVE DOT ANIMATION ===== */
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-success);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  border-color: var(--color-primary);
+}
+
+/* Show/hide sun and moon icons based on theme */
+[data-theme="dark"] .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .icon-moon {
+  display: none;
+}
+
+[data-theme="light"] .icon-sun {
+  display: none;
+}
+
+[data-theme="light"] .icon-moon {
+  display: block;
+}

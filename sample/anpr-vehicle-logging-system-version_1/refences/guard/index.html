@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Login - CSU Guard System</title>
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/auth.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="login-container fade-in">
+      <div class="login-left">
+        <div class="brand-showcase">
+          <div class="logo-container">
+            <div class="logo-placeholder">CSU</div>
+          </div>
+          <h1>Security Portal</h1>
+          <p>Authorized Personnel Only</p>
+          <div class="feature-list">
+            <div class="feature-item">
+              <span class="feature-icon">📹</span>
+              <span>Real-time Monitoring</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🛡️</span>
+              <span>Secure Access Control</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">⏱️</span>
+              <span>Duty Time Tracking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-right">
+        <div class="login-card slide-in-up">
+          <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Please sign in to your account</p>
+          </div>
+
+          <form id="loginForm" class="login-form">
+            <div class="input-group">
+              <label for="email" class="input-label">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                class="form-input"
+                placeholder="guard@csu.edu.ph"
+                required
+              />
+              <span class="error-message" id="emailError"></span>
+            </div>
+
+            <div class="input-group">
+              <label for="password" class="input-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                class="form-input"
+                placeholder="••••••••"
+                required
+              />
+              <span class="error-message" id="passwordError"></span>
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-container">
+                <input type="checkbox" id="rememberMe" />
+                <span class="checkmark"></span>
+                Remember me
+              </label>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary btn-block"
+              id="loginBtn"
+            >
+              <span class="btn-text">Sign In</span>
+              <span class="loader hidden"></span>
+            </button>
+          </form>
+
+          <div class="divider">
+            <span>or continue with</span>
+          </div>
+
+          <div class="social-login">
+            <button class="btn btn-outline social-btn" title="Google">G</button>
+            <button class="btn btn-outline social-btn" title="Facebook">
+              F
+            </button>
+            <button class="btn btn-outline social-btn" title="LinkedIn">
+              in
+            </button>
+            <button class="btn btn-outline social-btn" title="GitHub">
+              Git
+            </button>
+          </div>
+        </div>
+
+        <div class="theme-toggle-container">
+          <button
+            class="theme-toggle btn btn-outline"
+            aria-label="Toggle Dark Mode"
+          >
+            🌙
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/theme-toggle.js"></script>
+    <script src="assets/js/auth.js"></script>
+  </body>
+</html>
