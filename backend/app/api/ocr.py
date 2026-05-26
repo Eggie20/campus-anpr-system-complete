@@ -6,8 +6,12 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from app.utils.ocr import process_id_scan, correct_training_data, TRAINING_DATA_DIR
+from app.utils.ocr_paddle import process_id_scan_paddle
+from app.api.settings import get_settings
 import os
 import json
+import asyncio
+from fastapi.responses import StreamingResponse
 
 router = APIRouter()
 
@@ -86,10 +90,16 @@ async def scan_id_document(
         if len(back_content) > max_size:
             raise HTTPException(status_code=400, detail="Back image too large. Maximum size is 5MB.")
     
-    # Process the images
+    # Process the images using configured engine
     try:
-        result = process_id_scan(front_content, back_content)
+        settings = get_settings()
+        engine = settings.get("ocr_engine", "tesseract")
         
+        if engine == "paddle":
+            result = process_id_scan_paddle(front_content, back_content)
+        else:
+            result = process_id_scan(front_content, back_content)
+            
         if not result["success"]:
             return OCRResponse(
                 success=False,
@@ -112,6 +122,69 @@ async def scan_id_document(
             status_code=500,
             detail=f"OCR processing error: {str(e)}"
         )
+
+
+@router.post("/scan-id-stream")
+async def scan_id_stream(
+    front: UploadFile = File(..., description="Front image of the ID"),
+    back: UploadFile = File(None, description="Back image of the ID (optional)")
+):
+    """
+    Scan and extract information from an ID document with real-time progress streaming
+    Returns a stream of Server-Sent Events (SSE)
+    """
+    # Validation logic (same as /scan-id)
+    allowed_types = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
+    if front.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type for front")
+    
+    front_content = await front.read()
+    back_content = await back.read() if back else None
+
+    async def event_generator():
+        # Use a queue to receive progress updates from the sync ocr process
+        queue = asyncio.Queue()
+        loop = asyncio.get_running_loop()
+        
+        def on_progress(msg):
+            # This is called from the worker thread.
+            # Safely schedule a call to put_nowait on the event loop.
+            loop.call_soon_threadsafe(queue.put_nowait, msg)
+
+        # Run process_id_scan in a separate thread
+        settings = get_settings()
+        engine = settings.get("ocr_engine", "tesseract")
+        
+        if engine == "paddle":
+            task_fn = process_id_scan_paddle
+        else:
+            task_fn = process_id_scan
+            
+        task = loop.run_in_executor(None, task_fn, front_content, back_content, on_progress)
+
+        # Stream progress messages
+        while not task.done() or not queue.empty():
+            try:
+                # Wait for next message with a timeout to check if task is done
+                msg = await asyncio.wait_for(queue.get(), timeout=0.1)
+                yield f"data: {json.dumps({'type': 'progress', 'message': msg})}\n\n"
+            except asyncio.TimeoutError:
+                continue
+            except Exception as e:
+                yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+                break
+
+        # Send final result
+        try:
+            result = await task
+            if result["success"]:
+                yield f"data: {json.dumps({'type': 'result', 'data': result})}\n\n"
+            else:
+                yield f"data: {json.dumps({'type': 'error', 'message': result.get('error', 'OCR failed')})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
 @router.get("/status")

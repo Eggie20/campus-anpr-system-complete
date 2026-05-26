@@ -1,0 +1,1128 @@
+.pageContainer {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+.toolbar {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.toolbarTitle {
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.toolbarTitle small {
+    color: #94a3b8;
+    font-weight: 400;
+    display: block;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.toolbarActions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btnPrint {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+.btnPrint:hover {
+    background: #7dd3fc;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+}
+
+.btnDownload {
+    background: #22c55e;
+    color: #fff;
+}
+
+.btnDownload:hover {
+    background: #4ade80;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.btnWord {
+    background: #2b579a;
+    color: #fff;
+}
+
+.btnWord:hover {
+    background: #1e3f70;
+    box-shadow: 0 4px 12px rgba(43, 87, 154, 0.4);
+}
+
+.btnClose {
+    background: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.btnClose:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #e2e8f0;
+}
+
+.documentArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: row;
+    /* Horizontal flow to arrange sheets side-by-side */
+    flex-wrap: wrap;
+    /* Wraps to next row if not enough space */
+    justify-content: center;
+    /* Centers pages in the workspace */
+    align-items: flex-start;
+    gap: 30px;
+    /* Visually separates pages */
+}
+
+
+
+.reportPage {
+    background: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    padding: 25px 35px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Pushes the pageFooter to the very bottom of each page! */
+    page-break-after: always;
+    break-after: always;
+    zoom: var(--report-zoom, 1);
+    /* Binds zoom slider to screen scale */
+}
+
+/* Paper Sizes & Orientations - Enforces strict physical sheet size */
+.reportPage.A4.portrait {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+}
+
+.reportPage.A4.landscape {
+    width: 297mm;
+    height: 210mm;
+    min-height: 210mm;
+}
+
+.reportPage.letter.portrait {
+    width: 8.5in;
+    height: 11in;
+    min-height: 11in;
+}
+
+.reportPage.letter.landscape {
+    width: 11in;
+    height: 8.5in;
+    min-height: 8.5in;
+}
+
+.reportPage.legal.portrait {
+    width: 8.5in;
+    height: 14in;
+    min-height: 14in;
+}
+
+.reportPage.legal.landscape {
+    width: 14in;
+    height: 8.5in;
+    min-height: 8.5in;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0 0 8px 0;
+    color: #111827;
+    font-size: 22px;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 16px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #d1d5db;
+    padding: 7px 10px;
+    text-align: left;
+    word-wrap: break-word;
+    color: #1f2937;
+}
+
+.table th {
+    background: #f3f4f6;
+    font-weight: 600;
+    color: #374151;
+}
+
+.table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 9px;
+    color: #9ca3af;
+}
+
+/* Timeline specific styles */
+.timeline {
+    margin-top: 20px;
+    position: relative;
+}
+
+.timelineGroup {
+    margin-bottom: 30px;
+}
+
+.timelineDate {
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.timelineItems {
+    position: relative;
+    padding-left: 20px;
+}
+
+.timelineItems::before {
+    content: '';
+    position: absolute;
+    left: 25px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timelineItem {
+    display: flex;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.timelineTime {
+    width: 80px;
+    font-size: 11px;
+    color: #6b7280;
+    padding-right: 15px;
+    text-align: right;
+    font-weight: 500;
+}
+
+.timelineDot {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: 2px solid #38bdf8;
+    border-radius: 50%;
+    margin-top: 2px;
+    z-index: 1;
+}
+
+.timelineContent {
+    flex: 1;
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.timelineTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 2px;
+}
+
+.timelineDesc {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.success {
+    color: #059669;
+    font-weight: 600;
+}
+
+.warning {
+    color: #d97706;
+    font-weight: 600;
+}
+
+@media print {
+    /* Hide the header, sidebar, and overlays completely during print */
+    :global(.premium-topbar),
+    :global(aside),
+    :global(.premium-sidebar-overlay) {
+        display: none !important;
+    }
+
+    /* Reset dashboard layout wrapper styles for clean printing */
+    :global(.dashboard-container),
+    :global(.dashboard-main),
+    :global(.dashboard-content) {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        position: static !important;
+        background: white !important;
+        overflow: visible !important;
+    }
+
+    .toolbar {
+        display: none !important;
+    }
+
+    .pageContainer {
+        position: static !important;
+        height: auto !important;
+        background: white !important;
+        overflow: visible !important;
+    }
+
+    .documentArea {
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        display: block !important; /* Force vertical block stack on print! */
+        zoom: 1 !important;
+        --report-zoom: 1 !important;
+    }
+
+    .reportContent {
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        zoom: 0.85;
+        /* Beautifully fit the wide spreadsheet onto the page width */
+    }
+
+    @page {
+        margin: 10mm;
+    }
+
+    thead {
+        display: table-header-group !important;
+        /* REPEATS table headers on every single page automatically! */
+    }
+
+    tr,
+    .excelTr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        /* AVOIDS splitting table rows awkwardly across page breaks! */
+    }
+
+    /* Ensure dark mode colors print correctly */
+    .darkDocumentArea {
+        background-color: #111827 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .timelineCard {
+        background-color: #1e293b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: none !important;
+        break-inside: avoid;
+    }
+
+    .colMorning {
+        background-color: #059669 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .colAfternoon {
+        background-color: #b45309 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .colNight {
+        background-color: #374151 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .subHeaderRow th {
+        background-color: #334155 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .summaryCard {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .cellMorningData {
+        background-color: #ecfdf5 !important;
+        color: #059669 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .cellAfternoonData {
+        background-color: #fffbeb !important;
+        color: #d97706 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .cellNightData {
+        background-color: #f1f5f9 !important;
+        color: #475569 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .cellDay {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ------------------------------------------------------------- */
+/*  DARK MODE TIMELINE STYLES                                    */
+/* ------------------------------------------------------------- */
+.darkDocumentArea {
+    background-color: #111827;
+}
+
+.darkReportContent {
+    background: transparent;
+    box-shadow: none;
+    color: #e2e8f0;
+}
+
+.darkHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.darkHeader h1 {
+    color: #f8fafc;
+}
+
+.darkHeader h2 {
+    color: #94a3b8;
+}
+
+.headerRight {
+    text-align: right;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.timelineDarkContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.timelineCard {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    page-break-inside: avoid;
+}
+
+.timelineCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.timelineUserIdent {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.timelineAvatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.timelineUserInfo h4 {
+    margin: 0 0 4px 0;
+    color: #f8fafc;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.timelineUserInfo p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.timelineUserBadge {
+    background: rgba(56, 189, 248, 0.2);
+    color: #7dd3fc;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.metaChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-right: 6px;
+    color: #94a3b8;
+}
+
+.timelineTableWrapper {
+    overflow-x: auto;
+    border-radius: 0 0 12px 12px;
+}
+
+.timelineTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    color: #e2e8f0;
+}
+
+.timelineTable th {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #334155;
+}
+
+.timelineTable td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #334155;
+    background: transparent;
+    color: #94a3b8;
+}
+
+.activeBadge {
+    background-color: #22c55e !important;
+    color: #ffffff !important;
+}
+
+.colMorning {
+    background: #059669;
+    color: #fff;
+    border-color: #059669 !important;
+}
+
+.colAfternoon {
+    background: #b45309;
+    color: #fff;
+    border-color: #b45309 !important;
+}
+
+.colNight {
+    background: #374151;
+    color: #fff;
+    border-color: #374151 !important;
+}
+
+.subHeaderRow th {
+    background: #334155;
+    color: #cbd5e1;
+    font-weight: 500;
+    font-size: 11px;
+}
+
+.colDay {
+    background: #1e293b;
+    color: #94a3b8;
+    width: 120px;
+}
+
+.cellDay {
+    text-align: left !important;
+    font-weight: 600;
+    color: #f8fafc !important;
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* Data cells with content */
+.cellMorningData {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    font-weight: 600;
+}
+
+.cellAfternoonData {
+    background: #fffbeb !important;
+    color: #d97706 !important;
+    font-weight: 600;
+}
+
+.cellNightData {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    font-weight: 600;
+}
+
+.timelineSummaryRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.summaryCard {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    color: #fff;
+    page-break-inside: avoid;
+}
+
+.summaryCard h3 {
+    margin: 0 0 5px 0;
+    font-size: 28px;
+}
+
+.summaryCard p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.summaryMorning {
+    background: #059669;
+}
+
+.summaryAfternoon {
+    background: #b45309;
+}
+
+.summaryNight {
+    background: #374151;
+}
+
+.summaryTotal {
+    background: #1e293b;
+    border: 1px solid #334155;
+}
+
+.darkFooter {
+    color: #64748b;
+    border-top: 1px solid #334155;
+    padding-top: 20px;
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/*  EXCEL LOG REPORT SPREADSHEET STYLES                          */
+/* ───────────────────────────────────────────────────────────── */
+.excelContainer {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.excelTableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.excelTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+    color: #334155;
+    background-color: #ffffff;
+    table-layout: fixed;
+    /* STRICT enforcement of column proportions */
+}
+
+.excelHeaderRow {
+    background-color: #f1f5f9;
+    border-bottom: 2px solid #94a3b8;
+}
+
+.excelSubHeaderRow {
+    background-color: #e8ecf1;
+    border-bottom: 1.5px solid #94a3b8;
+}
+
+.excelTh,
+.excelSubTh {
+    padding: 8px 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 9.5px;
+    letter-spacing: 0.4px;
+    border: 1px solid #94a3b8;
+    text-align: center;
+    color: #1e293b;
+    background-color: #f1f5f9;
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: middle;
+}
+
+.excelSubTh {
+    background-color: #e8ecf1;
+    font-size: 9px;
+    color: #334155;
+}
+
+.excelColMorning {
+    background-color: #dcfce7;
+    color: #166534;
+    font-weight: 700;
+    font-size: 9.5px;
+    padding: 8px 5px;
+    text-align: center;
+    border: 1px solid #94a3b8;
+    text-transform: uppercase;
+}
+
+.excelColAfternoon {
+    background-color: #fef3c7;
+    color: #92400e;
+    font-weight: 700;
+    font-size: 9.5px;
+    padding: 8px 5px;
+    text-align: center;
+    border: 1px solid #94a3b8;
+    text-transform: uppercase;
+}
+
+.excelColNight {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 9.5px;
+    padding: 8px 5px;
+    text-align: center;
+    border: 1px solid #94a3b8;
+    text-transform: uppercase;
+}
+
+.excelTr {
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.15s;
+}
+
+.excelTr:hover {
+    background-color: #f8fafc;
+}
+
+.excelTd {
+    padding: 6px 4px;
+    border: 1px solid #cbd5e1;
+    text-align: center;
+    vertical-align: middle;
+    color: #334155;
+    word-break: break-word;
+    /* Safe wrapping inside cells */
+}
+
+.excelName {
+    font-weight: 600;
+    text-align: left !important;
+    color: #0f172a;
+    padding-left: 12px;
+}
+
+.excelPlate {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: #1e293b;
+}
+
+.excelDate {
+    font-weight: 500;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+/* Excel Shift Data Cells */
+.excelCellMorningData {
+    background-color: #ecfdf5 !important;
+    color: #059669 !important;
+    font-weight: 700;
+}
+
+.excelCellAfternoonData {
+    background-color: #fffbeb !important;
+    color: #d97706 !important;
+    font-weight: 700;
+}
+
+.excelCellNightData {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    font-weight: 700;
+}
+
+/* Role Badges */
+.excelRoleBadge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.excelRoleBadge.student {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1.5px solid #93c5fd;
+}
+
+.excelRoleBadge.faculty {
+    background-color: #ede9fe;
+    color: #5b21b6;
+    border: 1.5px solid #c4b5fd;
+}
+
+.excelRoleBadge.staff {
+    background-color: #ccfbf1;
+    color: #0f766e;
+    border: 1.5px solid #5eead4;
+}
+
+.excelRoleBadge.security {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1.5px solid #86efac;
+}
+
+.excelRoleBadge.admin {
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1.5px solid #fcd34d;
+}
+
+/* Excel Summary Cards */
+.excelSummaryRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.excelSummaryCard {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1.5px solid #cbd5e1;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.excelSummaryCard h4 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.excelSummaryCard p {
+    margin: 0;
+    font-size: 10px;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.excelSummaryMorning h4 {
+    color: #16a34a;
+}
+
+.excelSummaryAfternoon h4 {
+    color: #d97706;
+}
+
+.excelSummaryNight h4 {
+    color: #475569;
+}
+
+.excelSummaryTotal h4 {
+    color: #0f172a;
+}
+
+.excelSummaryMorning {
+    border-left: 4px solid #16a34a;
+}
+
+.excelSummaryAfternoon {
+    border-left: 4px solid #d97706;
+}
+
+.excelSummaryNight {
+    border-left: 4px solid #475569;
+}
+
+.excelSummaryTotal {
+    border-left: 4px solid #0f172a;
+}
+
+.timeStack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeStackItem {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 0;
+    white-space: nowrap;
+}
+
+@media print {
+    .excelTableWrapper {
+        border: 1px solid #94a3b8;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .excelTable th,
+    .excelTable td {
+        border: 1px solid #94a3b8 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .excelSummaryCard {
+        border: 1px solid #94a3b8;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/*  PAGINATED SHEETS AUXILIARY STYLES                           */
+/* ───────────────────────────────────────────────────────────── */
+.miniHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tableContainer {
+    flex: 1;
+    /* Anchors the table vertically, pushing cards/footers to bottom */
+}
+
+.pageFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1.5px solid #cbd5e1;
+    padding-top: 10px;
+    margin-top: 15px;
+    font-size: 9px;
+    color: #94a3b8;
+}
+
+.footerText {
+    font-weight: 500;
+    font-style: italic;
+}
+
+.pageNumber {
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+@media print {
+
+    /* Set page orientation and print dimensions */
+    @page {
+        margin: 0;
+    }
+
+    .reportPage {
+        box-shadow: none !important;
+        padding: 10mm 15mm !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: 100vh !important;
+        page-break-after: always !important;
+        break-after: always !important;
+        /* Force separate pages on PDF! */
+        box-sizing: border-box !important;
+    }
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/*  ZOOM CONTROLS STYLES                                         */
+/* ───────────────────────────────────────────────────────────── */
+.zoomControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    margin-right: 15px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btnZoom {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 50%;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.btnZoom:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.15);
+}
+
+.zoomValue {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    cursor: pointer;
+    min-width: 44px;
+    text-align: center;
+    user-select: none;
+    letter-spacing: 0.5px;
+}
+
+.zoomValue:hover {
+    text-decoration: underline;
+    color: #38bdf8;
+}
+
+@media print {
+    .zoomControls {
+        display: none !important;
+        /* Hide during printing! */
+    }
+
+    .reportPage {
+        zoom: 1 !important;
+        /* Force reset zoom on actual print/PDF! */
+    }
+}

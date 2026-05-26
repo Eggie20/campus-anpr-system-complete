@@ -130,25 +130,30 @@
 .premium-srch-inner {
     display: flex;
     align-items: center;
-    background: var(--i-bg);
+    background: rgba(0, 0, 0, 0.2);
     border: 1px solid var(--h-bd);
     border-radius: var(--premium-r-sm);
     overflow: hidden;
     transition: all var(--premium-tm);
+    padding: 0 6px;
+    height: 38px;
 }
 
 .premium-srch-inner:focus-within {
-    border-color: var(--ac-b);
-    box-shadow: 0 0 0 3px var(--ac-d), var(--ac-g);
+    border-color: var(--ac);
+    box-shadow: 0 0 0 1px var(--ac), 0 0 20px var(--ac-d);
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .premium-srch-ico {
-    width: 38px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     color: var(--t-3);
+    transition: color var(--premium-t);
 }
 
 .premium-srch-inner:focus-within .premium-srch-ico {
@@ -163,15 +168,19 @@
     font-family: inherit;
     font-size: 13px;
     color: var(--t-1);
-    padding: 10px 0;
+    padding: 8px 8px;
+    min-width: 0;
+    box-shadow: none !important;
+    caret-color: var(--ac);
 }
 
 .premium-srch-kbd {
     display: flex;
     align-items: center;
     gap: 3px;
-    padding: 0 10px;
+    padding: 0 8px;
     flex-shrink: 0;
+    transition: opacity var(--premium-t);
 }
 
 .premium-srch-inner:focus-within .premium-srch-kbd {

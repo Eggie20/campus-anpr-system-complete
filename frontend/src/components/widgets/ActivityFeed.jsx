@@ -29,9 +29,7 @@ export default function ActivityFeed({ activities = [] }) {
 
   if (activities.length === 0) {
     return (
-      <div className="activity-feed activity-feed--empty text-center text-muted">
-        <p>No recent activity</p>
-      </div>
+      <div className="widget-no-data">No recent activity</div>
     );
   }
 

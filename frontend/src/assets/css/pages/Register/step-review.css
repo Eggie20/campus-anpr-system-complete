@@ -1,0 +1,395 @@
+/* Review Step Specifics (Accordions & Data) */
+.review-accordions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.review-acc-item {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.review-acc-item.open {
+    border-color: var(--blue);
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.review-acc-header {
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.acc-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.acc-icon {
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.04);
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acc-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: 'Syne', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.acc-subtitle {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+}
+
+.acc-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg) translateY(-5px);
+    transition: all 0.3s;
+    margin-right: 10px;
+}
+
+.review-acc-item.open .acc-arrow {
+    transform: rotate(-135deg) translateY(-5px);
+    border-color: var(--blue);
+}
+
+.review-acc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+}
+
+.review-acc-item.open .review-acc-body {
+    max-height: 1000px;
+    transition: max-height 0.4s cubic-bezier(1, 0, 1, 0);
+    padding: 0 22px 22px;
+}
+
+.review-data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.data-item .data-label {
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+}
+
+.data-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.plate-highlight {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: 0.1em;
+}
+
+/* Status Badges */
+.status-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.status-badge.flagged {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status-badge.clean {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.s-title {
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.flagged .s-title {
+    color: #f59e0b;
+}
+
+.clean .s-title {
+    color: #10b981;
+}
+
+.s-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Terms Status Box */
+.terms-status-box {
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.terms-summary {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.btn-terms-trigger {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--text-primary);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Syne', sans-serif;
+}
+
+.btn-terms-trigger:hover {
+    border-color: var(--blue);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.btn-terms-trigger.agreed {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1.5px solid var(--green);
+    color: var(--green);
+    cursor: default;
+}
+
+/* TERMS MODAL SPECIFICS */
+.terms-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 16, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.terms-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 640px;
+    height: 85vh;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.modal-header {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.m-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.m-close {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: var(--text-muted);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.m-close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.terms-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 30px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.terms-content {
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.terms-content h1 {
+    font-family: 'Syne', sans-serif;
+    color: var(--text-primary);
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.last-updated {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.terms-content h2 {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 24px 0 10px;
+}
+
+.terms-content ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.terms-progress-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.terms-progress-bar {
+    height: 100%;
+    background: var(--blue);
+    transition: width 0.1s;
+    box-shadow: 0 0 10px var(--blue);
+}
+
+.terms-footer {
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid var(--border);
+    padding: 20px 30px 24px !important;
+}
+
+.scroll-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.btn-agree.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+.btn-agree.ready {
+    background: var(--green) !important;
+    border-color: var(--green) !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Success Overlay (keeping original but refining for ANPR status) */
+.success-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 14, 23, 0.95);
+    backdrop-filter: blur(12px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.success-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+    animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.success-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.success-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--green);
+    margin-bottom: 12px;
+}
+
+.success-msg {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.anpr-resolve-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--green);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}

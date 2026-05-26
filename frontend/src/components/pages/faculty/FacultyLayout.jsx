@@ -62,7 +62,11 @@ export default function FacultyLayout() {
             {/* Main Content */}
             <main className="dashboard-main">
                 <Header
-                    user={user || { name: 'Maria Santos' }}
+                    user={{
+                        name: user?.full_name || 'Maria Santos',
+                        email: user?.email,
+                        id: user?.faculty_id || user?.id
+                    }}
                     role="faculty"
                     onMenuToggle={toggleSidebar}
                     isSidebarCollapsed={sidebarCollapsed}

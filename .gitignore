@@ -11,6 +11,7 @@ frontend/.env.*
 backend/__pycache__/
 backend/.env
 backend/venv/
+backend/secure_uploads/
 
 # Environment Variables & Secrets
 .env

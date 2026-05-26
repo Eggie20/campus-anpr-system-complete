@@ -73,7 +73,11 @@ export default function VisitorLayout() {
             {/* Main Content */}
             <main className="dashboard-main">
                 <Header
-                    user={{ name: user?.full_name || 'Visitor' }}
+                    user={{
+                        name: user?.full_name || 'Visitor',
+                        email: user?.email,
+                        id: user?.id
+                    }}
                     role="visitor"
                     onMenuToggle={toggleSidebar}
                     isSidebarCollapsed={sidebarCollapsed}

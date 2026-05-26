@@ -36,12 +36,16 @@ export default function StudentDashboard() {
           api.get('/notifications/me?limit=5')
         ]);
 
-        setVehicles(vehiclesRes.data);
-        setLogs(logsRes.data);
-        setNotifications(notifsRes.data);
+        setVehicles(vehiclesRes.data || []);
+        setLogs(logsRes.data || []);
+        
+        // Handle paginated notifications { items, total }
+        const notifData = notifsRes.data;
+        const notifItems = Array.isArray(notifData.items) ? notifData.items : (Array.isArray(notifData) ? notifData : []);
+        setNotifications(notifItems);
 
         // Calculate simple stats based on logs (mock logic for demo)
-        const entries = logsRes.data.filter(l => l.direction === 'entry').length;
+        const entries = (logsRes.data || []).filter(l => l.direction === 'entry').length;
         setStats({
           entriesThisMonth: entries * 4, // Mock multiplier for demo
           avgDuration: '4.2h'
@@ -57,10 +61,9 @@ export default function StudentDashboard() {
     fetchData();
   }, []);
 
-  // Format logs for ActivityFeed
   const formattedActivities = logs.slice(0, 4).map(log => ({
     type: log.direction,
-    text: `<strong>${log.plate_number}</strong> ${log.direction === 'entry' ? 'entered' : 'exited'} via ${log.gate_name}`,
+    text: `<strong>${log.detected_plate_number || 'Unknown'}</strong> ${log.direction === 'entry' ? 'entered' : 'exited'} via ${log.gate_name}`,
     time: new Date(log.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
   }));
 
@@ -165,12 +168,12 @@ export default function StudentDashboard() {
         <div className="premium-panel">
           <div className="premium-panel-header">
             <div className="premium-panel-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 00-.84-.99L16 11l-2.7-3.6a1 1 0 00-.8-.4H5a2 2 0 00-2 2v7h3"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 00-.84-.99L16 11l-2.7-3.6a1 1 0 00-.8-.4H5a2 2 0 00-2 2v7h3" /><circle cx="6.5" cy="16.5" r="2.5" /><circle cx="16.5" cy="16.5" r="2.5" /></svg>
               My Vehicle
             </div>
             <a href="/vehicles" className="premium-panel-link">
               Manage
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14m-7-7l7 7-7 7" /></svg>
             </a>
           </div>
           <div className="premium-panel-body">
@@ -202,11 +205,11 @@ export default function StudentDashboard() {
             <a href="/vehicles" className="premium-register-tiny">
               <div className="premium-register-tiny-info">
                 <div className="icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14m-7-7h14"/></svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14m-7-7h14" /></svg>
                 </div>
                 <span>Register Another Vehicle</span>
               </div>
-              <svg className="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
+              <svg className="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6" /></svg>
             </a>
           </div>
         </div>
@@ -215,12 +218,12 @@ export default function StudentDashboard() {
         <div className="premium-panel">
           <div className="premium-panel-header">
             <div className="premium-panel-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               Recent Activity
             </div>
             <a href="/logs" className="premium-panel-link">
               View All
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14m-7-7l7 7-7 7" /></svg>
             </a>
           </div>
           <div className="premium-panel-body" style={{ padding: '10px 14px' }}>

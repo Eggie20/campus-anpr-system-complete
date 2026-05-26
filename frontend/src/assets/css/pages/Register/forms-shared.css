@@ -1,0 +1,236 @@
+/* Shared Form Elements */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px 20px;
+}
+
+.col-3 {
+    grid-column: span 3;
+}
+
+.col-4 {
+    grid-column: span 4;
+}
+
+.col-6 {
+    grid-column: span 6;
+}
+
+.col-12 {
+    grid-column: span 12;
+}
+
+@media (max-width: 640px) {
+
+
+    .col-3,
+    .col-4,
+    .col-6 {
+        grid-column: span 12;
+    }
+}
+
+.field-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.field-label.required::after {
+    content: ' *';
+    color: var(--red);
+}
+
+.field-input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 16px;
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.2s;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+}
+
+select.field-input option {
+    background-color: var(--bg-card, #1e293b);
+    color: var(--text-primary, #f8fafc);
+}
+
+.field-input:focus {
+    border-color: var(--green);
+    background: var(--bg-card2);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.field-input.error {
+    border-color: var(--red);
+    background: rgba(239, 68, 68, 0.03);
+}
+
+.field-error {
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.input-with-icon .field-input {
+    padding-left: 42px;
+}
+
+/* Sections & Dividers */
+.form-section-header {
+    margin: 32px 0 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.form-section-header::after {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: var(--border);
+}
+
+.form-section-divider {
+    text-align: center;
+    margin: 24px 0;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    position: relative;
+}
+
+.form-section-divider::before,
+.form-section-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 60px);
+    height: 1px;
+    background: var(--border);
+}
+
+.form-section-divider::before {
+    left: 0;
+}
+
+.form-section-divider::after {
+    right: 0;
+}
+
+/* Form Actions Area */
+.form-actions {
+    padding: 24px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Step Content Containers */
+.step-content-scroll {
+    padding: 20px 32px;
+}
+
+.step-info-header {
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.step-info-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+}
+
+.step-info-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.btn {
+    font-family: 'DM Sans', sans-serif;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-next,
+.btn-submit {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+    background: #059669;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border);
+}
+
+.btn-ghost:hover {
+    background: var(--bg-card2);
+    color: var(--text-primary);
+    border-color: var(--border2);
+}

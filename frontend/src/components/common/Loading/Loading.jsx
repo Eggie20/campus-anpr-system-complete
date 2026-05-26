@@ -10,11 +10,25 @@ export const LoadingSpinner = ({ size = 'medium', color = 'primary' }) => (
 export const LoadingOverlay = ({ message = 'Loading...' }) => (
     <div className="loading-overlay">
         <div className="loading-card">
-            <div className="pulse-logo">
-                <img src="/assets/images/anpr-logo.png" alt="ANPR Logo" />
+            {/* Animated Shield Logo */}
+            <div className="loading-shield">
+                <div className="loading-shield__ring loading-shield__ring--outer"></div>
+                <div className="loading-shield__ring loading-shield__ring--inner"></div>
+                <div className="loading-shield__icon">
+                    <span className="material-symbols-rounded">shield</span>
+                </div>
             </div>
-            <div className="loading-spinner"></div>
+
+            {/* Progress Bar */}
+            <div className="loading-progress">
+                <div className="loading-progress__track">
+                    <div className="loading-progress__bar"></div>
+                </div>
+            </div>
+
+            {/* Message */}
             <p className="loading-message">{message}</p>
+            <p className="loading-submessage">Please wait while we verify your session</p>
         </div>
     </div>
 );

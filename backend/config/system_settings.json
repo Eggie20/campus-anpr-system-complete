@@ -1,0 +1,13 @@
+{
+    "system_name": "CampusSecure ANPR",
+    "institution": "Caraga State University",
+    "timezone": "Asia/Manila",
+    "intrusion_alerts": true,
+    "camera_offline_alerts": true,
+    "nightly_reports": false,
+    "auto_logout_minutes": 30,
+    "keep_logs_days": 90,
+    "plate_read_accuracy": "medium",
+    "save_plate_snapshots": true,
+    "ocr_engine": "tesseract"
+}

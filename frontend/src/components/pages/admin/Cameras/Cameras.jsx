@@ -1,88 +1,16 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import api from '../../../../services/api';
 import './Cameras.css';
 
-const cameraData = [
-    { 
-        id: 'cam1', 
-        name: 'Main Gate - Front Left', 
-        gate: 'Main Gate',
-        position: 'Front Left',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'XYZ 5678',
-        lastPlateTime: '10:23 AM'
-    },
-    { 
-        id: 'cam2', 
-        name: 'Main Gate - Front Right', 
-        gate: 'Main Gate',
-        position: 'Front Right',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'ABC 1234',
-        lastPlateTime: '09:45 AM'
-    },
-    { 
-        id: 'cam3', 
-        name: 'Main Gate - Back Left', 
-        gate: 'Main Gate',
-        position: 'Back Left',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'PQR 9012',
-        lastPlateTime: '10:15 AM'
-    },
-    { 
-        id: 'cam4', 
-        name: 'Main Gate - Back Right', 
-        gate: 'Main Gate',
-        position: 'Back Right',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'JKL 3456',
-        lastPlateTime: '10:05 AM'
-    },
-    { 
-        id: 'cam5', 
-        name: '2nd Gate - Rear Left', 
-        gate: 'Back Gate',
-        position: 'Rear Left',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'MNO 7890',
-        lastPlateTime: '08:30 AM'
-    },
-    { 
-        id: 'cam6', 
-        name: '2nd Gate - Rear Right', 
-        gate: 'Back Gate',
-        position: 'Rear Right',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'STU 2345',
-        lastPlateTime: '09:12 AM'
-    },
-    { 
-        id: 'cam7', 
-        name: '2nd Gate - Front Left', 
-        gate: 'Back Gate',
-        position: 'Front Left',
-        status: 'online', 
-        isLive: true,
-        lastPlate: 'VWX 6789',
-        lastPlateTime: '07:55 AM'
-    },
-    { 
-        id: 'cam8', 
-        name: '2nd Gate - Front Right', 
-        gate: 'Back Gate',
-        position: 'Front Right',
-        status: 'offline', 
-        isLive: false,
-        lastPlate: 'DEF 0123',
-        lastPlateTime: '09:38 AM',
-        offlineSince: '09:42 AM'
-    }
+const defaultMockData = [
+    { id: 'cam1', name: 'Main Gate - Front Left', gate: 'Main Gate', position: 'Front Left', status: 'online', isLive: true, lastPlate: 'XYZ 5678', lastPlateTime: '10:23 AM' },
+    { id: 'cam2', name: 'Main Gate - Front Right', gate: 'Main Gate', position: 'Front Right', status: 'online', isLive: true, lastPlate: 'ABC 1234', lastPlateTime: '09:45 AM' },
+    { id: 'cam3', name: 'Main Gate - Back Left', gate: 'Main Gate', position: 'Back Left', status: 'online', isLive: true, lastPlate: 'PQR 9012', lastPlateTime: '10:15 AM' },
+    { id: 'cam4', name: 'Main Gate - Back Right', gate: 'Main Gate', position: 'Back Right', status: 'online', isLive: true, lastPlate: 'JKL 3456', lastPlateTime: '10:05 AM' },
+    { id: 'cam5', name: '2nd Gate - Rear Left', gate: 'Back Gate', position: 'Rear Left', status: 'online', isLive: true, lastPlate: 'MNO 7890', lastPlateTime: '08:30 AM' },
+    { id: 'cam6', name: '2nd Gate - Rear Right', gate: 'Back Gate', position: 'Rear Right', status: 'online', isLive: true, lastPlate: 'STU 2345', lastPlateTime: '09:12 AM' },
+    { id: 'cam7', name: '2nd Gate - Front Left', gate: 'Back Gate', position: 'Front Left', status: 'online', isLive: true, lastPlate: 'VWX 6789', lastPlateTime: '07:55 AM' },
+    { id: 'cam8', name: '2nd Gate - Front Right', gate: 'Back Gate', position: 'Front Right', status: 'offline', isLive: false, lastPlate: 'DEF 0123', lastPlateTime: '09:38 AM', offlineSince: '09:42 AM' }
 ];
 
 const StatCard = ({ label, value, badgeText, badgeVariant, rows }) => (
@@ -102,6 +30,7 @@ const StatCard = ({ label, value, badgeText, badgeVariant, rows }) => (
 );
 
 export default function Cameras() {
+    const [cameraData, setCameraData] = useState([]);
     const [selectedCamera, setSelectedCamera] = useState(null);
     const [isMatrixView, setIsMatrixView] = useState(false);
     const [statusFilter, setStatusFilter] = useState('');
@@ -109,12 +38,32 @@ export default function Cameras() {
     const [positionFilter, setPositionFilter] = useState('');
     const [isAddNodeModalOpen, setIsAddNodeModalOpen] = useState(false);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCameras = async () => {
+            try {
+                const res = await api.get('/admin/cameras');
+                if (res.data.cameras && res.data.cameras.length > 0) {
+                    setCameraData(res.data.cameras);
+                } else {
+                    setCameraData(defaultMockData);
+                }
+            } catch (e) {
+                console.error("Failed fetching cameras", e);
+                setCameraData(defaultMockData);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCameras();
+    }, []);
 
     const stats = useMemo(() => {
         const total = cameraData.length;
         const mainGateNodes = cameraData.filter(c => c.gate === 'Main Gate');
         const backGateNodes = cameraData.filter(c => c.gate === 'Back Gate');
-        
+
         const onlineCount = cameraData.filter(c => c.status === 'online').length;
         const mainOnline = mainGateNodes.filter(c => c.status === 'online').length;
         const backOnline = backGateNodes.filter(c => c.status === 'online').length;
@@ -134,34 +83,34 @@ export default function Cameras() {
             },
             online: {
                 count: onlineCount,
-                main: `${mainOnline} / ${mainGateNodes.length}`,
-                back: `${backOnline} / ${backGateNodes.length}`
+                main: mainGateNodes.length ? `${mainOnline} / ${mainGateNodes.length}` : '0 / 0',
+                back: backGateNodes.length ? `${backOnline} / ${backGateNodes.length}` : '0 / 0'
             },
             offline: {
                 count: offlineCount,
-                last: lastFailure ? `${lastFailure.gate} · ${lastFailure.position} · ${lastFailure.offlineSince}` : 'None'
+                last: lastFailure ? `${lastFailure.gate} · ${lastFailure.position || ''}` : 'None'
             },
             streaming: {
                 count: streamingCount,
-                main: `${mainStreaming} / ${mainGateNodes.length}`,
-                back: `${backStreaming} / ${backGateNodes.length}`
+                main: mainGateNodes.length ? `${mainStreaming} / ${mainGateNodes.length}` : '0 / 0',
+                back: backGateNodes.length ? `${backStreaming} / ${backGateNodes.length}` : '0 / 0'
             }
         };
-    }, []);
+    }, [cameraData]);
 
     const filteredCameras = useMemo(() => {
         return cameraData.filter(camera => {
-            const matchesStatus = !statusFilter || 
+            const matchesStatus = !statusFilter ||
                 (statusFilter === 'online' && camera.status === 'online') ||
                 (statusFilter === 'offline' && camera.status === 'offline') ||
                 (statusFilter === 'streaming' && camera.isLive);
-            
+
             const matchesGate = !gateFilter || camera.gate === gateFilter;
             const matchesPosition = !positionFilter || camera.position === positionFilter;
 
             return matchesStatus && matchesGate && matchesPosition;
         });
-    }, [statusFilter, gateFilter, positionFilter]);
+    }, [statusFilter, gateFilter, positionFilter, cameraData]);
 
     return (
         <div className="premium-dashboard-container">
@@ -183,42 +132,51 @@ export default function Cameras() {
                 </div>
             </div>
 
+            {/* Future Feature Info Banner */}
+            <div style={{ backgroundColor: 'rgba(139, 92, 246, 0.08)', border: '1px solid rgba(139, 92, 246, 0.25)', borderRadius: '12px', padding: '1rem 1.5rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <span className="material-symbols-rounded" style={{ color: '#a855f7', fontSize: '24px' }}>tips_and_updates</span>
+                <div>
+                    <h4 style={{ color: '#c084fc', margin: 0, fontSize: '0.95rem', fontWeight: 800, letterSpacing: '0.5px' }}>Feature Preview</h4>
+                    <p style={{ color: '#9ca3af', margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>This Surveillance Nodes module is a demonstration of planned capabilities for future application on the system. Live camera integration is scheduled for an upcoming update.</p>
+                </div>
+            </div>
+
             {/* Stats Grid */}
             {!isMatrixView && (
                 <section className="camera-stats-grid">
-                    <StatCard 
-                        label="Total nodes" 
-                        value={stats.total.count} 
-                        badgeText={`${stats.total.count} / ${stats.total.count}`} 
+                    <StatCard
+                        label="Total Nodes"
+                        value={stats.total.count}
+                        badgeText="Live"
                         badgeVariant="info"
                         rows={[
                             { label: 'Main gate', value: stats.total.main },
                             { label: 'Back gate', value: stats.total.back }
                         ]}
                     />
-                    <StatCard 
-                        label="Online" 
-                        value={stats.online.count} 
-                        badgeText="all synced" 
+                    <StatCard
+                        label="Online Nodes"
+                        value={stats.online.count}
+                        badgeText="Synced"
                         badgeVariant="success"
                         rows={[
                             { label: 'Main gate', value: stats.online.main },
                             { label: 'Back gate', value: stats.online.back }
                         ]}
                     />
-                    <StatCard 
-                        label="Offline" 
-                        value={stats.offline.count} 
-                        badgeText={stats.offline.count > 0 ? `${stats.offline.count} down` : 'stable'} 
-                        badgeVariant="danger"
+                    <StatCard
+                        label="Offline Nodes"
+                        value={stats.offline.count}
+                        badgeText={stats.offline.count > 0 ? 'Action' : 'Stable'}
+                        badgeVariant={stats.offline.count > 0 ? 'danger' : 'success'}
                         rows={[
                             { label: 'Last failure', value: stats.offline.last, isOffline: stats.offline.count > 0 }
                         ]}
                     />
-                    <StatCard 
-                        label="Streaming now" 
-                        value={stats.streaming.count} 
-                        badgeText="live" 
+                    <StatCard
+                        label="Active Streams"
+                        value={stats.streaming.count}
+                        badgeText="Live"
                         badgeVariant="info"
                         rows={[
                             { label: 'Main gate', value: stats.streaming.main },
@@ -232,8 +190,8 @@ export default function Cameras() {
             {!isMatrixView && (
                 <div className="camera-filters-bar mb-6">
                     <div className="filter-group">
-                        <select 
-                            className="form-select premium-editable" 
+                        <select
+                            className="form-select premium-editable"
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                         >
@@ -242,8 +200,8 @@ export default function Cameras() {
                             <option value="offline">Offline</option>
                             <option value="streaming">Streaming</option>
                         </select>
-                        <select 
-                            className="form-select premium-editable" 
+                        <select
+                            className="form-select premium-editable"
                             value={gateFilter}
                             onChange={(e) => setGateFilter(e.target.value)}
                         >
@@ -251,8 +209,8 @@ export default function Cameras() {
                             <option value="Main Gate">Main Gate</option>
                             <option value="Back Gate">Back Gate</option>
                         </select>
-                        <select 
-                            className="form-select premium-editable" 
+                        <select
+                            className="form-select premium-editable"
                             value={positionFilter}
                             onChange={(e) => setPositionFilter(e.target.value)}
                         >
@@ -278,9 +236,9 @@ export default function Cameras() {
                                     <div className="offline-text">Offline</div>
                                 </div>
                             )}
-                            
+
                             {camera.status !== 'offline' && <div className="scan-line"></div>}
-                            
+
                             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle, #1a1c22 0%, #000 100%)' }}>
                                 <span className="material-symbols-rounded" style={{ fontSize: '2.5rem', color: camera.status === 'offline' ? '#ef4444' : 'rgba(255,255,255,0.05)' }}>
                                     {camera.status === 'offline' ? 'videocam_off' : 'play_arrow'}
@@ -300,13 +258,13 @@ export default function Cameras() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="camera-info mb-4">
                             <div className="flex justify-between items-center mb-1">
                                 <div style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: isMatrixView ? '0.85rem' : '1rem' }}>{camera.name}</div>
                                 <span className="gate-badge">{camera.gate}</span>
                             </div>
-                            
+
                             <div className="plate-info-row">
                                 <span className="label">Status</span>
                                 <span className="value" style={{ color: camera.status === 'offline' ? '#ef4444' : '#10b981' }}>
@@ -322,15 +280,15 @@ export default function Cameras() {
                                 <span className="value" style={{ color: 'var(--text-muted)' }}>{camera.id.toUpperCase()} · 2024-12-16</span>
                             </div>
                         </div>
-                        
+
                         {!isMatrixView && (
                             <div className="flex gap-2 mt-auto">
                                 <button className="premium-page-btn" style={{ flex: 1, padding: '8px' }} onClick={() => setIsSettingsModalOpen(camera)}>
                                     <span className="material-symbols-rounded" style={{ fontSize: '18px' }}>settings</span>
                                 </button>
-                                <button 
-                                    className={`premium-page-btn active`} 
-                                    style={{ flex: 3, padding: '8px' }} 
+                                <button
+                                    className={`premium-page-btn active`}
+                                    style={{ flex: 3, padding: '8px' }}
                                     disabled={camera.status === 'offline'}
                                     onClick={() => setSelectedCamera(camera)}
                                 >
@@ -356,7 +314,7 @@ export default function Cameras() {
                                 <span className="material-symbols-rounded">close</span>
                             </button>
                         </header>
-                        
+
                         <div className="modal-body" style={{ padding: '1.5rem 0' }}>
                             <div style={{ position: 'relative', background: '#000', borderRadius: '16px', aspectVideo: '16/9', overflow: 'hidden', minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 {/* AI Scanning Overlay Elements */}
@@ -366,27 +324,27 @@ export default function Cameras() {
                                     <div style={{ position: 'absolute', top: 20, right: 20, width: 40, height: 40, borderTop: '4px solid #00e5b4', borderRight: '4px solid #00e5b4' }}></div>
                                     <div style={{ position: 'absolute', bottom: 20, left: 20, width: 40, height: 40, borderBottom: '4px solid #00e5b4', borderLeft: '4px solid #00e5b4' }}></div>
                                     <div style={{ position: 'absolute', bottom: 20, right: 20, width: 40, height: 40, borderBottom: '4px solid #00e5b4', borderRight: '4px solid #00e5b4' }}></div>
-                                    
+
                                     {/* Detection Box Simulation */}
-                                    <div className="detection-box" style={{ 
-                                        position: 'absolute', 
-                                        top: '40%', 
-                                        left: '35%', 
-                                        width: '120px', 
-                                        height: '60px', 
-                                        border: '2px solid #a855f7', 
+                                    <div className="detection-box" style={{
+                                        position: 'absolute',
+                                        top: '40%',
+                                        left: '35%',
+                                        width: '120px',
+                                        height: '60px',
+                                        border: '2px solid #a855f7',
                                         background: 'rgba(168, 85, 247, 0.1)',
                                         animation: 'pulse 2s infinite'
                                     }}>
                                         <div style={{ position: 'absolute', top: '-25px', left: 0, background: '#a855f7', color: '#fff', fontSize: '10px', padding: '2px 6px', fontWeight: 800 }}>PLATE DETECTED: {selectedCamera.lastPlate}</div>
                                     </div>
                                 </div>
-                                
+
                                 <span className="material-symbols-rounded" style={{ fontSize: '5rem', color: 'rgba(255,255,255,0.05)' }}>videocam</span>
-                                
+
                                 <div className="scan-line"></div>
                             </div>
-                            
+
                             <div className="flex justify-between items-center mt-6">
                                 <div className="flex gap-4">
                                     <div style={{ textAlign: 'center' }}>
@@ -462,7 +420,7 @@ export default function Cameras() {
                             <div className="form-group mb-4">
                                 <label className="form-label">Detection Threshold</label>
                                 <input type="range" className="form-range" min="0" max="100" defaultValue="85" />
-                                <div className="flex justify-between mt-1"><span style={{fontSize: '10px'}}>Performance</span><span style={{fontSize: '10px'}}>Accuracy (85%)</span></div>
+                                <div className="flex justify-between mt-1"><span style={{ fontSize: '10px' }}>Performance</span><span style={{ fontSize: '10px' }}>Accuracy (85%)</span></div>
                             </div>
                             <div className="form-group mb-4">
                                 <label className="form-label">Recording Mode</label>

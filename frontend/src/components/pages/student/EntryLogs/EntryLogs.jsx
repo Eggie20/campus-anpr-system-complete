@@ -71,7 +71,7 @@ export default function EntryLogs() {
             headers.join(','),
             ...logs.map(log => [
                 log.direction,
-                log.plate_number,
+                log.detected_plate_number || 'Unknown',
                 log.gate_name,
                 new Date(log.timestamp).toLocaleString(),
                 log.confidence_score ? `${log.confidence_score.toFixed(1)}%` : 'N/A'
@@ -99,61 +99,14 @@ export default function EntryLogs() {
             {/* Page Header */}
             <div className="premium-page-header">
                 <div>
-                    <h1>Entry <span>Logs</span> 🗂</h1>
+                    <h1>Entry <span>Logs</span> 📋</h1>
                     <p>Review your vehicle entry and exit history across campus gates.</p>
                 </div>
                 <div className="premium-header-meta">
                     <button className="premium-page-btn" onClick={exportToCSV}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
                         Export CSV
                     </button>
-                </div>
-            </div>
-
-            {/* Filters Section Premium */}
-            <div className="premium-glass-card mb-6" style={{ padding: '1.5rem' }}>
-                <div className="premium-dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                    <div className="form-group mb-0">
-                        <label className="form-label" style={{ color: 'var(--t-1)', fontWeight: '600' }}>Direction</label>
-                        <select
-                            className="form-select"
-                            value={filter}
-                            onChange={(e) => setFilter(e.target.value)}
-                            style={{ background: 'var(--p-bg)', borderColor: 'var(--p-border)' }}
-                        >
-                            <option value="all">All Directions</option>
-                            <option value="entry">Entry Only</option>
-                            <option value="exit">Exit Only</option>
-                        </select>
-                    </div>
-                    <div className="form-group mb-0">
-                        <label className="form-label" style={{ color: 'var(--t-1)', fontWeight: '600' }}>From Date</label>
-                        <input
-                            type="date"
-                            className="form-input"
-                            value={dateFrom}
-                            onChange={(e) => setDateFrom(e.target.value)}
-                            style={{ background: 'var(--p-bg)', borderColor: 'var(--p-border)' }}
-                        />
-                    </div>
-                    <div className="form-group mb-0">
-                        <label className="form-label" style={{ color: 'var(--t-1)', fontWeight: '600' }}>To Date</label>
-                        <input
-                            type="date"
-                            className="form-input"
-                            value={dateTo}
-                            onChange={(e) => setDateTo(e.target.value)}
-                            style={{ background: 'var(--p-bg)', borderColor: 'var(--p-border)' }}
-                        />
-                    </div>
-                    <div className="form-group mb-0" style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}>
-                        <button className="premium-page-btn" style={{ flex: 1, height: '42px', justifyContent: 'center', background: 'var(--p-accent)', color: 'white', borderColor: 'transparent' }} onClick={fetchLogs}>
-                            Apply
-                        </button>
-                        <button className="premium-page-btn" style={{ flex: 1, height: '42px', justifyContent: 'center' }} onClick={() => { setFilter('all'); setDateFrom(''); setDateTo(''); }}>
-                            Clear
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -211,11 +164,58 @@ export default function EntryLogs() {
                     <div className="premium-stat-header">
                         <span className="premium-stat-label">Security Status</span>
                         <div className="premium-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
                         </div>
                     </div>
                     <div className="premium-stat-value" style={{ fontSize: '1.25rem' }}>Verified</div>
                     <div className="premium-stat-sub"><span className="up">All Clear</span></div>
+                </div>
+            </div>
+
+            {/* Filters Section Premium */}
+            <div className="premium-glass-card mb-6" style={{ padding: '1.5rem' }}>
+                <div className="premium-dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                    <div className="form-group mb-0">
+                        <label className="form-label" style={{ color: 'var(--t-1)', fontWeight: '600' }}>Direction</label>
+                        <select
+                            className="form-select"
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                            style={{ background: 'var(--p-bg)', borderColor: 'var(--p-border)' }}
+                        >
+                            <option value="all">All Directions</option>
+                            <option value="entry">Entry Only</option>
+                            <option value="exit">Exit Only</option>
+                        </select>
+                    </div>
+                    <div className="form-group mb-0">
+                        <label className="form-label" style={{ color: 'var(--t-1)', fontWeight: '600' }}>From Date</label>
+                        <input
+                            type="date"
+                            className="form-input"
+                            value={dateFrom}
+                            onChange={(e) => setDateFrom(e.target.value)}
+                            style={{ background: 'var(--p-bg)', borderColor: 'var(--p-border)' }}
+                        />
+                    </div>
+                    <div className="form-group mb-0">
+                        <label className="form-label" style={{ color: 'var(--t-1)', fontWeight: '600' }}>To Date</label>
+                        <input
+                            type="date"
+                            className="form-input"
+                            value={dateTo}
+                            onChange={(e) => setDateTo(e.target.value)}
+                            style={{ background: 'var(--p-bg)', borderColor: 'var(--p-border)' }}
+                        />
+                    </div>
+                    <div className="form-group mb-0" style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}>
+                        <button className="premium-page-btn" style={{ flex: 1, height: '42px', justifyContent: 'center', background: 'var(--p-accent)', color: 'white', borderColor: 'transparent' }} onClick={fetchLogs}>
+                            Apply
+                        </button>
+                        <button className="premium-page-btn" style={{ flex: 1, height: '42px', justifyContent: 'center' }} onClick={() => { setFilter('all'); setDateFrom(''); setDateTo(''); }}>
+                            Clear
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -244,15 +244,15 @@ export default function EntryLogs() {
                                 <td>
                                     <span className={`premium-pill ${log.direction === 'entry' ? 'success' : 'warning'}`}>
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                            {log.direction === 'entry' 
-                                                ? <path d="m19 14-7 7-7-7M12 21V3"/> 
-                                                : <path d="m5 10 7-7 7 7M12 3v18"/>
+                                            {log.direction === 'entry'
+                                                ? <path d="m19 14-7 7-7-7M12 21V3" />
+                                                : <path d="m5 10 7-7 7 7M12 3v18" />
                                             }
                                         </svg>
                                         {log.direction === 'entry' ? 'Entry' : 'Exit'}
                                     </span>
                                 </td>
-                                <td><strong style={{ color: 'var(--t-1)' }}>{log.plate_number}</strong></td>
+                                <td><strong style={{ color: 'var(--t-1)' }}>{log.detected_plate_number || 'Unknown'}</strong></td>
                                 <td>{log.gate_name}</td>
                                 <td>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -285,7 +285,7 @@ export default function EntryLogs() {
                             onClick={handlePrevPage}
                             disabled={currentPage === 1}
                         >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
                             Previous
                         </button>
                         <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontSize: '0.9rem', color: 'var(--t-1)', fontWeight: '600' }}>
@@ -297,7 +297,7 @@ export default function EntryLogs() {
                             disabled={currentPage >= totalPages}
                         >
                             Next
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
                         </button>
                     </div>
                 </div>

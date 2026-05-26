@@ -1,0 +1,103 @@
+/* Registration Layout & Base Variables */
+:root {
+    /* Colors */
+    --green: #10b981;
+    --green-dim: rgba(16, 185, 129, 0.08);
+    --blue: #3b82f6;
+    --blue-dim: rgba(59, 130, 246, 0.08);
+    --red: #ef4444;
+    --orange: #f59e0b;
+
+    /* Backgrounds */
+    --bg-main: #0a0e17;
+    --bg-card: #161b27;
+    --bg-card2: #1c2333;
+    --bg-input: #111826;
+
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.06);
+    --border2: rgba(255, 255, 255, 0.12);
+
+    /* Text */
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+}
+
+[data-theme="light"] {
+    --green: #059669;
+    --green-dim: rgba(5, 150, 105, 0.05);
+    --blue: #2563eb;
+    --blue-dim: rgba(37, 99, 235, 0.05);
+    --red: #dc2626;
+
+    --bg-main: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-card2: #f9fafb;
+    --bg-input: #ffffff;
+
+    --border: rgba(0, 0, 0, 0.08);
+    --border2: rgba(0, 0, 0, 0.12);
+
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
+}
+
+.registration-page-body {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    height: 100vh;
+    background: var(--bg-main);
+    overflow: hidden;
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+}
+
+@media (max-width: 1024px) {
+    .registration-page-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Base Main Region */
+.main {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-body {
+    padding: 8px 24px 24px;
+    flex: 1;
+}
+
+@media (max-width: 640px) {
+    .main-body {
+        padding: 16px;
+    }
+}
+
+/* Registration Card Container */
+.registration-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .main-body {
+        padding: 0 12px 24px;
+    }
+
+    .registration-card {
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+}

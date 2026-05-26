@@ -26,9 +26,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (credentials, roleArg) => {
-    setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,8 +77,6 @@ export function AuthProvider({ children }) {
         message = "Server is unreachable. Please ensure the backend is running.";
       }
       return { success: false, error: message };
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -1,6 +1,5 @@
 /* Sidebar Styles */
 .sidebar {
-    width: var(--sidebar-width);
     background: var(--bg-elevated);
     transition: width var(--transition-normal);
 }

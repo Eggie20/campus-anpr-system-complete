@@ -304,33 +304,102 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5rem;
-    border-top: 1px solid var(--p-border);
+    padding: 1.25rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.premium-page-btn {
-    padding: 0.6rem 1.2rem;
-    border-radius: 10px;
-    border: 1px solid var(--p-border);
-    background: var(--p-bg);
-    color: var(--t-2);
-    font-weight: 600;
+.pagination-info {
     font-size: 0.85rem;
+    color: var(--color-text-muted, #94a3b8);
+    font-weight: 500;
+}
+
+.pagination-info span {
+    color: var(--color-text, #ffffff);
+    font-weight: 700;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.limit-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.limit-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-muted, #94a3b8);
+    text-transform: uppercase;
+}
+
+.premium-select-compact {
+    background: var(--color-surface, #1a1c23);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: var(--color-text, #ffffff);
+    font-size: 0.8rem;
+    font-weight: 600;
     cursor: pointer;
+    outline: none;
     transition: all 0.2s;
+}
+
+.premium-select-compact:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.page-btns {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.premium-page-btn:hover:not(:disabled) {
-    border-color: var(--p-accent);
-    color: var(--p-accent);
-    background: rgba(var(--ac-rgb), 0.05);
+.page-indicators {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
-.premium-page-btn:disabled {
-    opacity: 0.5;
+.page-indicator, .premium-page-btn.icon-only {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--color-surface, #1a1c23);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    color: var(--color-text-muted, #718096);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.page-indicator:hover, .premium-page-btn.icon-only:hover:not(:disabled) {
+    background: var(--color-surface-hover, #2d3748);
+    color: var(--color-text, #ffffff);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.page-indicator.active {
+    background: var(--color-primary, #8b5cf6);
+    color: white !important;
+    border-color: transparent;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+.premium-page-btn.icon-only:disabled {
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
@@ -341,4 +410,233 @@
 
 .admin-compact-card {
     padding: 1.25rem !important;
+}
+
+/* ============================================================
+   PREMIUM TABLE — FULL LAYOUT FIX & RESPONSIVE
+   ============================================================ */
+
+/* Scroll wrapper so table never breaks layout */
+.table-overflow {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Base table — always full width, no column squish */
+.premium-table {
+    width: 100%;
+    min-width: 700px;      /* prevent extreme squish */
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+/* Header cells */
+.premium-table th {
+    background: rgba(var(--ac-rgb, 0, 229, 180), 0.04);
+    padding: 0.85rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--t-3, #7a8599);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--p-border, rgba(255,255,255,0.07));
+    white-space: nowrap;
+}
+
+/* Data cells */
+.premium-table td {
+    padding: 0.8rem 1rem;
+    font-size: 0.875rem;
+    color: var(--t-2, #b0bac9);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s ease;
+    vertical-align: middle;
+}
+
+.premium-table tr:last-child td { border-bottom: none; }
+
+.premium-table tbody tr:hover td {
+    background: rgba(var(--ac-rgb, 0, 229, 180), 0.03);
+    color: var(--t-1, #e2e8f0);
+}
+
+/* Actions cell — always on one line, right-aligned */
+.premium-table td:last-child,
+.premium-table th:last-child {
+    text-align: right;
+    white-space: nowrap;
+    width: 1%;          /* shrink to content */
+}
+
+/* Icon-only action buttons — consistent sizing */
+.premium-page-btn.icon-only {
+    padding: 0.45rem;
+    min-width: 32px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.premium-page-btn.icon-only .material-symbols-rounded {
+    font-size: 1.1rem;
+}
+
+/* Active (primary) page btn */
+.premium-page-btn.active {
+    background: linear-gradient(135deg, var(--p-accent, #00e5b4), #6366f1);
+    color: #fff;
+    border-color: transparent;
+}
+
+.premium-page-btn.active:hover:not(:disabled) {
+    opacity: 0.88;
+    color: #fff;
+}
+
+/* Pill badges inside tables — keep on one line */
+.premium-table .premium-pill {
+    white-space: nowrap;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.72rem;
+}
+
+/* Identifier / name column — allow wrapping but constrain width */
+.premium-table td.col-identifier {
+    max-width: 180px;
+    word-break: break-word;
+}
+
+/* Email column */
+.premium-table td.col-email {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---- Responsive: stack-on-scroll breakpoints ---- */
+@media (max-width: 1100px) {
+    .premium-table {
+        min-width: 620px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Show horizontal scroll hint on mobile */
+    .table-overflow::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0; right: 0; bottom: 0;
+        width: 24px;
+        background: linear-gradient(to right, transparent, rgba(0,0,0,0.15));
+        pointer-events: none;
+    }
+
+    .premium-table th,
+    .premium-table td {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    /* Hide less-critical columns on small screens */
+    .premium-table .col-hide-sm {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .premium-table .col-hide-xs {
+        display: none;
+    }
+}
+
+/* ---- Users table specific ---- */
+.admin-compact-table .premium-table {
+    min-width: 680px;
+}
+
+/* ---- Vehicles table specific ---- */
+.vehicles-table .premium-table {
+    min-width: 760px;
+}
+
+/* ==========================================================================
+   GLOBAL SEARCH OMNIBOX (Header)
+   ========================================================================== */
+
+.global-search-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: 100%;
+    background: var(--p-bg);
+    border: 1px solid var(--p-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    padding: 0.75rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    animation: slideDownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.global-search-section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--t-3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.5rem 0.75rem 0.25rem;
+}
+
+.global-search-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    color: var(--t-2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.global-search-item:hover {
+    background: rgba(var(--ac-rgb), 0.05);
+    color: var(--t-1);
+}
+
+.global-search-item .gs-icon {
+    font-size: 1.25rem;
+    color: var(--t-3);
+    transition: color 0.2s ease;
+}
+
+.global-search-item:hover .gs-icon {
+    color: var(--p-accent);
+}
+
+.global-search-item.gs-action-item {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px dashed rgba(59, 130, 246, 0.2);
+}
+
+.global-search-item.gs-action-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.gs-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+@keyframes slideDownFade {
+    0% { opacity: 0; transform: translateY(-10px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }

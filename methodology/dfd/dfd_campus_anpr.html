@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DFD – Gane & Sarson | Campus ANPR System (CSUCC)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0f1117;height:100vh;display:flex;flex-direction:column;overflow:hidden;color:#e2e8f0}
+
+.bar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:#1a1d2e;border-bottom:1px solid #2d3348;flex-shrink:0;flex-wrap:wrap}
+.bar-title{font-size:13px;font-weight:700;color:#e2e8f0;margin-right:4px}
+.badge{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.35);color:#818cf8;font-weight:600}
+.sep{width:1px;height:20px;background:#2d3348;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-o{background:#1e2235;border-color:#2d3348;color:#94a3b8}.btn-o:hover{background:#252a40;color:#e2e8f0}
+.btn-g{background:#059669;color:#fff}.btn-g:hover{background:#047857}
+.btn-e{background:#ea580c;color:#fff}.btn-e:hover{background:#c2410c}
+.btn-b{background:#6366f1;color:#fff}.btn-b:hover{background:#4f46e5}
+
+.tabs{display:flex;gap:1px;padding:0 14px;background:#1a1d2e;border-bottom:1px solid #2d3348;flex-shrink:0;overflow-x:auto}
+.tab{padding:7px 16px;font-size:11px;font-weight:600;cursor:pointer;border-radius:7px 7px 0 0;color:#64748b;border:1px solid transparent;border-bottom:none;transition:all .15s;user-select:none;white-space:nowrap}
+.tab.active{background:#0f1117;border-color:#2d3348;color:#818cf8}
+.tab:hover:not(.active){color:#94a3b8}
+
+/* GROUP HIGHLIGHT CONTROLS */
+.grp-bar{display:flex;align-items:center;gap:8px;padding:6px 14px;background:#151829;border-bottom:1px solid #2d3348;flex-shrink:0;flex-wrap:wrap}
+.grp-bar label{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
+.grp-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;border:2px solid transparent;transition:all .2s;user-select:none}
+.grp-btn .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.grp-btn[data-group="1"]{color:#3b82f6;border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.08)}
+.grp-btn[data-group="1"] .dot{background:#3b82f6}
+.grp-btn[data-group="1"].on{background:rgba(59,130,246,.25);border-color:#3b82f6;box-shadow:0 0 12px rgba(59,130,246,.3)}
+
+.grp-btn[data-group="2"]{color:#10b981;border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+.grp-btn[data-group="2"] .dot{background:#10b981}
+.grp-btn[data-group="2"].on{background:rgba(16,185,129,.25);border-color:#10b981;box-shadow:0 0 12px rgba(16,185,129,.3)}
+
+.grp-btn[data-group="3"]{color:#f59e0b;border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.08)}
+.grp-btn[data-group="3"] .dot{background:#f59e0b}
+.grp-btn[data-group="3"].on{background:rgba(245,158,11,.25);border-color:#f59e0b;box-shadow:0 0 12px rgba(245,158,11,.3)}
+
+.grp-btn[data-group="all"]{color:#818cf8;border-color:rgba(129,140,248,.3);background:rgba(129,140,248,.08)}
+.grp-btn[data-group="all"] .dot{background:#818cf8}
+.grp-btn[data-group="all"].on{background:rgba(129,140,248,.25);border-color:#818cf8;box-shadow:0 0 12px rgba(129,140,248,.3)}
+
+.ws{flex:1;display:flex;overflow:hidden}
+
+.cw{flex:1;position:relative;overflow:hidden;cursor:grab;background:#0f1117}
+.cw:active{cursor:grabbing}
+.cw::before{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(99,102,241,.08) 1px,transparent 1px);
+  background-size:24px 24px;pointer-events:none;z-index:0}
+#cv{position:absolute;top:0;left:0;z-index:1}
+
+.lvlb{position:absolute;top:12px;left:12px;background:#1a1d2e;border:1px solid #2d3348;border-radius:6px;padding:4px 12px;font-size:10px;font-weight:700;color:#818cf8;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.3);pointer-events:none}
+
+.zc{position:absolute;bottom:14px;right:14px;display:flex;flex-direction:column;gap:3px;z-index:10}
+.zb{width:28px;height:28px;background:#1a1d2e;border:1px solid #2d3348;border-radius:6px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#94a3b8;transition:all .15s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.zb:hover{border-color:#818cf8;color:#818cf8}
+
+.sb{display:flex;align-items:center;gap:14px;padding:5px 14px;background:#1a1d2e;border-top:1px solid #2d3348;font-size:10px;color:#64748b;flex-shrink:0;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:5px}
+.le{width:14px;height:10px;background:transparent;border:1.5px solid #94a3b8;border-radius:1px}
+.lp{width:14px;height:14px;background:transparent;border:1.5px solid #94a3b8;border-radius:3px}
+.ls{width:14px;height:8px;background:transparent;border-top:1.5px solid #94a3b8;border-bottom:1.5px solid #94a3b8}
+
+#toast{position:fixed;bottom:50px;left:50%;transform:translateX(-50%) translateY(10px);background:#1e293b;color:#fff;padding:6px 18px;border-radius:20px;font-size:11px;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:9999;border:1px solid #2d3348}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;display:none;align-items:center;justify-content:center}
+.md{background:#1a1d2e;border-radius:14px;padding:24px;width:400px;box-shadow:0 20px 50px rgba(0,0,0,.5);border:1px solid #2d3348}
+.md h2{font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:10px}
+.md p{font-size:11px;color:#94a3b8;line-height:1.7;margin-bottom:6px}
+.mda{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar-title">📊 DFD — Campus ANPR System (CSUCC)</span>
+  <span class="badge">Gane &amp; Sarson Notation</span>
+  <div class="sep"></div>
+  <button class="btn btn-g" onclick="exportPNG()">📷 Export PNG (Transparent)</button>
+  <button class="btn btn-e" onclick="exportSVG()">⬇ Export SVG</button>
+  <div class="sep"></div>
+  <button class="btn btn-o" onclick="rv()">⊡ Fit View</button>
+  <button class="btn btn-o" onclick="resetLayout()" title="Restore original node positions">↺ Reset Layout</button>
+</div>
+
+<div class="grp-bar">
+  <label>Highlight Group:</label>
+  <div class="grp-btn on" data-group="all" onclick="setGroup('all')"><span class="dot"></span>All Combined</div>
+  <div class="grp-btn" data-group="1" onclick="setGroup('1')"><span class="dot"></span>Group 1 — Web Portal &amp; Admin</div>
+  <div class="grp-btn" data-group="2" onclick="setGroup('2')"><span class="dot"></span>Group 2 — SMART-PLATE ANPR Engine</div>
+  <div class="grp-btn" data-group="3" onclick="setGroup('3')"><span class="dot"></span>Group 3 — OCR ID Scanning</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" id="tab-ctx"  onclick="sw('ctx')">Context (Level 0)</div>
+  <div class="tab" id="tab-l1"   onclick="sw('l1')">Level 1 – Main Processes</div>
+  <div class="tab" id="tab-l2a"  onclick="sw('l2a')">Level 2 – ANPR Detection</div>
+  <div class="tab" id="tab-l2b"  onclick="sw('l2b')">Level 2 – User Registration</div>
+  <div class="tab" id="tab-l2c"  onclick="sw('l2c')">Level 2 – Admin Management</div>
+</div>
+
+<div class="ws">
+  <div class="cw" id="cw"
+    onmousedown="cMD(event)" onmousemove="cMM(event)" onmouseup="cMU(event)"
+    onwheel="cW(event)" oncontextmenu="return false">
+    <div class="lvlb" id="lvlb">Context Diagram – Level 0</div>
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="zc">
+      <button class="zb" onclick="dz(1.15)">+</button>
+      <button class="zb" onclick="dz(0.87)">−</button>
+      <button class="zb" onclick="rv()">⊡</button>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <b style="color:#94a3b8">Legend:</b>
+  <div class="li"><div class="le"></div>External Entity</div>
+  <div class="li"><div class="lp"></div>Process</div>
+  <div class="li"><div class="ls"></div>Data Store</div>
+  <div class="li"><span style="font-size:14px;color:#94a3b8">→</span>Data Flow (one-way)</div>
+  <div class="li"><span style="font-size:14px;color:#94a3b8">↔</span>Data Flow (two-way)</div>
+  <div class="li" style="margin-left:8px"><span style="width:10px;height:3px;background:#3b82f6;display:inline-block;border-radius:2px;margin-right:4px"></span><span style="color:#3b82f6">Group 1</span></div>
+  <div class="li"><span style="width:10px;height:3px;background:#10b981;display:inline-block;border-radius:2px;margin-right:4px"></span><span style="color:#10b981">Group 2</span></div>
+  <div class="li"><span style="width:10px;height:3px;background:#f59e0b;display:inline-block;border-radius:2px;margin-right:4px"></span><span style="color:#f59e0b">Group 3</span></div>
+  <span style="margin-left:auto;color:#475569">Scroll to zoom · Drag background to pan · Drag nodes to adjust · 📷 Export PNG</span>
+</div>
+
+<div id="toast"></div>
+
+<div class="mbg" id="pngMod">
+  <div class="md">
+    <h2>📷 Export PNG – Transparent Background</h2>
+    <p>Exports the current diagram at <strong>2× resolution</strong> with a transparent background.</p>
+    <p>Paste directly into Word, PowerPoint, Photoshop, or any document.</p>
+    <div class="mda">
+      <button class="btn btn-o" onclick="closeMod()">Cancel</button>
+      <button class="btn btn-g" onclick="doPNG()">⬇ Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// CANVAS STATE
+// ═══════════════════════════════════════════
+const svg = document.getElementById('cv');
+const cw  = document.getElementById('cw');
+let vx=40, vy=40, vs=1;
+let panS = null;
+let curTab = 'ctx';
+let dragNode = null, dragOff = {x:0, y:0};
+let activeGroup = 'all'; // 'all', '1', '2', '3'
+
+// GROUP COLORS
+const GRP_COLORS = {
+  '1': {stroke:'#3b82f6', fill:'rgba(59,130,246,.12)', header:'rgba(59,130,246,.25)', text:'#93c5fd', labelBg:'rgba(30,58,138,.85)', labelBorder:'rgba(59,130,246,.4)'},
+  '2': {stroke:'#10b981', fill:'rgba(16,185,129,.12)', header:'rgba(16,185,129,.25)', text:'#6ee7b7', labelBg:'rgba(6,78,59,.85)', labelBorder:'rgba(16,185,129,.4)'},
+  '3': {stroke:'#f59e0b', fill:'rgba(245,158,11,.12)', header:'rgba(245,158,11,.25)', text:'#fcd34d', labelBg:'rgba(120,53,15,.85)', labelBorder:'rgba(245,158,11,.4)'},
+  'shared': {stroke:'#8b5cf6', fill:'rgba(139,92,246,.12)', header:'rgba(139,92,246,.25)', text:'#c4b5fd', labelBg:'rgba(76,29,149,.85)', labelBorder:'rgba(139,92,246,.4)'}
+};
+
+const GREY = {stroke:'#2d3348', fill:'rgba(30,33,50,.5)', header:'rgba(45,51,72,.5)', text:'#475569', labelBg:'rgba(15,17,23,.8)', labelBorder:'#2d3348'};
+const FULL = {stroke:'#94a3b8', fill:'rgba(30,34,53,.8)', header:'rgba(45,51,72,.8)', text:'#e2e8f0', labelBg:'rgba(26,29,46,.95)', labelBorder:'#3d4463'};
+
+function getNodeStyle(grp) {
+  if (activeGroup === 'all') {
+    if (grp && GRP_COLORS[grp]) return GRP_COLORS[grp];
+    return FULL;
+  }
+  if (grp === activeGroup) return GRP_COLORS[grp] || FULL;
+  if (grp === 'shared') return GRP_COLORS['shared'];
+  return GREY;
+}
+
+function getArrowStyle(grp) {
+  if (activeGroup === 'all') {
+    if (grp && GRP_COLORS[grp]) return {color: GRP_COLORS[grp].stroke, opacity: 1};
+    return {color: '#94a3b8', opacity: 1};
+  }
+  if (grp === activeGroup) return {color: GRP_COLORS[grp]?.stroke || '#94a3b8', opacity: 1};
+  if (grp === 'shared') return {color: '#8b5cf6', opacity: 0.7};
+  return {color: '#2d3348', opacity: 0.25};
+}
+
+function setGroup(g) {
+  activeGroup = g;
+  document.querySelectorAll('.grp-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.group === g);
+  });
+  render(curTab);
+}
+
+function canvasPoint(sx, sy) {
+  const r = cw.getBoundingClientRect();
+  return { x: (sx - r.left - vx) / vs, y: (sy - r.top - vy) / vs };
+}
+
+const ORIG_POS = {};
+function saveOrigPositions() {
+  for (const key of Object.keys(TABS)) {
+    ORIG_POS[key] = TABS[key].nodes.map(n => ({id:n.id, x:n.x, y:n.y}));
+  }
+}
+function resetLayout() {
+  if (!ORIG_POS[curTab]) return;
+  const map = {};
+  ORIG_POS[curTab].forEach(p => map[p.id]=p);
+  TABS[curTab].nodes.forEach(n => { if(map[n.id]){n.x=map[n.id].x; n.y=map[n.id].y;} });
+  render(curTab); fitView(); toast('Layout reset!');
+}
+
+const TAB_LABELS = {
+  ctx: 'Context Diagram – Level 0',
+  l1:  'Level 1 – Main Processes',
+  l2a: 'Level 2 – ANPR Detection Pipeline (Process 3.0)',
+  l2b: 'Level 2 – User Registration (Process 1.0)',
+  l2c: 'Level 2 – Admin Management (Process 5.0)'
+};
+
+// ═══════════════════════════════════════════
+// DIAGRAM DATA
+// grp: '1' = Web Portal, '2' = ANPR Engine, '3' = OCR, 'shared' = shared
+// ═══════════════════════════════════════════
+
+const EW=136, EH=48;
+const PW=166, PH=72;
+const SW=178, SH=38;
+const PHDR=22;
+
+function mkE(id,x,y,label,grp){return{id,type:'ext',x,y,w:EW,h:EH,label,grp};}
+function mkP(id,x,y,label,pid,grp){return{id,type:'proc',x,y,w:PW,h:PH,label,pid,grp};}
+function mkS(id,x,y,label,grp){return{id,type:'store',x,y,w:SW,h:SH,label,grp};}
+function mkA(from,to,label,label2,grp){return{from,to,label,label2:label2||'',bi:(label2||'')!=='',grp:grp||'shared'};}
+
+// ═══════════════════════════════════════════
+// CONTEXT LEVEL 0
+// ═══════════════════════════════════════════
+const CTX = {
+  nodes: [
+    // Left external entities
+    mkE('e1', 20,  40, 'Student /\nFaculty / Staff', '1'),
+    mkE('e2', 20, 140, 'Visitor', '1'),
+    mkE('e3', 20, 240, 'Security\nOfficer', '2'),
+    mkE('e4', 20, 340, 'Administrator', '1'),
+    mkE('e5', 20, 440, 'ANPR Camera\n(IoT Device)', '2'),
+    // Central process
+    mkP('p0', 310, 210, 'Campus ANPR\nSystem', '0', 'shared'),
+    // Right external entities
+    mkE('e6', 600, 65, 'PostgreSQL\nDatabase', 'shared'),
+    mkE('e7', 600, 175, 'Tesseract /\nPaddleOCR', '3'),
+    mkE('e8', 600, 285, 'YOLOv8 /\nOpenCV', '2'),
+    mkE('e9', 600, 400, 'Web Browser /\nElectron App', '1'),
+  ],
+  arrows: [
+    mkA('e1','p0','Registration / Login\n& Vehicle Data', 'Dashboard /\nNotifications', '1'),
+    mkA('e2','p0','Visitor Registration', 'Visitor Pass', '1'),
+    mkA('e3','p0','Plate Correction /\nAlert Acknowledgment', 'Real-time Alerts /\nLive Feed', '2'),
+    mkA('e4','p0','User & Vehicle\nApproval / Config', 'Analytics /\nEntry Logs', '1'),
+    mkA('e5','p0','Video Stream /\nFrame Capture', '', '2'),
+    mkA('p0','e6','CRUD Operations', 'Query Results', 'shared'),
+    mkA('p0','e7','ID Document\nImages', 'Extracted Text\n& Fields', '3'),
+    mkA('p0','e8','Video Frames', 'Detected Plates\n& Bounding Boxes', '2'),
+    mkA('p0','e9','HTML / API\nResponses', 'HTTP Requests', '1'),
+  ]
+};
+
+// ═══════════════════════════════════════════
+// LEVEL 1 - MAIN PROCESSES
+// ═══════════════════════════════════════════
+const L1 = {
+  nodes: [
+    // External entities (column 1)
+    mkE('e1',  15,  25, 'Student /\nFaculty / Staff', '1'),
+    mkE('e2',  15, 135, 'Visitor', '1'),
+    mkE('e3',  15, 260, 'Security\nOfficer', '2'),
+    mkE('e4',  15, 390, 'Administrator', '1'),
+    mkE('e5',  15, 510, 'ANPR Camera\n(IoT Device)', '2'),
+
+    // Processes (column 2)
+    mkP('p1', 225,  18, '1.0\nUser Registration\n& Authentication', '1.0', '1'),
+    mkP('p2', 225, 118, '2.0\nVehicle\nRegistration', '2.0', '1'),
+    mkP('p3', 225, 218, '3.0\nANPR Detection\n& Recognition', '3.0', '2'),
+    mkP('p4', 225, 318, '4.0\nEntry / Exit\nLogging', '4.0', '2'),
+    mkP('p5', 225, 418, '5.0\nAdmin\nManagement', '5.0', '1'),
+    mkP('p6', 225, 518, '6.0\nSecurity\nMonitoring', '6.0', '2'),
+    mkP('p7', 225, 618, '7.0\nOCR ID\nScanning', '7.0', '3'),
+
+    // Data stores (column 3)
+    mkS('d1', 470,  18, 'D1 – Users', '1'),
+    mkS('d2', 470,  68, 'D2 – Vehicles', '1'),
+    mkS('d3', 470, 128, 'D3 – Entry Logs', '2'),
+    mkS('d4', 470, 178, 'D4 – ANPR Plate Captures', '2'),
+    mkS('d5', 470, 238, 'D5 – Detected Vehicles', '2'),
+    mkS('d6', 470, 298, 'D6 – Cameras / Gates', '2'),
+    mkS('d7', 470, 358, 'D7 – Notifications', '1'),
+    mkS('d8', 470, 418, 'D8 – Violations', '2'),
+    mkS('d9', 470, 478, 'D9 – System Logs', '1'),
+    mkS('d10',470, 538, 'D10 – Anomaly Events', '2'),
+    mkS('d11',470, 598, 'D11 – OCR Scans', '3'),
+    mkS('d12',470, 648, 'D12 – Settings', '1'),
+  ],
+  arrows: [
+    // P1 Registration
+    mkA('e1','p1','Register / Login', 'JWT Token', '1'),
+    mkA('e2','p1','Visitor Registration', 'QR Pass', '1'),
+    mkA('p1','d1','User Record', '', '1'),
+
+    // P2 Vehicle Registration
+    mkA('e1','p2','Vehicle Info\n& Plate Number', '', '1'),
+    mkA('p2','d2','Vehicle Record', '', '1'),
+
+    // P3 ANPR Detection
+    mkA('e5','p3','Video Stream', '', '2'),
+    mkA('p3','d5','Detection Record', '', '2'),
+    mkA('p3','d4','Plate Capture', '', '2'),
+
+    // P4 Entry/Exit Logging
+    mkA('p3','p4','Recognized Plate', '', '2'),
+    mkA('p4','d3','Entry/Exit Log', '', '2'),
+    mkA('p4','d8','Violation Record', '', '2'),
+    mkA('p4','d10','Anomaly Event', '', '2'),
+
+    // P5 Admin Management
+    mkA('e4','p5','Approve / Reject\nUsers & Vehicles', 'Reports &\nAnalytics', '1'),
+    mkA('p5','d1','Update User Status', '', '1'),
+    mkA('p5','d2','Update Vehicle Status', '', '1'),
+    mkA('p5','d9','Audit Log', '', '1'),
+    mkA('p5','d12','System Config', '', '1'),
+
+    // P6 Security Monitoring
+    mkA('e3','p6','Plate Correction', 'Real-time Alerts', '2'),
+    mkA('p6','d3','Corrected Entry', '', '2'),
+    mkA('p6','d6','Camera Config', '', '2'),
+
+    // P7 OCR Scanning
+    mkA('e1','p7','ID Document\nImages', 'Extracted Fields', '3'),
+    mkA('p7','d11','OCR Scan Result', '', '3'),
+    mkA('p7','d1','Auto-fill User Data', '', '3'),
+  ]
+};
+
+// ═══════════════════════════════════════════
+// LEVEL 2a - ANPR DETECTION PIPELINE
+// ═══════════════════════════════════════════
+const L2A = {
+  nodes: [
+    mkE('cam', 15,  55, 'ANPR Camera\n(USB / RTSP)', '2'),
+    mkE('sec', 15, 200, 'Security\nOfficer', '2'),
+    mkE('ws',  15, 340, 'WebSocket\nClients', '2'),
+
+    mkP('p31', 220,  30, '3.1\nCapture Video\nFrame', '3.1', '2'),
+    mkP('p32', 220, 130, '3.2\nYOLOv8 Vehicle\nDetection', '3.2', '2'),
+    mkP('p33', 220, 230, '3.3\nPlate Region\nExtraction (OCR)', '3.3', '2'),
+    mkP('p34', 220, 330, '3.4\nVehicle\nAuthorization Check', '3.4', '2'),
+    mkP('p35', 220, 430, '3.5\nLog Detection &\nBroadcast Alert', '3.5', '2'),
+    mkP('p36', 220, 530, '3.6\nManual Plate\nCorrection', '3.6', '2'),
+
+    mkS('d5',  465,  30, 'D5 – Detected Vehicles', '2'),
+    mkS('d6',  465,  82, 'D6 – Camera Config', '2'),
+    mkS('d2',  465, 134, 'D2 – Vehicles', '1'),
+    mkS('d4',  465, 194, 'D4 – ANPR Plate Captures', '2'),
+    mkS('d3',  465, 254, 'D3 – Entry Logs', '2'),
+    mkS('d10', 465, 314, 'D10 – Anomaly Events', '2'),
+    mkS('d8',  465, 374, 'D8 – Violations', '2'),
+  ],
+  arrows: [
+    mkA('cam','p31','Raw Video\nStream', '', '2'),
+    mkA('p31','p32','Extracted\nFrame', '', '2'),
+    mkA('p31','d6','Camera Status', '', '2'),
+
+    mkA('p32','p33','Detected Vehicle\n+ Bounding Box', '', '2'),
+    mkA('p32','d5','Detection Record\n(type, brand, color)', '', '2'),
+
+    mkA('p33','p34','Plate Text +\nConfidence Score', '', '2'),
+    mkA('p33','d4','Raw Plate Capture', '', '2'),
+
+    mkA('d2','p34','Registered Plates\nLookup', '', '2'),
+    mkA('p34','p35','Authorization\nResult', '', '2'),
+
+    mkA('p35','d3','Entry / Exit Log', '', '2'),
+    mkA('p35','d10','Anomaly Event\n(if unregistered)', '', '2'),
+    mkA('p35','d8','Violation\n(if blacklisted)', '', '2'),
+    mkA('p35','ws','Real-time\nWebSocket Alert', '', '2'),
+
+    mkA('sec','p36','Corrected\nPlate Text', '', '2'),
+    mkA('p36','d3','Updated Entry\nLog', '', '2'),
+    mkA('p36','d4','Updated Capture', '', '2'),
+  ]
+};
+
+// ═══════════════════════════════════════════
+// LEVEL 2b - USER REGISTRATION
+// ═══════════════════════════════════════════
+const L2B = {
+  nodes: [
+    mkE('usr', 15,  55, 'Student /\nFaculty / Staff', '1'),
+    mkE('vis', 15, 180, 'Visitor', '1'),
+    mkE('adm', 15, 340, 'Administrator', '1'),
+
+    mkP('p11', 225,  28, '1.1\nCapture User\nInformation', '1.1', '1'),
+    mkP('p12', 225, 128, '1.2\nOCR Scan\nDriver\'s License', '1.2', '3'),
+    mkP('p13', 225, 228, '1.3\nRegister Vehicle\n& Generate QR', '1.3', '1'),
+    mkP('p14', 225, 328, '1.4\nSubmit for\nAdmin Approval', '1.4', '1'),
+    mkP('p15', 225, 428, '1.5\nAuthenticate\n(Login)', '1.5', '1'),
+
+    mkS('d1',  470,  28, 'D1 – Users', '1'),
+    mkS('d2',  470,  80, 'D2 – Vehicles', '1'),
+    mkS('d11', 470, 140, 'D11 – OCR Scans', '3'),
+    mkS('d13', 470, 200, 'D13 – Secure Uploads', '1'),
+    mkS('d7',  470, 270, 'D7 – Notifications', '1'),
+  ],
+  arrows: [
+    mkA('usr','p11','Personal Info\n(Name, Email, etc.)', '', '1'),
+    mkA('vis','p11','Visitor Info\n(Purpose, Host)', '', '1'),
+    mkA('p11','p12','ID Document\nImages', '', '3'),
+
+    mkA('p12','p11','Auto-filled\nFields', '', '3'),
+    mkA('p12','d11','OCR Scan\nResult', '', '3'),
+
+    mkA('p11','p13','User Data +\nVehicle Info', '', '1'),
+    mkA('p13','d2','Vehicle Record\n(pending)', '', '1'),
+    mkA('p13','d13','ID Photo /\nOR-CR / QR Code', '', '1'),
+
+    mkA('p13','p14','Complete\nRegistration', '', '1'),
+    mkA('p14','d1','User Record\n(status: pending)', '', '1'),
+    mkA('p14','d7','Notify Admin\n(new registration)', '', '1'),
+
+    mkA('usr','p15','Email / ID +\nPassword', 'JWT Token', '1'),
+    mkA('p15','d1','Verify\nCredentials', '', '1'),
+
+    mkA('adm','p14','Approve /\nReject', '', '1'),
+  ]
+};
+
+// ═══════════════════════════════════════════
+// LEVEL 2c - ADMIN MANAGEMENT
+// ═══════════════════════════════════════════
+const L2C = {
+  nodes: [
+    mkE('adm', 15,  80, 'Administrator', '1'),
+    mkE('sec', 15, 260, 'Security\nOfficer', '2'),
+
+    mkP('p51', 230,  25, '5.1\nManage Users\n(CRUD)', '5.1', '1'),
+    mkP('p52', 230, 125, '5.2\nManage Vehicles\n& Blacklist', '5.2', '1'),
+    mkP('p53', 230, 225, '5.3\nManage Cameras\n& Gates', '5.3', '2'),
+    mkP('p54', 230, 325, '5.4\nView Analytics\n& Reports', '5.4', '1'),
+    mkP('p55', 230, 425, '5.5\nManage Security\nShifts', '5.5', '1'),
+    mkP('p56', 230, 520, '5.6\nSystem\nConfiguration', '5.6', '1'),
+
+    mkS('d1',  475, 20, 'D1 – Users', '1'),
+    mkS('d2',  475, 68, 'D2 – Vehicles', '1'),
+    mkS('d14', 475, 120, 'D14 – Blacklist Records', '1'),
+    mkS('d6',  475, 180, 'D6 – Cameras / Gates', '2'),
+    mkS('d3',  475, 240, 'D3 – Entry Logs', '2'),
+    mkS('d9',  475, 298, 'D9 – System Logs', '1'),
+    mkS('d15', 475, 356, 'D15 – Security Shifts', '1'),
+    mkS('d16', 475, 414, 'D16 – Duty Logs', '1'),
+    mkS('d12', 475, 476, 'D12 – Settings', '1'),
+  ],
+  arrows: [
+    mkA('adm','p51','Add / Edit /\nApprove Users', 'User List', '1'),
+    mkA('p51','d1','User Record\nUpdate', '', '1'),
+    mkA('p51','d9','Audit Log', '', '1'),
+
+    mkA('adm','p52','Approve / Reject\n/ Blacklist Vehicle', '', '1'),
+    mkA('p52','d2','Vehicle Status\nUpdate', '', '1'),
+    mkA('p52','d14','Blacklist\nRecord', '', '1'),
+
+    mkA('adm','p53','Camera CRUD /\nGate Config', '', '2'),
+    mkA('p53','d6','Camera / Gate\nRecord', '', '2'),
+
+    mkA('adm','p54','Request\nReports', 'Dashboard\nAnalytics', '1'),
+    mkA('p54','d3','Query Entry\nLogs', '', '2'),
+    mkA('p54','d1','Query User\nCounts', '', '1'),
+
+    mkA('adm','p55','Assign Shifts', '', '1'),
+    mkA('sec','p55','Clock In/Out', '', '2'),
+    mkA('p55','d15','Shift Record', '', '1'),
+    mkA('p55','d16','Duty Log', '', '1'),
+
+    mkA('adm','p56','System\nSettings', '', '1'),
+    mkA('p56','d12','Config Update', '', '1'),
+  ]
+};
+
+const TABS = { ctx: CTX, l1: L1, l2a: L2A, l2b: L2B, l2c: L2C };
+
+// ═══════════════════════════════════════════
+// RENDER ENGINE
+// ═══════════════════════════════════════════
+function svgEl(tag, attrs={}) {
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
+}
+
+function nodeCenter(n) { return { x: n.x + n.w/2, y: n.y + n.h/2 }; }
+
+function edgePt(n, tx, ty) {
+  const cx = n.x + n.w/2, cy = n.y + n.h/2;
+  const dx = tx - cx, dy = ty - cy;
+  if (!dx && !dy) return {x:cx, y:cy};
+  const scaleX = n.w/2 / Math.abs(dx), scaleY = n.h/2 / Math.abs(dy);
+  const s = Math.min(scaleX, scaleY);
+  return { x: cx + dx*s, y: cy + dy*s };
+}
+
+function drawNode(g, n) {
+  const style = getNodeStyle(n.grp);
+
+  if (n.type === 'ext') {
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:n.h, rx:3,
+      fill:style.fill, stroke:style.stroke, 'stroke-width':'1.5', filter:'url(#nsh)'}));
+    textBlock(g, n.x+n.w/2, n.y+n.h/2, n.label, style.text, '10');
+
+  } else if (n.type === 'proc') {
+    const HH = PHDR;
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:n.h, rx:6,
+      fill:style.fill, stroke:style.stroke, 'stroke-width':'1.5', filter:'url(#nsh)'}));
+    // Header strip
+    const cid = 'cl' + n.id;
+    const cp = svgEl('clipPath', {id:cid});
+    cp.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:HH+6}));
+    svg.querySelector('defs').appendChild(cp);
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:HH, rx:6,
+      fill:style.header, 'clip-path':`url(#${cid})`}));
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y+6, width:n.w, height:HH-6, fill:style.header}));
+    g.appendChild(svgEl('line', {x1:n.x, y1:n.y+HH, x2:n.x+n.w, y2:n.y+HH,
+      stroke:style.stroke, 'stroke-width':'0.8', 'stroke-opacity':'0.6'}));
+    // PID
+    if (n.pid) {
+      const t = svgEl('text', {x:n.x+n.w/2, y:n.y+HH/2,
+        'text-anchor':'middle', 'dominant-baseline':'central',
+        fill:style.text, 'font-size':'9', 'font-weight':'700', 'font-family':'Inter,Arial,sans-serif'});
+      t.textContent = n.pid;
+      g.appendChild(t);
+    }
+    const lbl = n.label.replace(/^\d+\.\d+\n/, '');
+    textBlock(g, n.x+n.w/2, n.y+HH+(n.h-HH)/2, lbl, style.text, '10');
+
+  } else if (n.type === 'store') {
+    const sw2 = n.w * 0.13;
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:n.h,
+      fill:style.fill, stroke:style.stroke, 'stroke-width':'1.5', filter:'url(#nsh)'}));
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:sw2, height:n.h, fill:style.header}));
+    g.appendChild(svgEl('line', {x1:n.x+sw2, y1:n.y, x2:n.x+sw2, y2:n.y+n.h,
+      stroke:style.stroke, 'stroke-width':'1'}));
+    const dm = n.label.match(/^(D\d+)/);
+    if (dm) {
+      const t = svgEl('text', {x:n.x+sw2/2, y:n.y+n.h/2,
+        'text-anchor':'middle', 'dominant-baseline':'central',
+        fill:style.text, 'font-size':'7.5', 'font-weight':'700', 'font-family':'Inter,Arial,sans-serif'});
+      t.textContent = dm[1]; g.appendChild(t);
+    }
+    textBlock(g, n.x+sw2+(n.w-sw2)/2, n.y+n.h/2,
+      n.label.replace(/^D\d+\s*[–-]\s*/, ''), style.text, '8.5');
+  }
+}
+
+function textBlock(g, cx, cy, text, color, fs='10') {
+  const lines = text.split('\n');
+  const lh = 12.5, tot = (lines.length-1)*lh;
+  lines.forEach((ln, i) => {
+    const t = svgEl('text', {x:cx, y:cy - tot/2 + i*lh,
+      'text-anchor':'middle', 'dominant-baseline':'central',
+      fill:color, 'font-size':fs, 'font-weight':'600', 'font-family':'Inter,Arial,sans-serif'});
+    t.textContent = ln;
+    g.appendChild(t);
+  });
+}
+
+function drawArrow(g, arr, nodeMap, pass) {
+  const from = nodeMap[arr.from], to = nodeMap[arr.to];
+  if (!from || !to) return;
+
+  const fc = nodeCenter(from), tc = nodeCenter(to);
+  let sp = edgePt(from, tc.x, tc.y);
+  let ep = edgePt(to, fc.x, fc.y);
+
+  const astyle = getArrowStyle(arr.grp);
+  const col = astyle.color;
+  const opac = astyle.opacity;
+  const dx = ep.x-sp.x, dy = ep.y-sp.y;
+  const len = Math.sqrt(dx*dx+dy*dy) || 1;
+  const nx = -dy/len, ny = dx/len;
+
+  // Use unique marker ID per color
+  const markerId = 'ah_' + col.replace('#','');
+
+  if (arr.bi) {
+    const off = 5;
+    const fsx=sp.x+nx*off, fsy=sp.y+ny*off, fex=ep.x+nx*off, fey=ep.y+ny*off;
+    const rsx=ep.x-nx*off, rsy=ep.y-ny*off, rex=sp.x-nx*off, rey=sp.y-ny*off;
+
+    if (pass !== 2) {
+      g.appendChild(svgEl('line', {x1:fsx, y1:fsy, x2:fex, y2:fey,
+        stroke:col, 'stroke-width':'1.3', 'marker-end':`url(#${markerId})`, opacity:opac}));
+      g.appendChild(svgEl('line', {x1:rsx, y1:rsy, x2:rex, y2:rey,
+        stroke:col, 'stroke-width':'1.3', 'marker-end':`url(#${markerId})`, opacity:opac}));
+    }
+    if (pass !== 1) {
+      const fmx=(fsx+fex)/2+nx*10, fmy=(fsy+fey)/2+ny*10;
+      drawLabel(g, fmx, fmy, arr.label, col, opac, arr.grp);
+      if (arr.label2) {
+        const rmx=(rsx+rex)/2-nx*10, rmy=(rsy+rey)/2-ny*10;
+        drawLabel(g, rmx, rmy, arr.label2, col, opac, arr.grp);
+      }
+    }
+  } else {
+    if (pass !== 2) {
+      g.appendChild(svgEl('line', {x1:sp.x, y1:sp.y, x2:ep.x, y2:ep.y,
+        stroke:col, 'stroke-width':'1.3', 'marker-end':`url(#${markerId})`, opacity:opac}));
+    }
+    if (pass !== 1) {
+      const lx = (sp.x+ep.x)/2 + nx*11;
+      const ly = (sp.y+ep.y)/2 + ny*11;
+      drawLabel(g, lx, ly, arr.label, col, opac, arr.grp);
+    }
+  }
+}
+
+function drawLabel(g, x, y, text, col, opac, grp) {
+  if (!text) return;
+  const lines = text.split('\n');
+  const lineH = 11;
+  const maxLen = Math.max(...lines.map(l => l.length));
+  const bw = maxLen * 4.5 + 10, bh = lines.length * lineH + 4;
+
+  const style = getNodeStyle(grp);
+  const bg = style.labelBg || 'rgba(15,17,23,.9)';
+  const border = style.labelBorder || '#2d3348';
+
+  g.appendChild(svgEl('rect', {x:x-bw/2, y:y-bh/2, width:bw, height:bh, rx:3,
+    fill:bg, stroke:border, 'stroke-width':'0.6', opacity:opac}));
+
+  lines.forEach((ln, i) => {
+    const ty = y - ((lines.length-1)*lineH)/2 + i*lineH;
+    const t = svgEl('text', {x, y:ty, 'text-anchor':'middle', 'dominant-baseline':'central',
+      fill:col, 'font-size':'7.5', 'font-weight':'600', 'font-family':'Inter,Arial,sans-serif', opacity:opac});
+    t.textContent = ln;
+    g.appendChild(t);
+  });
+}
+
+function render(tabKey) {
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  const defs = svgEl('defs');
+
+  // Create arrow markers for all possible colors
+  const colors = ['#94a3b8','#3b82f6','#10b981','#f59e0b','#8b5cf6','#2d3348','#e2e8f0'];
+  let markerDefs = '';
+  colors.forEach(c => {
+    const id = 'ah_' + c.replace('#','');
+    markerDefs += `<marker id="${id}" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="${c}"/>
+    </marker>`;
+  });
+
+  defs.innerHTML = markerDefs + `
+    <filter id="nsh" x="-8%" y="-12%" width="116%" height="124%">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/>
+    </filter>
+  `;
+  svg.appendChild(defs);
+
+  const diag = TABS[tabKey];
+  const nodeMap = {};
+  diag.nodes.forEach(n => nodeMap[n.id] = n);
+
+  // LAYER 1: arrow LINES
+  const arrowLinesG = svgEl('g');
+  diag.arrows.forEach(a => drawArrow(arrowLinesG, a, nodeMap, 1));
+  svg.appendChild(arrowLinesG);
+
+  // LAYER 2: nodes
+  diag.nodes.forEach(n => {
+    const g = svgEl('g', {cursor:'grab', style:'cursor:grab'});
+    drawNode(g, n);
+    g.addEventListener('mousedown', e => {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      dragNode = n;
+      const pt = canvasPoint(e.clientX, e.clientY);
+      dragOff = { x: pt.x - n.x, y: pt.y - n.y };
+      cw.style.cursor = 'grabbing';
+    });
+    svg.appendChild(g);
+  });
+
+  // LAYER 3: arrow LABELS
+  const arrowLabelsG = svgEl('g');
+  diag.arrows.forEach(a => drawArrow(arrowLabelsG, a, nodeMap, 2));
+  svg.appendChild(arrowLabelsG);
+}
+
+// ═══════════════════════════════════════════
+// TAB + VIEW
+// ═══════════════════════════════════════════
+function sw(tab) {
+  curTab = tab;
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('lvlb').textContent = TAB_LABELS[tab];
+  render(tab);
+  fitView();
+}
+
+function getDiagBounds(diag) {
+  let mnx=Infinity, mny=Infinity, mxx=-Infinity, mxy=-Infinity;
+  diag.nodes.forEach(n => {
+    mnx = Math.min(mnx, n.x-10); mny = Math.min(mny, n.y-10);
+    mxx = Math.max(mxx, n.x+n.w+10); mxy = Math.max(mxy, n.y+n.h+10);
+  });
+  return {mnx, mny, W: mxx-mnx, H: mxy-mny};
+}
+
+function fitView() {
+  const diag = TABS[curTab];
+  const {mnx, mny, W, H} = getDiagBounds(diag);
+  const pad = 50;
+  const scaleX = (cw.clientWidth  - pad*2) / W;
+  const scaleY = (cw.clientHeight - pad*2) / H;
+  vs = Math.min(scaleX, scaleY, 1.4);
+  vx = (cw.clientWidth  - W*vs) / 2 - mnx*vs;
+  vy = (cw.clientHeight - H*vs) / 2 - mny*vs;
+  tf();
+}
+
+function rv() { fitView(); }
+function tf() {
+  svg.style.transform = `translate(${vx}px,${vy}px) scale(${vs})`;
+  svg.style.transformOrigin = '0 0';
+  svg.setAttribute('width', 4000);
+  svg.setAttribute('height', 4000);
+}
+function dz(f) {
+  const cx = cw.clientWidth/2, cy = cw.clientHeight/2;
+  vx = cx-(cx-vx)*f; vy = cy-(cy-vy)*f; vs*=f; tf();
+}
+
+// ═══════════════════════════════════════════
+// PAN + NODE DRAG
+// ═══════════════════════════════════════════
+function cMD(e) {
+  if (e.button !== 0 || dragNode) return;
+  cw.style.cursor = 'grabbing';
+  panS = {sx:e.clientX, sy:e.clientY, vx, vy};
+}
+function cMM(e) {
+  if (dragNode) {
+    const pt = canvasPoint(e.clientX, e.clientY);
+    dragNode.x = pt.x - dragOff.x;
+    dragNode.y = pt.y - dragOff.y;
+    render(curTab);
+    return;
+  }
+  if (!panS) return;
+  vx = panS.vx + (e.clientX - panS.sx);
+  vy = panS.vy + (e.clientY - panS.sy);
+  tf();
+}
+function cMU() {
+  dragNode = null;
+  panS = null;
+  cw.style.cursor = 'grab';
+}
+function cW(e) {
+  e.preventDefault();
+  const f = e.deltaY<0?1.12:0.89;
+  const r = cw.getBoundingClientRect();
+  const ex=e.clientX-r.left, ey=e.clientY-r.top;
+  vx=ex-(ex-vx)*f; vy=ey-(ey-vy)*f; vs*=f; tf();
+}
+
+// ═══════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════
+function exportSVG() {
+  const diag = TABS[curTab];
+  let mnx=Infinity, mny=Infinity, mxx=-Infinity, mxy=-Infinity;
+  diag.nodes.forEach(n=>{mnx=Math.min(mnx,n.x);mny=Math.min(mny,n.y);mxx=Math.max(mxx,n.x+n.w);mxy=Math.max(mxy,n.y+n.h);});
+  const pad=40, W=mxx-mnx+pad*2, H=mxy-mny+pad*2;
+  const clone = svg.cloneNode(true);
+  clone.setAttribute('viewBox',`${mnx-pad} ${mny-pad} ${W} ${H}`);
+  clone.setAttribute('width', W); clone.setAttribute('height', H);
+  clone.style.transform='';
+  const blob=new Blob(['<?xml version="1.0" encoding="UTF-8"?>'+clone.outerHTML],{type:'image/svg+xml'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`dfd_${curTab}_campus_anpr.svg`; a.click();
+  toast('SVG exported!');
+}
+
+function exportPNG() { document.getElementById('pngMod').style.display='flex'; }
+function closeMod()  { document.getElementById('pngMod').style.display='none'; }
+
+function doPNG() {
+  closeMod();
+  const diag = TABS[curTab];
+  let mnx=Infinity, mny=Infinity, mxx=-Infinity, mxy=-Infinity;
+  diag.nodes.forEach(n=>{mnx=Math.min(mnx,n.x);mny=Math.min(mny,n.y);mxx=Math.max(mxx,n.x+n.w);mxy=Math.max(mxy,n.y+n.h);});
+  const PAD=50, W=mxx-mnx+PAD*2, H=mxy-mny+PAD*2, SC=2.5;
+
+  const svgContent = buildStaticSVG(diag, mnx-PAD, mny-PAD, W, H);
+  const blob=new Blob([svgContent],{type:'image/svg+xml;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const img=new Image();
+  img.onload=function(){
+    const c=document.createElement('canvas');
+    c.width=W*SC; c.height=H*SC;
+    const ctx2=c.getContext('2d');
+    ctx2.save();
+    ctx2.scale(SC, SC);
+    ctx2.drawImage(img, 0, 0);
+    ctx2.restore();
+    URL.revokeObjectURL(url);
+    const lnk=document.createElement('a');
+    lnk.download=`dfd_${curTab}_${activeGroup === 'all' ? 'combined' : 'group'+activeGroup}_transparent.png`;
+    lnk.href=c.toDataURL('image/png'); lnk.click();
+    toast('PNG exported (transparent)!');
+  };
+  img.onerror=()=>toast('Export failed – try SVG instead');
+  img.src=url;
+}
+
+function buildStaticSVG(diag, ox, oy, W, H) {
+  const nodeMap={};
+  diag.nodes.forEach(n=>nodeMap[n.id]=n);
+
+  // Collect unique colors for markers
+  const usedColors = new Set(['#94a3b8','#3b82f6','#10b981','#f59e0b','#8b5cf6','#2d3348']);
+  let markers = '';
+  usedColors.forEach(c => {
+    const id = 'ah_' + c.replace('#','');
+    markers += `<marker id="${id}" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="${c}"/>
+    </marker>`;
+  });
+
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${ox} ${oy} ${W} ${H}">
+<defs>
+  ${markers}
+  <filter id="nsh" x="-8%" y="-12%" width="116%" height="124%">
+    <feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/>
+  </filter>
+</defs>`;
+
+  // LAYER 1: Arrow lines
+  diag.arrows.forEach(a => {
+    const from=nodeMap[a.from], to=nodeMap[a.to];
+    if(!from||!to)return;
+    const fc=nodeCenter(from), tc=nodeCenter(to);
+    let sp=edgePt(from,tc.x,tc.y), ep=edgePt(to,fc.x,fc.y);
+    const dx=ep.x-sp.x, dy=ep.y-sp.y, len=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=-dy/len, ny=dx/len;
+    const astyle = getArrowStyle(a.grp);
+    const col = astyle.color;
+    const opac = astyle.opacity;
+    const markerId = 'ah_' + col.replace('#','');
+
+    if(a.bi){
+      const off=5;
+      const fsx=sp.x+nx*off,fsy=sp.y+ny*off,fex=ep.x+nx*off,fey=ep.y+ny*off;
+      const rsx=ep.x-nx*off,rsy=ep.y-ny*off,rex=sp.x-nx*off,rey=sp.y-ny*off;
+      s+=`<line x1="${fsx}" y1="${fsy}" x2="${fex}" y2="${fey}" stroke="${col}" stroke-width="1.3" marker-end="url(#${markerId})" opacity="${opac}"/>`;
+      s+=`<line x1="${rsx}" y1="${rsy}" x2="${rex}" y2="${rey}" stroke="${col}" stroke-width="1.3" marker-end="url(#${markerId})" opacity="${opac}"/>`;
+    } else {
+      s+=`<line x1="${sp.x}" y1="${sp.y}" x2="${ep.x}" y2="${ep.y}" stroke="${col}" stroke-width="1.3" marker-end="url(#${markerId})" opacity="${opac}"/>`;
+    }
+  });
+
+  // LAYER 2: Nodes
+  diag.nodes.forEach(n=>{
+    const style = getNodeStyle(n.grp);
+    if(n.type==='ext'){
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="3" fill="${style.fill}" stroke="${style.stroke}" stroke-width="1.5" filter="url(#nsh)"/>`;
+      s+=staticTextBlock(n.x+n.w/2,n.y+n.h/2,n.label,style.text,'10');
+    } else if(n.type==='proc'){
+      const HH=PHDR;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="6" fill="${style.fill}" stroke="${style.stroke}" stroke-width="1.5" filter="url(#nsh)"/>`;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${HH}" rx="6" fill="${style.header}"/>`;
+      s+=`<rect x="${n.x}" y="${n.y+6}" width="${n.w}" height="${HH-6}" fill="${style.header}"/>`;
+      s+=`<line x1="${n.x}" y1="${n.y+HH}" x2="${n.x+n.w}" y2="${n.y+HH}" stroke="${style.stroke}" stroke-width="0.8" stroke-opacity="0.6"/>`;
+      if(n.pid) s+=`<text x="${n.x+n.w/2}" y="${n.y+HH/2}" text-anchor="middle" dominant-baseline="central" fill="${style.text}" font-size="9" font-weight="700" font-family="Inter,Arial,sans-serif">${ex(n.pid)}</text>`;
+      s+=staticTextBlock(n.x+n.w/2,n.y+HH+(n.h-HH)/2,n.label.replace(/^\d+\.\d+\n/,''),style.text,'10');
+    } else if(n.type==='store'){
+      const sw2=n.w*0.13;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" fill="${style.fill}" stroke="${style.stroke}" stroke-width="1.5" filter="url(#nsh)"/>`;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${sw2}" height="${n.h}" fill="${style.header}"/>`;
+      s+=`<line x1="${n.x+sw2}" y1="${n.y}" x2="${n.x+sw2}" y2="${n.y+n.h}" stroke="${style.stroke}" stroke-width="1"/>`;
+      const dm=n.label.match(/^(D\d+)/);
+      if(dm) s+=`<text x="${n.x+sw2/2}" y="${n.y+n.h/2}" text-anchor="middle" dominant-baseline="central" fill="${style.text}" font-size="7.5" font-weight="700" font-family="Inter,Arial,sans-serif">${dm[1]}</text>`;
+      s+=staticTextBlock(n.x+sw2+(n.w-sw2)/2,n.y+n.h/2,n.label.replace(/^D\d+\s*[–-]\s*/,''),style.text,'8.5');
+    }
+  });
+
+  // LAYER 3: Arrow labels
+  diag.arrows.forEach(a => {
+    const from=nodeMap[a.from], to=nodeMap[a.to];
+    if(!from||!to)return;
+    const fc=nodeCenter(from), tc=nodeCenter(to);
+    let sp=edgePt(from,tc.x,tc.y), ep=edgePt(to,fc.x,fc.y);
+    const dx=ep.x-sp.x, dy=ep.y-sp.y, len=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=-dy/len, ny=dx/len;
+    const astyle = getArrowStyle(a.grp);
+    const col = astyle.color;
+    const opac = astyle.opacity;
+    const nStyle = getNodeStyle(a.grp);
+    const bg = nStyle.labelBg || 'rgba(15,17,23,.9)';
+    const border = nStyle.labelBorder || '#2d3348';
+
+    if(a.bi){
+      const off=5;
+      const fsx=sp.x+nx*off,fsy=sp.y+ny*off,fex=ep.x+nx*off,fey=ep.y+ny*off;
+      const rsx=ep.x-nx*off,rsy=ep.y-ny*off,rex=sp.x-nx*off,rey=sp.y-ny*off;
+      if(a.label) s+=staticLabel((fsx+fex)/2+nx*10,(fsy+fey)/2+ny*10,a.label,col,opac,bg,border);
+      if(a.label2) s+=staticLabel((rsx+rex)/2-nx*10,(rsy+rey)/2-ny*10,a.label2,col,opac,bg,border);
+    } else {
+      if(a.label) s+=staticLabel((sp.x+ep.x)/2+nx*11,(sp.y+ep.y)/2+ny*11,a.label,col,opac,bg,border);
+    }
+  });
+
+  s+='</svg>';
+  return s;
+}
+
+function staticLabel(x,y,text,col,opac,bg,border){
+  const lines = text.split('\n');
+  const lineH = 11;
+  const maxLen = Math.max(...lines.map(l => l.length));
+  const bw = maxLen*4.5+10, bh = lines.length*lineH+4;
+  let s = `<rect x="${x-bw/2}" y="${y-bh/2}" width="${bw}" height="${bh}" rx="3" fill="${bg}" stroke="${border}" stroke-width="0.6" opacity="${opac}"/>`;
+  lines.forEach((ln, i) => {
+    const ty = y - ((lines.length-1)*lineH)/2 + i*lineH;
+    s += `<text x="${x}" y="${ty}" text-anchor="middle" dominant-baseline="central" fill="${col}" font-size="7.5" font-weight="600" font-family="Inter,Arial,sans-serif" opacity="${opac}">${ex(ln)}</text>`;
+  });
+  return s;
+}
+
+function staticTextBlock(cx,cy,text,color,fs){
+  const lines=text.split('\n'), lh=12.5, tot=(lines.length-1)*lh;
+  return lines.map((ln,i)=>`<text x="${cx}" y="${cy-tot/2+i*lh}" text-anchor="middle" dominant-baseline="central" fill="${color}" font-size="${fs}" font-weight="600" font-family="Inter,Arial,sans-serif">${ex(ln)}</text>`).join('');
+}
+
+function ex(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e=>{
+  if(e.key==='=') dz(1.12);
+  if(e.key==='-') dz(0.89);
+  if(e.key==='0') rv();
+  if(e.key==='1') setGroup('1');
+  if(e.key==='2') setGroup('2');
+  if(e.key==='3') setGroup('3');
+  if(e.key==='a'||e.key==='A') setGroup('all');
+});
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+render('ctx');
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  saveOrigPositions();
+  fitView();
+}));
+</script>
+</body>
+</html>

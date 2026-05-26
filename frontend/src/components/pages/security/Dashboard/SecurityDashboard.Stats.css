@@ -1,0 +1,699 @@
+/* ═══════════════════════
+   VEHICLE COUNT PANEL
+   ═══════════════════════ */
+.vc-panel {
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    height: 100%;
+}
+
+.vc-hdr {
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    padding-top: 2px;
+    background: var(--panel-hdr);
+}
+
+.vc-hdr-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 11px 4px;
+}
+
+.vc-hdr-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.vc-ico {
+    width: 26px;
+    height: 26px;
+    border-radius: 5px;
+    background: rgba(0, 229, 255, .07);
+    border: 1px solid rgba(0, 229, 255, .18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.vc-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-brand, #fff);
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.vc-sub {
+    font-size: 7px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 1px;
+}
+
+.vc-hdr-right {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.vc-others,
+.vc-rate {
+    font-size: 7px;
+    font-family: var(--mono);
+    color: var(--green);
+    background: rgba(0, 255, 136, .07);
+    border: 1px solid rgba(0, 255, 136, .15);
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.vc-reset {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 7px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all .15s;
+}
+
+.vc-reset:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.vc-totals {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 11px 8px;
+    border-top: 1px solid rgba(255, 255, 255, .035);
+}
+
+.vc-total-lbl {
+    font-size: 7px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--muted);
+    font-family: var(--mono);
+}
+
+.vc-total-val {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-brand, #fff);
+    line-height: 1.1;
+    margin-top: 1px;
+}
+
+.vc-live {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 7px;
+    font-family: var(--mono);
+    color: var(--green);
+    background: rgba(0, 255, 136, .05);
+    border: 1px solid rgba(0, 255, 136, .15);
+    padding: 3px 7px;
+    border-radius: 4px;
+}
+
+.vc-ldot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pdot 1.6s infinite;
+}
+
+.vc-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.vc-cell-row {
+    background: var(--card);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.vc-cell-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+}
+
+.vc-cell-row.car::before { background: var(--accent); }
+.vc-cell-row.van::before { background: var(--amber); }
+.vc-cell-row.motorcycle::before { background: var(--green); }
+.vc-cell-row.truck::before { background: var(--purple); }
+.vc-cell-row.other::before { background: var(--muted); }
+
+.vc-cr-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 48%; /* Increased for 'MOTORCYCLE' */
+    white-space: nowrap;
+}
+
+.vc-cr-mid {
+    display: flex;
+    align-items: center;
+    width: 15%;
+    justify-content: flex-start;
+}
+
+.vc-cr-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 37%;
+    justify-content: flex-end;
+}
+
+.vc-emoji {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.vc-trend {
+    font-size: 7px;
+    font-family: var(--mono);
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+.vc-trend.up {
+    color: var(--green);
+    background: rgba(0, 255, 136, .06);
+}
+
+.vc-trend.dn {
+    color: var(--red);
+    background: rgba(255, 60, 60, .06);
+}
+
+.vc-num {
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+    font-family: var(--mono);
+}
+
+.vc-cell-row.car .vc-num { color: var(--accent); }
+.vc-cell-row.van .vc-num { color: var(--amber); }
+.vc-cell-row.motorcycle .vc-num { color: var(--green); }
+.vc-cell-row.truck .vc-num { color: var(--purple); }
+.vc-cell-row.other .vc-num { color: var(--muted); }
+
+.vc-lbl {
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .9px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.vc-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+}
+
+.vc-delta {
+    font-size: 7px;
+    font-family: var(--mono);
+    color: var(--green);
+}
+
+.vc-range {
+    font-size: 7px;
+    font-family: var(--mono);
+    color: var(--muted);
+}
+
+.vc-campus-lbl {
+    font-size: 8px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: .2px;
+}
+
+.vc-campus-val {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--accent);
+    background: rgba(0, 229, 255, .08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 229, 255, .15);
+    min-width: 24px;
+    text-align: center;
+    transition: color .3s;
+}
+
+.vc-chart {
+    padding: 7px 11px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    display: none;
+    /* Hidden because moved to top */
+}
+
+.vc-chart-lbl {
+    font-size: 7px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 4px;
+}
+
+.mini-chart-canvas {
+    display: block;
+    width: 100%;
+    height: 80px;
+}
+
+/* ═══════════════════════
+   CAPTURED VEHICLE CARD (RIGHT BAR)
+   ═══════════════════════ */
+.captured-vehicle-panel-in {
+    margin: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.cv-empty-placeholder {
+    width: calc(100% - 20px);
+    margin: 10px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #1a2740;
+    border-radius: 8px;
+}
+
+.cv-empty-msg {
+    text-align: center;
+    color: var(--muted);
+    font-size: 8px;
+    font-family: var(--mono);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.cv-empty-icon {
+    font-size: 22px;
+    opacity: 0.1;
+    margin-bottom: 2px;
+}
+
+.cv-hdr {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 229, 255, 0.04);
+}
+
+.cv-hdr-title {
+    font-size: 8px;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cv-close {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.cv-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cv-visuals {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 10px;
+}
+
+.cv-visuals-single {
+    grid-template-columns: 1fr;
+}
+
+.cv-thumb-box--inset {
+    position: relative;
+}
+
+.cv-plate-inset {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+    border: 2px solid var(--accent);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.cv-plate-crop-zoom {
+    position: relative;
+    min-width: 120px;
+    min-height: 44px;
+}
+
+.cv-plate-zoom-canvas {
+    display: block;
+    border-radius: 2px;
+    vertical-align: top;
+}
+
+.cv-plate-zoom-lbl {
+    position: absolute;
+    bottom: -12px;
+    right: 0;
+    font-size: 5px;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.cv-thumb-box,
+.cv-crop-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cv-img-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cv-snapshot-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    object-fit: cover;
+    background: var(--panel);
+}
+
+.cv-ico-lg {
+    font-size: 24px;
+    opacity: 0.15;
+}
+
+.cv-scan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    opacity: 0.4;
+    animation: scanAnimation 4s linear infinite;
+}
+
+@keyframes scanAnimation {
+    0% {
+        top: 0;
+    }
+
+    100% {
+        top: 100%;
+    }
+}
+
+.cv-plate-crop {
+    width: 100%;
+    height: 34px;
+    background: #eef2f7;
+    border: 2px solid #2d3e50;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.cv-plate-txt {
+    color: #1a2740;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.cv-img-lbl {
+    font-size: 6px;
+    font-weight: 900;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cv-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+}
+
+.cv-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cv-lbl {
+    font-size: 6px;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.cv-val {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cv-conf-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    position: relative;
+    margin-top: 4px;
+}
+
+.cv-conf-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 2px;
+    box-shadow: 0 0 5px var(--green);
+}
+
+.cv-conf-val {
+    position: absolute;
+    right: 0;
+    top: -11px;
+    font-size: 6px;
+    font-family: var(--mono);
+    color: var(--green);
+}
+
+.cv-status-chip {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 7px;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-block;
+    width: fit-content;
+}
+
+.cv-status-chip.ac {
+    background: rgba(0, 255, 136, 0.08);
+    color: var(--green);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.cv-status-chip.an {
+    background: rgba(255, 183, 0, 0.08);
+    color: var(--amber);
+    border: 1px solid rgba(255, 183, 0, 0.2);
+}
+
+.cv-status-chip.br {
+    background: rgba(255, 60, 60, 0.08);
+    color: var(--red);
+    border: 1px solid rgba(255, 60, 60, 0.2);
+}
+
+.cv-status-chip.un {
+    background: rgba(168, 85, 247, 0.08);
+    color: var(--purple);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+/* ── CV DETAIL REASONS & ACTIONS ── */
+.cv-item-full {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    grid-column: 1 / -1;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cv-reason-text {
+    font-size: 11px !important;
+    color: var(--text) !important;
+    background: rgba(0, 229, 255, .05);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.cv-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.cv-triage-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+.cv-btn {
+    padding: 10px 0;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cv-btn.dismiss {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--muted);
+}
+
+.cv-btn.dismiss:hover {
+    background: rgba(255, 255, 255, .15);
+    color: var(--text);
+}
+
+.cv-btn.escalate {
+    background: rgba(255, 183, 0, .15);
+    color: var(--amber);
+    border: 1px solid rgba(255, 183, 0, 0.4);
+}
+
+.cv-btn.escalate:hover {
+    background: rgba(255, 183, 0, .25);
+    transform: translateY(-1px);
+}
+
+.cv-btn.resolve-br {
+    background: rgba(255, 60, 60, .15);
+    color: var(--red);
+    border: 1px solid rgba(255, 60, 60, 0.4);
+}
+
+.cv-btn.resolve-br:hover {
+    background: rgba(255, 60, 60, .25);
+    transform: translateY(-1px);
+}
+
+.cv-btn.resolve-std {
+    width: 100%;
+    background: rgba(0, 230, 118, .15);
+    color: var(--green);
+    border: 1px solid rgba(0, 230, 118, 0.4);
+}
+
+.cv-btn.resolve-std:hover {
+    background: rgba(0, 230, 118, .25);
+    transform: translateY(-1px);
+}
+
+.vc-chart-top {
+    padding: 10px 11px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0, 229, 255, 0.02);
+}

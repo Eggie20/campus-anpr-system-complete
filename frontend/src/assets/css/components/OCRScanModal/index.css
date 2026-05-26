@@ -1,0 +1,5 @@
+/* OCR Scan Modal Styles Entry Point */
+@import './layout.css';
+@import './steps.css';
+@import './sections.css';
+@import './animations.css';

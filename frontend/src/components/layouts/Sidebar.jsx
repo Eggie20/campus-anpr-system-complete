@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import isElectron from '../../utils/isElectron';
+import LogoutModal from '../common/Modal/LogoutModal';
 
 /**
  * Sidebar - Premium Dashboard navigation sidebar
@@ -17,11 +20,18 @@ export default function Sidebar({
   const { user, logout } = useAuth();
   const { toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = (e) => {
     e.preventDefault();
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     logout();
-    navigate('/login', { replace: true });
+    const logoutTarget = isElectron() ? '/admin-login' : '/login';
+    navigate(logoutTarget, { replace: true });
+    setShowLogoutModal(false);
   };
 
   const userInitials = user?.full_name
@@ -193,6 +203,12 @@ export default function Sidebar({
         {!isCollapsed && <div className="footer-copy">© 2026 ALRIGHT SERVE · CSUCC SYSTEM V1.0</div>}
       </div>
     </aside>
+
+    <LogoutModal 
+      isOpen={showLogoutModal}
+      onConfirm={confirmLogout}
+      onCancel={() => setShowLogoutModal(false)}
+    />
     </>
   );
 }
@@ -200,7 +216,7 @@ export default function Sidebar({
 Sidebar.propTypes = {
   role: PropTypes.string,
   menuItems: PropTypes.arrayOf(PropTypes.shape({
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
     materialIcon: PropTypes.string,
     premiumIcon: PropTypes.string,
     label: PropTypes.string.isRequired,

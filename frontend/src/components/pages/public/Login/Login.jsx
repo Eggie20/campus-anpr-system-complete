@@ -4,6 +4,7 @@ import { useAuth } from '../../../../contexts/AuthContext';
 import { useTheme } from '../../../../contexts/ThemeContext';
 import { useNotification } from '../../../../contexts/NotificationContext';
 import { LoadingOverlay } from '../../../common/Loading/Loading';
+import TermsModal from '../Register/modals/TermsModal';
 
 // SVG Icons as components
 const SunIcon = () => (
@@ -66,6 +67,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState('');
+  const [showTerms, setShowTerms] = useState(false);
 
   // Email validation regex
   const validateEmail = (email) => {
@@ -355,12 +357,32 @@ export default function Login() {
 
           {/* Footer Navigation */}
           <div className="footer-nav">
-            <Link to="/admin-login">Admin</Link>
-            <span className="divider">|</span>
-            <Link to="/security-login">Security</Link>
+            <button 
+              onClick={() => setShowTerms(true)} 
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-tertiary)',
+                fontSize: '12px',
+                cursor: 'pointer',
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => e.target.style.color = 'var(--text-secondary)'}
+              onMouseLeave={(e) => e.target.style.color = 'var(--text-tertiary)'}
+            >
+              Terms and Agreement
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Terms and Agreement Modal */}
+      {showTerms && (
+        <TermsModal 
+          onClose={() => setShowTerms(false)}
+          onAgree={() => setShowTerms(false)} 
+        />
+      )}
     </div>
   );
 }

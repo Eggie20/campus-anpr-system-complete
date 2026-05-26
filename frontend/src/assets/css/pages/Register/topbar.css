@@ -1,0 +1,89 @@
+/* Register Page Topbar */
+.main-topbar {
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-main);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.topbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.back-link:hover {
+    color: var(--green);
+    background: var(--green-dim);
+    transform: translateX(-4px);
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.theme-toggle:hover {
+    border-color: var(--green);
+    background: var(--green-dim);
+}
+
+.topbar-btn {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 12px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.topbar-btn:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 1024px) {
+    .main-topbar {
+        display: none;
+    }
+}

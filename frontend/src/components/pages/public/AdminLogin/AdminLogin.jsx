@@ -4,6 +4,7 @@ import { useTheme } from '../../../../contexts/ThemeContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { useNotification } from '../../../../contexts/NotificationContext';
 import { LoadingOverlay } from '../../../common/Loading/Loading';
+import isElectron from '../../../../utils/isElectron';
 
 const SunIcon = () => (
   <svg className="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -208,9 +209,11 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <div className="footer-nav">
-            <Link to="/login">← Back to Main Portal</Link>
-          </div>
+          {!isElectron() && (
+            <div className="footer-nav">
+              <Link to="/login">← Back to Main Portal</Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

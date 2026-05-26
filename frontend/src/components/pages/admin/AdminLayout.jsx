@@ -18,6 +18,8 @@ const adminMenuItems = [
 
   { type: 'header', label: 'SYSTEM' },
   { path: '/admin/analytics', materialIcon: 'trending_up', label: 'Analytics' },
+  { path: '/admin/anomalies', materialIcon: 'warning', label: 'Anomalies' },
+  { path: '/admin/entry-logs', materialIcon: 'history', label: 'Entry-Exit Logs' },
   { path: '/admin/logs', materialIcon: 'assignment', label: 'System Logs' },
   { path: '/admin/settings', materialIcon: 'settings', label: 'Settings' }
 ];
@@ -71,9 +73,12 @@ export default function AdminLayout() {
 
       {/* Main Content Area */}
       <div className="dashboard-main">
-        {/* Shared Header Component */}
         <Header
-          user={user}
+          user={{
+            name: user?.full_name || 'Admin User',
+            email: user?.email,
+            id: user?.id
+          }}
           role="admin"
           onMenuToggle={toggleSidebar}
           pageTitle="Admin Dashboard"

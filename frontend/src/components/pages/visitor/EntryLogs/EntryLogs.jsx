@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../../../services/api';
 
-export default function VisitorEntryLogs() {
+export default function EntryLogs() {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all');
@@ -71,7 +71,7 @@ export default function VisitorEntryLogs() {
             headers.join(','),
             ...logs.map(log => [
                 log.direction,
-                log.plate_number,
+                log.detected_plate_number || 'Unknown',
                 log.gate_name,
                 new Date(log.timestamp).toLocaleString(),
                 log.confidence_score ? `${log.confidence_score.toFixed(1)}%` : 'N/A'
@@ -82,7 +82,7 @@ export default function VisitorEntryLogs() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `visitor_entry_logs_${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `entry_logs_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -99,14 +99,76 @@ export default function VisitorEntryLogs() {
             {/* Page Header */}
             <div className="premium-page-header">
                 <div>
-                    <h1>Visitor <span>Logs</span> 🗂</h1>
+                    <h1>Entry <span>Logs</span> 📋</h1>
                     <p>Review your vehicle entry and exit history across campus gates.</p>
                 </div>
                 <div className="premium-header-meta">
                     <button className="premium-page-btn" onClick={exportToCSV}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
                         Export CSV
                     </button>
+                </div>
+            </div>
+
+            {/* Stats Summary Premium */}
+            <div className="premium-stats-grid mb-6">
+                <div className="premium-stat-card c1">
+                    <div className="premium-stat-header">
+                        <span className="premium-stat-label">Total Entries</span>
+                        <span className="premium-stat-badge-today">today</span>
+                    </div>
+                    <div className="premium-stat-value">{stats.entryCount}</div>
+                    <div className="premium-gate-breakdown">
+                        <div className="gate-item">
+                            <div className="gate-info">
+                                <span className="gate-dot main"></span>
+                                <span className="gate-name">Main gate</span>
+                            </div>
+                            <span className="gate-value">{Math.round(stats.entryCount * 0.7)}</span>
+                        </div>
+                        <div className="gate-item">
+                            <div className="gate-info">
+                                <span className="gate-dot back"></span>
+                                <span className="gate-name">Back gate</span>
+                            </div>
+                            <span className="gate-value">{Math.round(stats.entryCount * 0.3)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="premium-stat-card c3">
+                    <div className="premium-stat-header">
+                        <span className="premium-stat-label">Last entry</span>
+                        <span className="premium-stat-badge-today">today</span>
+                    </div>
+                    <div className="premium-stat-value" style={{ fontSize: '1.8rem', letterSpacing: '0' }}>10:23 AM</div>
+                    <div className="premium-gate-breakdown">
+                        <div className="gate-item">
+                            <div className="gate-info">
+                                <span className="gate-dot main"></span>
+                                <span className="gate-name">Main gate</span>
+                            </div>
+                            <span className="gate-time">10:23 AM</span>
+                        </div>
+                        <div className="gate-item">
+                            <div className="gate-info">
+                                <span className="gate-dot back"></span>
+                                <span className="gate-name">Back gate</span>
+                            </div>
+                            <span className="gate-time">04:08 AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="premium-stat-card c4">
+                    <div className="premium-stat-header">
+                        <span className="premium-stat-label">Security Status</span>
+                        <div className="premium-stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                        </div>
+                    </div>
+                    <div className="premium-stat-value" style={{ fontSize: '1.25rem' }}>Verified</div>
+                    <div className="premium-stat-sub"><span className="up">All Clear</span></div>
                 </div>
             </div>
 
@@ -157,50 +219,6 @@ export default function VisitorEntryLogs() {
                 </div>
             </div>
 
-            {/* Stats Summary Premium */}
-            <div className="premium-stats-grid mb-6">
-                <div className="premium-stat-card c1">
-                    <div className="premium-stat-header">
-                        <span className="premium-stat-label">Total Entries</span>
-                        <div className="premium-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
-                        </div>
-                    </div>
-                    <div className="premium-stat-value">{stats.entryCount}</div>
-                    <div className="premium-stat-sub"><span className="up">Records found</span></div>
-                </div>
-                <div className="premium-stat-card c2">
-                    <div className="premium-stat-header">
-                        <span className="premium-stat-label">Total Exits</span>
-                        <div className="premium-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M19.8 12H9"/></svg>
-                        </div>
-                    </div>
-                    <div className="premium-stat-value">{stats.exitCount}</div>
-                    <div className="premium-stat-sub"><span className="neutral">Records found</span></div>
-                </div>
-                <div className="premium-stat-card c3">
-                    <div className="premium-stat-header">
-                        <span className="premium-stat-label">Most Used Gate</span>
-                        <div className="premium-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        </div>
-                    </div>
-                    <div className="premium-stat-value" style={{ fontSize: '1.25rem' }}>{stats.mostUsedGate}</div>
-                    <div className="premium-stat-sub"><span className="neutral">Primary Access Point</span></div>
-                </div>
-                <div className="premium-stat-card c4">
-                    <div className="premium-stat-header">
-                        <span className="premium-stat-label">Security Status</span>
-                        <div className="premium-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        </div>
-                    </div>
-                    <div className="premium-stat-value" style={{ fontSize: '1.25rem' }}>Verified</div>
-                    <div className="premium-stat-sub"><span className="up">All Clear</span></div>
-                </div>
-            </div>
-
             {/* Logs Table Premium */}
             <div className="premium-table-container">
                 <table className="premium-table">
@@ -226,15 +244,15 @@ export default function VisitorEntryLogs() {
                                 <td>
                                     <span className={`premium-pill ${log.direction === 'entry' ? 'success' : 'warning'}`}>
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                            {log.direction === 'entry' 
-                                                ? <path d="m19 14-7 7-7-7M12 21V3"/> 
-                                                : <path d="m5 10 7-7 7 7M12 3v18"/>
+                                            {log.direction === 'entry'
+                                                ? <path d="m19 14-7 7-7-7M12 21V3" />
+                                                : <path d="m5 10 7-7 7 7M12 3v18" />
                                             }
                                         </svg>
                                         {log.direction === 'entry' ? 'Entry' : 'Exit'}
                                     </span>
                                 </td>
-                                <td><strong style={{ color: 'var(--t-1)' }}>{log.plate_number}</strong></td>
+                                <td><strong style={{ color: 'var(--t-1)' }}>{log.detected_plate_number || 'Unknown'}</strong></td>
                                 <td>{log.gate_name}</td>
                                 <td>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -267,7 +285,7 @@ export default function VisitorEntryLogs() {
                             onClick={handlePrevPage}
                             disabled={currentPage === 1}
                         >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
                             Previous
                         </button>
                         <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontSize: '0.9rem', color: 'var(--t-1)', fontWeight: '600' }}>
@@ -279,7 +297,7 @@ export default function VisitorEntryLogs() {
                             disabled={currentPage >= totalPages}
                         >
                             Next
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
                         </button>
                     </div>
                 </div>

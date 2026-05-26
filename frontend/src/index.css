@@ -27,7 +27,7 @@
 
 /* Page Styles */
 @import './assets/css/pages/login.css';
-@import './assets/css/pages/register.css';
+@import './assets/css/pages/Register/index.css';
 @import './assets/css/pages/dashboard.css';
 @import './assets/css/pages/notifications.css';
 @import './assets/css/pages/profile.css';

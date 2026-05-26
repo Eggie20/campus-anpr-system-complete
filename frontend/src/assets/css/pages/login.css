@@ -597,3 +597,19 @@
 .login-redirect a:hover {
   text-decoration: underline;
 }
+
+/* ============================================
+   Dark Mode Link Overrides (Readability)
+   ============================================ */
+[data-theme="dark"] .recovery-link,
+[data-theme="dark"] .register-prompt a,
+[data-theme="dark"] .login-redirect a,
+[data-theme="dark"] .footer-nav a:hover {
+  color: #34d399; /* High-contrast bright emerald */
+}
+
+[data-theme="dark"] .recovery-link:hover,
+[data-theme="dark"] .register-prompt a:hover,
+[data-theme="dark"] .login-redirect a:hover {
+  color: #6ee7b7; 
+}

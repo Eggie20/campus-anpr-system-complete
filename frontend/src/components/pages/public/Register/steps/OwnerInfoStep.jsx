@@ -1,287 +1,268 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default function OwnerInfoStep({ formData, errors, updateFormData, onOpenOCR }) {
+export default function OwnerInfoStep({ formData, errors, updateFormData, onOpenOCR, onNext }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+  const password = formData.password || '';
+  
+  const criteria = [
+    { label: 'At least 8 characters', met: password.length >= 8 },
+    { label: 'At least one number', met: /\d/.test(password) },
+    { label: 'At least one lowercase letter', met: /[a-z]/.test(password) },
+    { label: 'At least one uppercase letter', met: /[A-Z]/.test(password) },
+    { label: 'At least one special character', met: /[!@#$%^&*(),.?":{}|<>_]/.test(password) }
+  ];
   return (
-    <div className="form-step active" data-step="1">
-      <div className="step-header">
-        <h2>Owner Information</h2>
-        <p>Please provide your personal details and documents</p>
-      </div>
-
-      {/* Scan ID Trigger */}
-      <div className="scan-id-action">
-        <button type="button" className="btn-scan-id" onClick={onOpenOCR}>
-          <span className="icon">📷</span> Scan Driver's License (Auto-Fill)
-        </button>
-        <p className="scan-helper-text">or fill details manually below</p>
-      </div>
-
-      {/* Basic Info Row */}
-      <div className="form-row three-columns">
-        <div className="form-group">
-          <label htmlFor="firstName" className="form-label required">First Name</label>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              className={`form-input ${errors.firstName ? 'error' : ''}`}
-              placeholder="First Name"
-              value={formData.firstName}
-              onChange={(e) => updateFormData('firstName', e.target.value)}
-              autoComplete="given-name"
-            />
+    <div className="form-step active">
+      <div className="step-content-scroll">
+        <div className="step-section">
+          <div className="step-info-header">
+            <div className="step-info-title">Owner Information</div>
+            <div className="step-info-desc">Please provide your personal details and identification documents.</div>
           </div>
-          {errors.firstName && <div className="error-message show">{errors.firstName}</div>}
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="middleName" className="form-label">Middle Name</label>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              id="middleName"
-              name="middleName"
-              className="form-input"
-              placeholder="Middle Name"
-              value={formData.middleName || ''}
-              onChange={(e) => updateFormData('middleName', e.target.value)}
-              autoComplete="additional-name"
-            />
+          {/* SCAN CARD */}
+          <div className="scan-card-trigger" onClick={onOpenOCR}>
+            <div className="scan-card-icon">🪪</div>
+            <div className="scan-card-content">
+              <div className="scan-card-title">Auto-fill with OCR Scan</div>
+              <div className="scan-card-text">Scan your Driver's License to automatically fill the fields below. Fast and accurate.</div>
+            </div>
+            <div className="scan-card-badge">RECOMMENDED</div>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="lastName" className="form-label required">Last Name</label>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              className={`form-input ${errors.lastName ? 'error' : ''}`}
-              placeholder="Last Name"
-              value={formData.lastName}
-              onChange={(e) => updateFormData('lastName', e.target.value)}
-              autoComplete="family-name"
-            />
+          <div className="form-section-divider">OR FILL MANUALLY</div>
+
+          <div className="form-grid">
+            <div className="form-group col-4">
+              <label className="field-label required">First Name</label>
+              <input
+                type="text"
+                className={`field-input ${errors.firstName ? 'error' : ''}`}
+                placeholder="Juan"
+                value={formData.firstName}
+                onChange={(e) => updateFormData('firstName', e.target.value)}
+              />
+              {errors.firstName && <div className="field-error">{errors.firstName}</div>}
+            </div>
+            <div className="form-group col-4">
+              <label className="field-label">Middle Name</label>
+              <input
+                type="text"
+                className="field-input"
+                placeholder="Ramos"
+                value={formData.middleName || ''}
+                onChange={(e) => updateFormData('middleName', e.target.value)}
+              />
+            </div>
+            <div className="form-group col-4">
+              <label className="field-label required">Last Name</label>
+              <input
+                type="text"
+                className={`field-input ${errors.lastName ? 'error' : ''}`}
+                placeholder="Dela Cruz"
+                value={formData.lastName}
+                onChange={(e) => updateFormData('lastName', e.target.value)}
+              />
+              {errors.lastName && <div className="field-error">{errors.lastName}</div>}
+            </div>
+
+            <div className="form-group col-4">
+              <label className="field-label required">Sex</label>
+              <select
+                className={`field-input ${errors.sex ? 'error' : ''}`}
+                value={formData.sex || ''}
+                onChange={(e) => updateFormData('sex', e.target.value)}
+              >
+                <option value="" disabled>Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              {errors.sex && <div className="field-error">{errors.sex}</div>}
+            </div>
+            <div className="form-group col-4">
+              <label className="field-label required">Date of Birth</label>
+              <input
+                type="date"
+                className={`field-input ${errors.birthDate ? 'error' : ''}`}
+                value={formData.birthDate || ''}
+                onChange={(e) => updateFormData('birthDate', e.target.value)}
+              />
+              {errors.birthDate && <div className="field-error">{errors.birthDate}</div>}
+            </div>
+            <div className="form-group col-4">
+              <label className="field-label">Nationality</label>
+              <input
+                type="text"
+                className="field-input"
+                placeholder="Filipino"
+                value={formData.nationality || ''}
+                onChange={(e) => updateFormData('nationality', e.target.value)}
+              />
+            </div>
+
+            <div className="form-group col-12">
+              <label className="field-label required">Driver's License Number</label>
+              <input
+                type="text"
+                className={`field-input ${errors.idNumber ? 'error' : ''}`}
+                placeholder="N01-XX-XXXXXX"
+                value={formData.idNumber}
+                onChange={(e) => updateFormData('idNumber', e.target.value)}
+              />
+              {errors.idNumber && <div className="field-error">{errors.idNumber}</div>}
+            </div>
+
+            <div className="form-group col-12">
+              <label className="field-label required">Home Address</label>
+              <textarea
+                className={`field-input ${errors.address ? 'error' : ''}`}
+                placeholder="House No., Street, Barangay, City, Province"
+                rows="2"
+                value={formData.address}
+                onChange={(e) => updateFormData('address', e.target.value)}
+              ></textarea>
+              {errors.address && <div className="field-error">{errors.address}</div>}
+            </div>
           </div>
-          {errors.lastName && <div className="error-message show">{errors.lastName}</div>}
-        </div>
-      </div>
 
-      {/* Personal Details Row */}
-      <div className="form-row three-columns">
-        <div className="form-group">
-          <label htmlFor="sex" className="form-label">Sex</label>
-          <select
-            id="sex"
-            name="sex"
-            className="form-select"
-            value={formData.sex || ''}
-            onChange={(e) => updateFormData('sex', e.target.value)}
-          >
-            <option value="" disabled>Select Sex</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          {errors.sex && <div className="error-message show">{errors.sex}</div>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="birthDate" className="form-label">Date of Birth</label>
-          <input
-            type="date"
-            id="birthDate"
-            name="birthDate"
-            className="form-input"
-            value={formData.birthDate || ''}
-            onChange={(e) => updateFormData('birthDate', e.target.value)}
-            placeholder="YYYY-MM-DD"
-          />
-          {errors.birthDate && <div className="error-message show">{errors.birthDate}</div>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="nationality" className="form-label">Nationality</label>
-          <input
-            type="text"
-            id="nationality"
-            name="nationality"
-            className="form-input"
-            placeholder="e.g. Philippines"
-            value={formData.nationality || ''}
-            onChange={(e) => updateFormData('nationality', e.target.value)}
-          />
-          {errors.nationality && <div className="error-message show">{errors.nationality}</div>}
-        </div>
-      </div>
-
-      {/* Email */}
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="email" className="form-label required">Email Address</label>
-          <div className="input-wrapper">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className={`form-input ${errors.email ? 'error' : ''}`}
-              placeholder="name@example.com"
-              value={formData.email}
-              onChange={(e) => updateFormData('email', e.target.value)}
-              autoComplete="email"
-            />
-          </div>
-          {errors.email && <div className="error-message show">{errors.email}</div>}
-        </div>
-      </div>
-
-      {/* Password */}
-      <div className="form-row two-columns">
-        <div className="form-group">
-          <label htmlFor="password" className="form-label required">Password</label>
-          <div className="input-wrapper">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={`form-input ${errors.password ? 'error' : ''}`}
-              placeholder="Create a password"
-              value={formData.password || ''}
-              onChange={(e) => updateFormData('password', e.target.value)}
-              autoComplete="new-password"
-            />
-          </div>
-          {errors.password && <div className="error-message show">{errors.password}</div>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="confirmPassword" className="form-label required">Confirm Password</label>
-          <div className="input-wrapper">
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
-              placeholder="Confirm your password"
-              value={formData.confirmPassword || ''}
-              onChange={(e) => updateFormData('confirmPassword', e.target.value)}
-              autoComplete="new-password"
-            />
-          </div>
-          {errors.confirmPassword && <div className="error-message show">{errors.confirmPassword}</div>}
-        </div>
-      </div>
-
-      {/* Phone & ID */}
-      <div className="form-row two-columns">
-        <div className="form-group">
-          <label htmlFor="phone" className="form-label required">Phone Number</label>
-          <div className="input-wrapper">
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              className={`form-input ${errors.phone ? 'error' : ''}`}
-              placeholder="+1 (555) 000-0000"
-              value={formData.phone}
-              onChange={(e) => updateFormData('phone', e.target.value)}
-              autoComplete="tel"
-            />
-          </div>
-          {errors.phone && <div className="error-message show">{errors.phone}</div>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="idNumber" className="form-label required">ID Number</label>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              id="idNumber"
-              name="idNumber"
-              className={`form-input ${errors.idNumber ? 'error' : ''}`}
-              placeholder="ID Number"
-              value={formData.idNumber}
-              onChange={(e) => updateFormData('idNumber', e.target.value)}
-            />
-          </div>
-          {errors.idNumber && <div className="error-message show">{errors.idNumber}</div>}
-        </div>
-      </div>
-
-      {/* Address */}
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="address" className="form-label required">Address</label>
-          <textarea
-            id="address"
-            name="address"
-            className={`form-textarea ${errors.address ? 'error' : ''}`}
-            placeholder="Complete Address"
-            value={formData.address}
-            onChange={(e) => updateFormData('address', e.target.value)}
-            rows="2"
-          />
-          {errors.address && <div className="error-message show">{errors.address}</div>}
-        </div>
-      </div>
-
-      {/* Relationship */}
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="relationship" className="form-label required">Relationship to CSUCC</label>
-          <select
-            id="relationship"
-            name="relationship"
-            className={`form-select ${errors.relationship ? 'error' : ''}`}
-            value={formData.relationship}
-            onChange={(e) => updateFormData('relationship', e.target.value)}
-          >
-            <option value="">Select Relationship</option>
-            <option value="student">Student</option>
-            <option value="faculty">Faculty</option>
-            <option value="staff">Staff</option>
-          </select>
-          {errors.relationship && <div className="error-message show">{errors.relationship}</div>}
-        </div>
-      </div>
-
-      {/* Driver's License Upload */}
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="driverLicense" className="form-label required">Driver's License</label>
-          <div className={`file-upload-wrapper ${formData.driverLicense ? 'has-file' : ''}`}>
-            <input
-              type="file"
-              id="driverLicense"
-              name="driverLicense"
-              className="file-upload-input"
-              accept="image/*,.pdf"
-              onChange={(e) => updateFormData('driverLicense', e.target.files[0])}
-            />
-            <label htmlFor="driverLicense" className="file-upload-label">
-              <div className="file-upload-icon-box">
-                {formData.driverLicense && formData.driverLicense.type?.startsWith('image/') ? (
-                   <img 
-                     src={URL.createObjectURL(formData.driverLicense)} 
-                     alt="License Preview" 
-                     className="upload-preview-img"
-                   />
-                ) : (
-                  <span>{formData.driverLicense ? '✅' : '📄'}</span>
-                )}
+          <div className="form-section-header">Contact & Security</div>
+          <div className="form-grid">
+            <div className="form-group col-6">
+              <label className="field-label required">Email Address</label>
+              <div className="input-with-icon">
+                <span className="icon">📧</span>
+                <input
+                  type="email"
+                  className={`field-input ${errors.email ? 'error' : ''}`}
+                  placeholder="juan.delacruz@csucc.edu.ph"
+                  value={formData.email}
+                  onChange={(e) => updateFormData('email', e.target.value)}
+                />
               </div>
-              <div className="file-upload-info">
-                <div className="upload-title">
-                  {formData.driverLicense ? formData.driverLicense.name || 'ID Document Attached' : 'Click to upload Driver\'s License'}
-                </div>
-                <div className="upload-desc">
-                  {formData.driverLicense ? 'Auto-filled from scan' : 'SVG, PNG, JPG or PDF (max. 5MB)'}
-                </div>
+              {errors.email && <div className="field-error">{errors.email}</div>}
+            </div>
+            <div className="form-group col-6">
+              <label className="field-label">Phone Number (Optional)</label>
+              <div className="input-with-icon">
+                <span className="icon">📱</span>
+                <input
+                  type="tel"
+                  className={`field-input ${errors.phone ? 'error' : ''}`}
+                  placeholder="0912 345 6789"
+                  value={formData.phone}
+                  onChange={(e) => updateFormData('phone', e.target.value)}
+                />
               </div>
-            </label>
+              {errors.phone && <div className="field-error">{errors.phone}</div>}
+            </div>
+
+            <div className="form-group col-6 password-group">
+              <label className="field-label required">Password</label>
+              <div className="input-with-icon">
+                <span className="icon">🔒</span>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className={`field-input ${errors.password ? 'error' : ''}`}
+                  placeholder="Create a strong password"
+                  value={formData.password || ''}
+                  onChange={(e) => updateFormData('password', e.target.value)}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={() => setIsPasswordFocused(false)}
+                />
+                <button 
+                  type="button" 
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+              
+              <div className={`password-checklist ${isPasswordFocused ? 'visible' : ''}`}>
+                {criteria.map((c, i) => (
+                  <div key={i} className={`checklist-item ${c.met ? 'met' : ''}`}>
+                    <div className="check-circle">
+                      {c.met && <span className="check-mark">✓</span>}
+                    </div>
+                    <span>{c.label}</span>
+                  </div>
+                ))}
+              </div>
+              {errors.password && <div className="field-error">{errors.password}</div>}
+            </div>
+            <div className="form-group col-6">
+              <label className="field-label required">Confirm Password</label>
+              <input
+                type="password"
+                className={`field-input ${errors.confirmPassword ? 'error' : ''}`}
+                placeholder="••••••••"
+                value={formData.confirmPassword || ''}
+                onChange={(e) => updateFormData('confirmPassword', e.target.value)}
+              />
+              {errors.confirmPassword && <div className="field-error">{errors.confirmPassword}</div>}
+            </div>
           </div>
-          {errors.driverLicense && <div className="error-message show">{errors.driverLicense}</div>}
+
+          <div className="form-section-header">University Relationship</div>
+          <div className="relationship-grid">
+            {[
+              { id: 'student', label: 'Student', icon: '🎓', desc: 'Currently enrolled student' },
+              { id: 'faculty', label: 'Faculty', icon: '👨‍🏫', desc: 'Teaching & academic staff' },
+              { id: 'staff', label: 'Staff', icon: '💼', desc: 'Administrative & support personnel' },
+              { id: 'visitor', label: 'Visitor', icon: '🤝', desc: 'Guest or temporary visitor' }
+            ].map(rel => (
+              <div
+                key={rel.id}
+                className={`rel-opt ${formData.relationship === rel.id ? 'active' : ''}`}
+                onClick={() => updateFormData('relationship', rel.id)}
+              >
+                <div className="rel-icon">{rel.icon}</div>
+                <div className="rel-info">
+                  <div className="rel-label">{rel.label}</div>
+                  <div className="rel-desc">{rel.desc}</div>
+                </div>
+                <div className="rel-check">✓</div>
+              </div>
+            ))}
+          </div>
+          {errors.relationship && <div className="field-error" style={{ textAlign: 'center', marginTop: '10px' }}>{errors.relationship}</div>}
+        </div>
+      </div>
+
+      <div className="form-actions">
+        <div className="login-prompt" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Already have an account?</span>
+          <a href="/login" 
+            style={{ 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '6px', 
+              background: 'rgba(16, 185, 129, 0.1)', 
+              color: 'var(--green)', 
+              padding: '6px 14px', 
+              borderRadius: '8px', 
+              fontWeight: 600, 
+              fontSize: '13px', 
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+              border: '1px solid rgba(16, 185, 129, 0.2)'
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.2)'; e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)' }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'; e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.2)' }}
+          >
+            <span>Login here</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </a>
+        </div>
+        <div className="form-actions-right">
+          <button type="button" className="btn btn-next" onClick={onNext}>Continue</button>
         </div>
       </div>
     </div>
@@ -292,5 +273,6 @@ OwnerInfoStep.propTypes = {
   formData: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   updateFormData: PropTypes.func.isRequired,
-  onOpenOCR: PropTypes.func.isRequired
+  onOpenOCR: PropTypes.func.isRequired,
+  onNext: PropTypes.func.isRequired
 };

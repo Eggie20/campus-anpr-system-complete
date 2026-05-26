@@ -1,0 +1,124 @@
+/* OCR Scan Modal Steps Bar */
+.steps-bar {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.015);
+    gap: 0;
+}
+
+.proc-step-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.proc-step-wrapper:last-child {
+    flex: 0;
+}
+
+.proc-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 2;
+}
+
+.sc-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+
+.sc-circle.done {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+}
+
+.sc-circle.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+    box-shadow: 0 0 15px rgba(55, 138, 221, 0.4);
+    transform: scale(1.1);
+}
+
+.sc-circle.pending {
+    color: var(--text-secondary);
+}
+
+.sl-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.3s;
+}
+
+.sl-label.done {
+    color: var(--green);
+}
+
+.sl-label.active {
+    color: var(--blue);
+}
+
+.sl-label.pending {
+    color: var(--text-secondary);
+}
+
+.connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border-color);
+    margin: 0 -4px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.conn-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--green);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 580px) {
+    .steps-bar {
+        padding: 12px 6px;
+    }
+
+    .sc-circle {
+        width: 22px;
+        height: 22px;
+        font-size: 9px;
+    }
+
+    .sl-label {
+        font-size: 8px;
+        letter-spacing: 0;
+    }
+
+    .proc-step {
+        gap: 4px;
+    }
+
+    .connector {
+        margin-bottom: 12px;
+    }
+}

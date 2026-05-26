@@ -1,4 +1,7 @@
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext';
+import { usePrivacy } from '../../../../contexts/PrivacyContext';
+import api from '../../../../services/api';
 import {
   StatWidget,
   DashboardWidget,
@@ -7,6 +10,7 @@ import {
   QuickActions,
   CameraTile
 } from '../../../../components';
+import styles from './Dashboard.module.css';
 
 // Admin navigation menu items
 export const adminMenuItems = [
@@ -20,263 +24,379 @@ export const adminMenuItems = [
   { path: '/admin/settings', materialIcon: 'settings', label: 'Settings' }
 ];
 
-// Mock data
-const recentUsers = [
-  { avatar: 'JD', avatarClass: 'role-student', primary: 'John Dela Cruz', secondary: 'student@csu.edu.ph', badge: 'Student', badgeClass: 'badge-primary' },
-  { avatar: 'AR', avatarClass: 'role-student', primary: 'Anna Reyes', secondary: 'anna.r@csu.edu.ph', badge: 'Student', badgeClass: 'badge-primary' },
-  { avatar: 'JC', avatarClass: 'role-faculty', primary: 'Prof. Jose Cruz', secondary: 'jose.c@csu.edu.ph', badge: 'Faculty', badgeClass: 'badge-secondary' },
-  { avatar: 'PG', avatarClass: 'role-security', primary: 'Pedro Garcia', secondary: 'guard@csu.edu.ph', badge: 'Security', badgeClass: 'badge-success' }
-];
-
-const recentVehicles = [
-  { avatar: '🚗', avatarClass: 'bg-success', primary: 'ABC 1234', secondary: 'Toyota Vios • Dr. Maria Santos', badge: 'Registered', badgeClass: 'badge-success' },
-  { avatar: '🏍️', avatarClass: 'bg-success', primary: 'XYZ 5678', secondary: 'Honda Click 125i • John Dela Cruz', badge: 'Registered', badgeClass: 'badge-success' },
-  { avatar: '🚗', avatarClass: 'bg-success', primary: 'DEF 9012', secondary: 'Honda Civic • Prof. Jose Cruz', badge: 'Registered', badgeClass: 'badge-success' },
-  { avatar: '🚐', avatarClass: 'bg-warning', primary: 'GHI 3456', secondary: 'Toyota Hiace • Unassigned', badge: 'Pending', badgeClass: 'badge-warning' }
-];
-
-const recentActivity = [
-  { type: 'entry', text: '<strong>ABC 1234</strong> entered via Main Gate', time: '2 minutes ago' },
-  { type: 'alert', text: '<strong>UNK 0000</strong> - Unregistered vehicle detected', time: '15 minutes ago' },
-  { type: 'exit', text: '<strong>XYZ 5678</strong> exited via Main Gate', time: '32 minutes ago' },
-  { type: 'system', text: 'Camera <strong>Parking Lot B</strong> went offline', time: '1 hour ago' },
-  { type: 'entry', text: '<strong>DEF 9012</strong> entered via Back Gate', time: '2 hours ago' }
-];
-
-const cameras = [
-  { name: 'Main Gate - Entry', status: 'online' },
-  { name: 'Main Gate - Exit', status: 'online' },
-  { name: 'Parking Lot A', status: 'online' },
-  { name: 'Parking Lot B', status: 'offline' },
-  { name: 'Back Gate', status: 'online' },
-  { name: 'Faculty Area', status: 'recording' }
-];
-
 const quickActions = [
-  { icon: '➕', iconClass: 'quick-action-icon--info', label: 'Add User', onClick: () => { } },
-  { icon: '🚗', iconClass: 'quick-action-icon--success', label: 'Add Vehicle', onClick: () => { } },
+  { icon: '➕', iconClass: 'quick-action-icon--info', label: 'Add User', path: '/admin/users' },
+  { icon: '🚗', iconClass: 'quick-action-icon--success', label: 'Add Vehicle', path: '/admin/vehicles' },
   { icon: '📊', iconClass: 'quick-action-icon--warning', label: 'Reports', path: '/admin/analytics' },
   { icon: '⚙️', iconClass: 'quick-action-icon--secondary', label: 'Settings', path: '/admin/settings' }
 ];
 
+const EMPTY_WEEKLY = { days: [], entries: 0, exits: 0, onCampus: 0 };
+const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+/* ------------------------------------------------------------------ */
+/*  Skeleton helpers                                                   */
+/* ------------------------------------------------------------------ */
+function SkeletonLine({ width = '60%', height = '1.25rem' }) {
+  return <div className={styles.skeleton} style={{ height, width }} />;
+}
+
+function SkeletonBlock({ width = '80%', height = '3rem' }) {
+  return <div className={styles.skeleton} style={{ height, width }} />;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Main component                                                     */
+/* ------------------------------------------------------------------ */
 export default function AdminDashboard() {
   const { user } = useAuth();
+  const { anonymizeName, anonymizePlate, isConfidentialMode } = usePrivacy();
+
+  const anonymizeActivityText = (text) => {
+    return text;
+  };
+
+  const [data, setData] = useState({
+    stats: {
+      users: { total: 0, students: 0, faculty: 0, staff: 0, security: 0 },
+      vehicles: { total: 0, on_campus: 0, entered_main: 0, exited_main: 0, entered_back: 0, exited_back: 0 }
+    },
+    recentUsers: [],
+    recentVehicles: [],
+    recentActivity: [],
+    cameras: [],
+    alerts: [],
+    weekly: EMPTY_WEEKLY
+  });
+  const [loading, setLoading] = useState(true);
+  const [resolvingIds, setResolvingIds] = useState(new Set());
+  const [resolveErrors, setResolveErrors] = useState({});
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await api.get('/admin/dashboard/summary');
+        const raw = res.data;
+        setData({
+          stats: raw.stats ?? data.stats,
+          recentUsers: raw.recentUsers ?? [],
+          recentVehicles: raw.recentVehicles ?? [],
+          recentActivity: raw.recentActivity ?? [],
+          cameras: raw.cameras ?? [],
+          alerts: raw.alerts ?? [],
+          weekly: raw.weekly ?? EMPTY_WEEKLY
+        });
+      } catch (e) {
+        console.error('Dashboard fetch error', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboard();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ---- Alert resolve handler ---- */
+  const handleResolve = useCallback(async (alertId) => {
+    setResolvingIds(prev => new Set(prev).add(alertId));
+    setResolveErrors(prev => { const n = { ...prev }; delete n[alertId]; return n; });
+
+    try {
+      await api.patch(`/admin/alerts/${alertId}/resolve`);
+      setData(prev => ({
+        ...prev,
+        alerts: prev.alerts.filter(a => a.id !== alertId)
+      }));
+    } catch (e) {
+      setResolveErrors(prev => ({
+        ...prev,
+        [alertId]: e.response?.data?.detail || 'Failed'
+      }));
+    } finally {
+      setResolvingIds(prev => {
+        const n = new Set(prev);
+        n.delete(alertId);
+        return n;
+      });
+    }
+  }, []);
+
+  /* ---- Derived values ---- */
+  const cameras = data.cameras;
+  const onlineCameras = cameras.filter(c => c.status === 'online').length;
+  const totalCameras = cameras.length;
+  const allOnline = totalCameras > 0 && onlineCameras === totalCameras;
+  const systemStatus = allOnline ? 'Operational' : 'Degraded';
+
+  const alerts = data.alerts;
+  const criticalCount = alerts.filter(a => a.type === 'critical').length;
+  const warningCount = alerts.filter(a => a.type === 'warning').length;
+
+  const weekly = data.weekly;
+  const weeklyDays = weekly.days ?? [];
+  const maxDay = weeklyDays.length > 0 ? Math.max(...weeklyDays, 1) : 1;
+
+  const { users: userStats, vehicles: vehicleStats } = data.stats;
 
   return (
-      <>
-        <div className="dashboard-header-banner" style={{ border: 'none', background: 'transparent' }}>
-          <div className="premium-page-header" style={{ marginBottom: '2rem' }}>
-            <div>
-              <h1 style={{ fontSize: '1.75rem' }}>Administrator <span>Command Center</span> 🛡️</h1>
-              <p>System status: <span className="text-success-glow" style={{ color: '#10b981', fontWeight: 600 }}>● Operational</span> • All campus nodes are synchronized.</p>
-            </div>
-            <div className="premium-header-meta">
-              <div className="premium-glass-card" style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span className="material-symbols-rounded" style={{ color: 'var(--ac)' }}>calendar_today</span>
-                <span style={{ fontWeight: 600, color: 'var(--t-1)' }}>
-                  {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+    <>
+      {/* ===== HEADER ===== */}
+      <div className="premium-page-header">
+        <div>
+          <h1>Command <span>Management</span> 🛡️</h1>
+          <p className={styles.headerStatus} style={{ marginTop: '4px' }}>
+            System status:{' '}
+            <span
+              className={allOnline ? styles.statusDotOnline : styles.statusDotDegraded}
+              style={{ display: 'inline-block', width: '0.5rem', height: '0.5rem', borderRadius: '50%', marginRight: '0.25rem', verticalAlign: 'middle' }}
+            />
+            <strong style={{ color: allOnline ? 'var(--color-success)' : 'var(--color-danger)' }}>
+              {loading ? '...' : systemStatus}
+            </strong>
+            {allOnline && !loading && ' • All campus nodes are synchronized.'}
+            {!allOnline && !loading && ` • ${totalCameras - onlineCameras} node(s) offline.`}
+          </p>
+        </div>
+        <div className={styles.dateBadge}>
+          <span className="material-symbols-rounded" style={{ color: 'var(--color-primary)' }}>calendar_today</span>
+          <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
+        </div>
+      </div>
+
+      {/* ===== STAT CARDS ROW ===== */}
+      <section className={styles.statCardsRow}>
+        {/* -- Total Residents -- */}
+        <div className={styles.metricCard}>
+          {loading ? (
+            <>
+              <SkeletonLine width="50%" height="0.75rem" />
+              <div style={{ marginTop: '0.75rem' }}><SkeletonBlock width="40%" height="2.5rem" /></div>
+              <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.25rem' }}>
+                <SkeletonLine width="3rem" height="1rem" />
+                <SkeletonLine width="3rem" height="1rem" />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.metricCardHeader}>
+                <span className={styles.metricCardLabel}>Total Residents</span>
+                <span className={styles.badgeUpdated} role="status" aria-live="polite">Updated</span>
+              </div>
+              <div className={styles.metricCardValue}>{userStats.total}</div>
+              <div className={styles.rolePills}>
+                <span className={styles.rolePill}>
+                  <span className={styles.rolePillDot} style={{ background: 'var(--role-student)' }} />
+                  Student {userStats.students}
+                </span>
+                <span className={styles.rolePill}>
+                  <span className={styles.rolePillDot} style={{ background: 'var(--role-faculty)' }} />
+                  Faculty {userStats.faculty}
+                </span>
+                <span className={styles.rolePill}>
+                  <span className={styles.rolePillDot} style={{ background: 'var(--role-staff)' }} />
+                  Staff {userStats.staff}
+                </span>
+                <span className={styles.rolePill}>
+                  <span className={styles.rolePillDot} style={{ background: 'var(--role-security)' }} />
+                  Security {userStats.security}
                 </span>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
 
-        {/* Complex Stats Row */}
-        <section className="dashboard-grid dashboard-grid--2col mb-8">
-          {/* Node Connectivity Card */}
-          <div className="complex-stat-card">
-            <div className="stat-card-header">
-              <span className="stat-card-label">Node connectivity</span>
-              <span className="stat-card-badge stat-card-badge--online">8 / 8 online</span>
-            </div>
-            <div className="stat-card-grid">
-              <div className="stat-card-column">
-                <div className="stat-card-column-title">
-                  <span className="dot main"></span>
-                  Main gate <span style={{ opacity: 0.6, marginLeft: '4px', fontWeight: 400 }}>4 cameras</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Front left</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Front right</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Rear left</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Rear right</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
+        {/* -- On Campus Now -- */}
+        <div className={styles.metricCard}>
+          {loading ? (
+            <>
+              <SkeletonLine width="50%" height="0.75rem" />
+              <div style={{ marginTop: '0.75rem' }}><SkeletonBlock width="40%" height="2.5rem" /></div>
+              <div style={{ marginTop: '0.5rem' }}><SkeletonLine width="80%" height="0.75rem" /></div>
+            </>
+          ) : (
+            <>
+              <div className={styles.metricCardHeader}>
+                <span className={styles.metricCardLabel}>On Campus Now</span>
+                <span className={styles.badgeUpdated} role="status" aria-live="polite">Updated</span>
               </div>
-              <div className="stat-card-column">
-                <div className="stat-card-column-title">
-                  <span className="dot back"></span>
-                  Back gate <span style={{ opacity: 0.6, marginLeft: '4px', fontWeight: 400 }}>4 cameras</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Front left</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Front right</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Rear left</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
-                <div className="stat-list-item">
-                  <div className="stat-item-info"><span className="stat-item-dot online"></span>Rear right</div>
-                  <span className="stat-item-status online">Online</span>
-                </div>
+              <div className={styles.metricCardValue}>{vehicleStats.on_campus}</div>
+              <div className={styles.metricCardSub}>
+                Main gate {vehicleStats.entered_main} in / {vehicleStats.exited_main} out
+                {' · '}
+                Back gate {vehicleStats.entered_back} in / {vehicleStats.exited_back} out
               </div>
-            </div>
-            <div className="stat-card-footer">
-              <span className="footer-label">Total nodes online</span>
-              <span className="footer-value" style={{ color: '#10b981' }}>8 / 8</span>
-            </div>
-          </div>
+            </>
+          )}
+        </div>
 
-          {/* Active Residents Card */}
-          <div className="complex-stat-card">
-            <div className="stat-card-header">
-              <span className="stat-card-label">Active residents</span>
-              <span className="stat-card-badge stat-card-badge--online">↑ 12% today</span>
-            </div>
-            <div className="stat-card-value-display">
-              <div className="stat-card-value">156</div>
-            </div>
-            <div className="resident-role-list">
-              <div className="resident-role-item">
-                <div className="flex items-center gap-2">
-                  <span className="stat-item-dot" style={{ background: '#3b82f6' }}></span>
-                  <span style={{ fontSize: '0.85rem' }}>Student</span>
-                </div>
-                <span style={{ fontWeight: 700 }}>98</span>
+        {/* -- Camera Nodes -- */}
+        <div className={styles.metricCard}>
+          {loading ? (
+            <>
+              <SkeletonLine width="50%" height="0.75rem" />
+              <div style={{ marginTop: '0.75rem' }}><SkeletonBlock width="50%" height="2.5rem" /></div>
+              <div style={{ marginTop: '0.5rem' }}><SkeletonLine width="65%" height="0.75rem" /></div>
+            </>
+          ) : (
+            <>
+              <div className={styles.metricCardHeader}>
+                <span className={styles.metricCardLabel}>Camera Nodes</span>
+                <span
+                  className={allOnline ? styles.badgeOnline : styles.badgeDanger}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {onlineCameras} / {totalCameras} online
+                </span>
               </div>
-              <div className="resident-role-item">
-                <div className="flex items-center gap-2">
-                  <span className="stat-item-dot" style={{ background: '#10b981' }}></span>
-                  <span style={{ fontSize: '0.85rem' }}>Faculty</span>
-                </div>
-                <span style={{ fontWeight: 700 }}>32</span>
+              <div className={styles.metricCardValue}>{onlineCameras} / {totalCameras}</div>
+              <div className={styles.metricCardSub} style={{ color: allOnline ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                {allOnline ? 'All nodes online' : `${totalCameras - onlineCameras} offline`}
               </div>
-              <div className="resident-role-item">
-                <div className="flex items-center gap-2">
-                  <span className="stat-item-dot" style={{ background: '#f59e0b' }}></span>
-                  <span style={{ fontSize: '0.85rem' }}>Staff</span>
-                </div>
-                <span style={{ fontWeight: 700 }}>18</span>
-              </div>
-              <div className="resident-role-item">
-                <div className="flex items-center gap-2">
-                  <span className="stat-item-dot" style={{ background: '#8b5cf6' }}></span>
-                  <span style={{ fontSize: '0.85rem' }}>Security</span>
-                </div>
-                <span style={{ fontWeight: 700 }}>8</span>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
+        </div>
 
-          {/* Tracked Vehicles Card */}
-          <div className="complex-stat-card">
-            <div className="stat-card-header">
-              <span className="stat-card-label">Tracked vehicles</span>
-              <span className="stat-card-badge stat-card-badge--online">↑ 8% today</span>
-            </div>
-            <div className="stat-card-value">89</div>
-            <div className="stat-card-grid">
-              <div className="stat-card-column">
-                <div className="stat-card-column-title"><span className="dot main"></span>Main gate</div>
-                <div className="vehicle-stat-row">
-                  <span className="vehicle-stat-label">Entered</span>
-                  <span className="vehicle-stat-value entered">52</span>
-                </div>
-                <div className="vehicle-stat-row">
-                  <span className="vehicle-stat-label">Exited</span>
-                  <span className="vehicle-stat-value exited">38</span>
-                </div>
-                <div className="vehicle-stat-row vehicle-stat-row--highlight">
-                  <span className="vehicle-stat-label">On campus</span>
-                  <span className="vehicle-stat-value">14</span>
-                </div>
+        {/* -- Unresolved Alerts -- */}
+        <div className={styles.metricCard}>
+          {loading ? (
+            <>
+              <SkeletonLine width="50%" height="0.75rem" />
+              <div style={{ marginTop: '0.75rem' }}><SkeletonBlock width="30%" height="2.5rem" /></div>
+              <div style={{ marginTop: '0.5rem' }}><SkeletonLine width="70%" height="0.75rem" /></div>
+            </>
+          ) : (
+            <>
+              <div className={styles.metricCardHeader}>
+                <span className={styles.metricCardLabel}>Unresolved Alerts</span>
+                {alerts.length > 0 ? (
+                  <span className={styles.badgeDanger} role="status" aria-live="polite">
+                    {alerts.length} unresolved
+                  </span>
+                ) : (
+                  <span className={styles.badgeOnline} role="status" aria-live="polite">
+                    All clear
+                  </span>
+                )}
               </div>
-              <div className="stat-card-column">
-                <div className="stat-card-column-title"><span className="dot back"></span>Back gate</div>
-                <div className="vehicle-stat-row">
-                  <span className="vehicle-stat-label">Entered</span>
-                  <span className="vehicle-stat-value entered">37</span>
-                </div>
-                <div className="vehicle-stat-row">
-                  <span className="vehicle-stat-label">Exited</span>
-                  <span className="vehicle-stat-value exited">24</span>
-                </div>
-                <div className="vehicle-stat-row vehicle-stat-row--highlight">
-                  <span className="vehicle-stat-label">On campus</span>
-                  <span className="vehicle-stat-value">13</span>
-                </div>
+              <div className={styles.metricCardValue}>{alerts.length}</div>
+              <div className={styles.metricCardSub}>
+                {criticalCount > 0 && <>{criticalCount} critical</>}
+                {criticalCount > 0 && warningCount > 0 && ' · '}
+                {warningCount > 0 && <>{warningCount} warnings</>}
+                {alerts.length === 0 && 'No active alerts'}
               </div>
-            </div>
-            <div className="stat-card-footer">
-              <span className="footer-label">Currently on campus</span>
-              <span className="footer-value">27</span>
-            </div>
-          </div>
+            </>
+          )}
+        </div>
+      </section>
 
-          {/* Critical Alerts Card */}
-          <div className="complex-stat-card">
-            <div className="stat-card-header">
-              <span className="stat-card-label">Critical alerts</span>
-              <span className="stat-card-badge stat-card-badge--danger">3 unresolved</span>
+      {/* ===== CAMERA STATUS & ALERTS ===== */}
+      <div className={styles.widgetGrid}>
+        <DashboardWidget
+          title="Camera Status"
+          icon="📹"
+          actionText="Manage"
+          actionLink="/admin/cameras"
+        >
+          {loading ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.5rem', padding: '1rem' }}>
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className={styles.skeleton} style={{ height: '4.5rem', borderRadius: 'var(--border-radius-md)' }} />
+              ))}
             </div>
-            <div className="alert-list">
-              <div className="alert-list-item">
-                <div className="alert-icon-box critical"><span className="material-symbols-rounded" style={{ fontSize: '18px' }}>close</span></div>
-                <div className="alert-content">
-                  <div className="alert-title">Offline camera</div>
-                  <div className="alert-meta">Main gate - Rear left</div>
-                </div>
-                <span style={{ fontWeight: 800, color: '#ef4444' }}>1</span>
-              </div>
-              <div className="alert-list-item">
-                <div className="alert-icon-box warning"><span className="material-symbols-rounded" style={{ fontSize: '18px' }}>warning</span></div>
-                <div className="alert-content">
-                  <div className="alert-title">Unregistered vehicle</div>
-                  <div className="alert-meta">Back gate • 10:45 AM</div>
-                </div>
-                <span style={{ fontWeight: 800, color: '#f59e0b' }}>1</span>
-              </div>
-              <div className="alert-list-item">
-                <div className="alert-icon-box warning"><span className="material-symbols-rounded" style={{ fontSize: '18px' }}>report</span></div>
-                <div className="alert-content">
-                  <div className="alert-title">Expired registration</div>
-                  <div className="alert-meta">Main gate • 09:12 AM</div>
-                </div>
-                <span style={{ fontWeight: 800, color: '#f59e0b' }}>1</span>
-              </div>
+          ) : cameras.length === 0 ? (
+            <div className={styles.noData}>No cameras configured</div>
+          ) : (
+            <div className={styles.cameraNodeGrid} style={{ padding: '1rem' }}>
+              {cameras.map((cam, i) => (
+                <CameraTile key={i} name={cam.name} status={cam.status} gate={cam.gate} />
+              ))}
             </div>
-            <div className="stat-card-footer">
-              <span className="footer-label">Total unresolved</span>
-              <span className="footer-value" style={{ color: '#ef4444' }}>3</span>
-            </div>
-          </div>
-        </section>
+          )}
+        </DashboardWidget>
 
-      {/* Recent Users & Vehicles */}
-      <div className="dashboard-grid dashboard-grid--2col mb-6">
+        <DashboardWidget
+          title="Critical Alerts"
+          icon="🚨"
+          actionText="View All"
+          actionLink="/admin/logs"
+        >
+          {loading ? (
+            <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[1, 2, 3].map(i => (
+                <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <div className={styles.skeleton} style={{ width: '2rem', height: '2rem', borderRadius: '50%' }} />
+                  <div style={{ flex: 1 }}>
+                    <SkeletonLine width="70%" height="0.8rem" />
+                    <div style={{ marginTop: '0.25rem' }}><SkeletonLine width="50%" height="0.6rem" /></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : alerts.length === 0 ? (
+            <div className={styles.noData}>No unresolved alerts — system clear ✓</div>
+          ) : (
+            <div style={{ padding: '0 1rem' }}>
+              {alerts.map(alert => {
+                const isCritical = alert.type === 'critical';
+                const isResolving = resolvingIds.has(alert.id);
+                return (
+                  <div key={alert.id} className={styles.alertItem}>
+                    <div className={`${styles.alertIconBox} ${isCritical ? styles.alertIconCritical : styles.alertIconWarning}`}>
+                      <span className="material-symbols-rounded" style={{ fontSize: '1rem' }}>
+                        {isCritical ? 'close' : 'warning'}
+                      </span>
+                    </div>
+                    <div className={styles.alertContent}>
+                      <div className={styles.alertTitle}>{anonymizeActivityText(alert.title)}</div>
+                      <div className={styles.alertMeta}>{anonymizeActivityText(alert.meta)}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <button
+                        className={styles.resolveBtn}
+                        disabled={isResolving}
+                        aria-busy={isResolving}
+                        aria-label={`Resolve alert: ${alert.title}`}
+                        onClick={() => handleResolve(alert.id)}
+                      >
+                        {isResolving ? <span className={styles.resolveSpinner} /> : 'Resolve'}
+                      </button>
+                      {resolveErrors[alert.id] && (
+                        <span className={styles.resolveError}>{resolveErrors[alert.id]}</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </DashboardWidget>
+      </div>
+
+      {/* ===== RECENT USERS & VEHICLES ===== */}
+      <div className={styles.widgetGrid}>
         <DashboardWidget
           title="Recent Users"
           icon="👥"
           actionText="View All"
           actionLink="/admin/users"
           flush
-          className="fade-in-up delay-100"
         >
-          <MiniTable rows={recentUsers} />
+          {loading ? (
+            <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[1, 2, 3].map(i => (
+                <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                  <div className={styles.skeleton} style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%' }} />
+                  <div style={{ flex: 1 }}>
+                    <SkeletonLine width="60%" height="0.8rem" />
+                    <div style={{ marginTop: '0.25rem' }}><SkeletonLine width="40%" height="0.6rem" /></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <MiniTable rows={data.recentUsers.map(u => ({ ...u, title: anonymizeName(u.title), name: anonymizeName(u.name) }))} />
+          )}
         </DashboardWidget>
 
         <DashboardWidget
@@ -285,89 +405,119 @@ export default function AdminDashboard() {
           actionText="View All"
           actionLink="/admin/vehicles"
           flush
-          className="fade-in-up delay-150"
         >
-          <MiniTable rows={recentVehicles} />
+          {loading ? (
+            <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[1, 2, 3].map(i => (
+                <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                  <div className={styles.skeleton} style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%' }} />
+                  <div style={{ flex: 1 }}>
+                    <SkeletonLine width="55%" height="0.8rem" />
+                    <div style={{ marginTop: '0.25rem' }}><SkeletonLine width="45%" height="0.6rem" /></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <MiniTable rows={data.recentVehicles.map(v => ({
+              ...v,
+              primary: anonymizePlate(v.primary),
+              secondary: anonymizeName(v.secondary)
+            }))} />
+          )}
         </DashboardWidget>
       </div>
 
-      {/* Camera Status & Activity Feed */}
-      <div className="dashboard-grid dashboard-grid--2col mb-6">
+      {/* ===== ACTIVITY FEED & TRAFFIC ===== */}
+      <div className={styles.widgetGrid}>
         <DashboardWidget
-          title="Camera Status"
-          icon="📹"
-          actionText="Manage"
-          actionLink="/admin/cameras"
-          className="fade-in-up delay-200"
+          title="This Week's Traffic"
+          icon="📈"
+          actionText="Full Report"
+          actionLink="/admin/analytics"
         >
-          <div className="camera-grid">
-            {cameras.map((camera, index) => (
-              <CameraTile key={index} name={camera.name} status={camera.status} />
-            ))}
-          </div>
+          {loading ? (
+            <div style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                {[1, 2, 3].map(i => (
+                  <div key={i} className={styles.skeleton} style={{ flex: 1, height: '3.5rem', borderRadius: 'var(--border-radius-md)' }} />
+                ))}
+              </div>
+              <div className={styles.skeleton} style={{ width: '100%', height: '3.75rem', borderRadius: 'var(--border-radius-md)' }} />
+            </div>
+          ) : weeklyDays.length === 0 ? (
+            <div className={styles.noData}>No traffic data available this week</div>
+          ) : (
+            <>
+              <div className="traffic-stats-grid">
+                <div className="traffic-stat-item">
+                  <div className="traffic-stat-value" style={{ color: 'var(--color-success)' }}>{weekly.entries}</div>
+                  <div className="traffic-stat-label">Total Entries</div>
+                </div>
+                <div className="traffic-stat-item">
+                  <div className="traffic-stat-value" style={{ color: 'var(--color-info)' }}>{weekly.exits}</div>
+                  <div className="traffic-stat-label">Total Exits</div>
+                </div>
+                <div className="traffic-stat-item">
+                  <div className="traffic-stat-value" style={{ color: 'var(--color-warning)' }}>{weekly.onCampus}</div>
+                  <div className="traffic-stat-label">Still Inside</div>
+                </div>
+              </div>
+              <div className={styles.miniChart}>
+                {weeklyDays.map((value, i) => (
+                  <div
+                    key={i}
+                    className={`${styles.miniChartBar} ${i === weeklyDays.length - 1 ? styles.miniChartBarCurrent : ''}`}
+                    style={{ height: `${(value / maxDay) * 100}%` }}
+                  />
+                ))}
+              </div>
+              <div className={styles.miniChartLabels}>
+                {DAY_LABELS.slice(0, weeklyDays.length).map((d, i) => (
+                  <span key={i}>{d}</span>
+                ))}
+              </div>
+            </>
+          )}
         </DashboardWidget>
 
+        <DashboardWidget
+          title="Quick Actions"
+          icon="⚡"
+        >
+          <QuickActions actions={quickActions} />
+        </DashboardWidget>
+      </div>
+
+      {/* ===== RECENT ACTIVITY ===== */}
+      <div className={styles.widgetGrid}>
         <DashboardWidget
           title="Recent Activity"
           icon="📋"
           actionText="View All"
           actionLink="/admin/logs"
           flush
-          className="fade-in-up delay-250"
         >
-          <ActivityFeed activities={recentActivity} />
+          {loading ? (
+            <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <div className={styles.skeleton} style={{ width: '1.5rem', height: '1.5rem', borderRadius: '50%' }} />
+                  <div style={{ flex: 1 }}>
+                    <SkeletonLine width="80%" height="0.75rem" />
+                    <div style={{ marginTop: '0.2rem' }}><SkeletonLine width="30%" height="0.6rem" /></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <ActivityFeed activities={data.recentActivity.map(act => ({
+              ...act,
+              text: anonymizeActivityText(act.text)
+            }))} />
+          )}
         </DashboardWidget>
       </div>
-
-      {/* Analytics Preview & Quick Actions */}
-      <div className="dashboard-grid dashboard-grid--2col mb-6">
-        <DashboardWidget
-          title="This Week's Traffic"
-          icon="📈"
-          actionText="Full Report"
-          actionLink="/admin/analytics"
-          className="fade-in-up delay-300"
-        >
-          <div className="traffic-stats-grid">
-            <div className="traffic-stat-item">
-              <div className="traffic-stat-value text-success">247</div>
-              <div className="traffic-stat-label">Total Entries</div>
-            </div>
-            <div className="traffic-stat-item">
-              <div className="traffic-stat-value text-info">231</div>
-              <div className="traffic-stat-label">Total Exits</div>
-            </div>
-            <div className="traffic-stat-item">
-              <div className="traffic-stat-value text-warning">16</div>
-              <div className="traffic-stat-label">Still Inside</div>
-            </div>
-          </div>
-          <div className="mini-chart" style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '60px' }}>
-            {[32, 45, 38, 52, 41, 28, 11].map((value, i) => (
-              <div
-                key={i}
-                style={{
-                  flex: 1,
-                  height: `${value}%`,
-                  background: i === 6 ? 'rgba(16, 185, 129, 0.3)' : 'var(--color-success)',
-                  borderRadius: '4px 4px 0 0'
-                }}
-              />
-            ))}
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
-            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-          </div>
-        </DashboardWidget>
-
-        <DashboardWidget
-          title="Quick Actions"
-          icon="⚡"
-          className="fade-in-up delay-350"
-        >
-          <QuickActions actions={quickActions} />
-        </DashboardWidget>
-      </div>
-      </>
+    </>
   );
 }

@@ -1,0 +1,378 @@
+/* ============================================
+   Dashboard Module CSS
+   Role colors, skeleton loading, resolve spinner
+   ============================================ */
+
+:root {
+    --role-student: #378ADD;
+    --role-faculty: #1D9E75;
+    --role-staff: #BA7517;
+    --role-security: #7F77DD;
+}
+
+/* ===== Skeleton Loading ===== */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.skeleton {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+.skeletonLine {
+    height: 1.25rem;
+    width: 60%;
+}
+
+.skeletonLineShort {
+    height: 1rem;
+    width: 40%;
+}
+
+.skeletonBlock {
+    height: 3rem;
+    width: 80%;
+}
+
+/* ===== Resolve Spinner ===== */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.resolveSpinner {
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--text-primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+}
+
+/* ===== Header ===== */
+.headerBanner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.headerTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.headerTitleAccent {
+    color: var(--color-primary);
+}
+
+.headerStatus {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.statusDot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.25rem;
+    vertical-align: middle;
+}
+
+.statusDotOnline {
+    background: var(--color-success);
+}
+
+.statusDotDegraded {
+    background: var(--color-danger);
+}
+
+.dateBadge {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+/* ===== Stat Cards Row ===== */
+.statCardsRow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metricCard {
+    background: var(--bg-elevated, var(--bg-secondary));
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.metricCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.metricCardLabel {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.metricCardValue {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.metricCardSub {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Role pills */
+.rolePills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+}
+
+.rolePill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--border-radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+.rolePillDot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ===== Widget Grid ===== */
+.widgetGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ===== Camera Node Grid ===== */
+.cameraNodeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.5rem;
+}
+
+/* ===== Alerts ===== */
+.alertItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.alertItem:last-child {
+    border-bottom: none;
+}
+
+.alertIconBox {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.alertIconCritical {
+    background: var(--color-danger-light, rgba(239, 68, 68, 0.1));
+    color: var(--color-danger);
+}
+
+.alertIconWarning {
+    background: var(--color-warning-light, rgba(245, 158, 11, 0.1));
+    color: var(--color-warning);
+}
+
+.alertContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.alertTitle {
+    font-weight: 700;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+}
+
+.alertMeta {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.resolveBtn {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.resolveBtn:hover:not(:disabled) {
+    background: var(--color-success);
+    color: var(--text-inverse, #fff);
+    border-color: var(--color-success);
+}
+
+.resolveBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.resolveError {
+    font-size: 0.6875rem;
+    color: var(--color-danger);
+    margin-left: 0.5rem;
+}
+
+/* ===== Badge ===== */
+.badgeOnline {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(var(--color-success-rgb), 0.15);
+    color: var(--color-success);
+}
+
+.badgeDanger {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(var(--color-error-rgb), 0.15);
+    color: var(--color-error);
+}
+
+.badgeWarning {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(var(--color-warning-rgb), 0.15);
+    color: var(--color-warning);
+}
+
+.badgeUpdated {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(var(--color-info-rgb), 0.15);
+    color: var(--color-info);
+}
+
+/* ===== Traffic Mini Chart ===== */
+.miniChart {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+    height: 3.75rem;
+}
+
+.miniChartBar {
+    flex: 1;
+    border-radius: 0.25rem 0.25rem 0 0;
+    background: var(--color-success);
+    transition: height 0.3s ease;
+}
+
+.miniChartBarCurrent {
+    opacity: 0.35;
+}
+
+.miniChartLabels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+/* ===== No Data Placeholder ===== */
+.noData {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: var(--text-tertiary);
+    font-size: 0.8125rem;
+    font-style: italic;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    .widgetGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .headerBanner {
+        flex-direction: column;
+    }
+}

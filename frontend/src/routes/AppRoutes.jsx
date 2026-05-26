@@ -1,5 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import isElectron from '../utils/isElectron';
+
+const isDesktop = isElectron();
 
 // Page Components - Public
 import Login from '../components/pages/public/Login/Login';
@@ -20,7 +23,11 @@ import Cameras from '../components/pages/admin/Cameras/Cameras';
 import SecurityStaff from '../components/pages/admin/SecurityStaff/SecurityStaff';
 import Analytics from '../components/pages/admin/Analytics/Analytics';
 import Logs from '../components/pages/admin/Logs/Logs';
+import AdminEntryLogs from '../components/pages/admin/EntryLogs/EntryLogs';
+import AdminAnomalies from '../components/pages/admin/Anomalies/Anomalies';
 import Settings from '../components/pages/admin/Settings/Settings';
+import AdminProfile from '../components/pages/admin/Profile/Profile';
+import ReportPreview from '../components/pages/admin/ReportPreview/ReportPreview';
 
 // Student/Faculty Pages
 import StudentDashboard from '../components/pages/student/Dashboard/Dashboard';
@@ -81,9 +88,21 @@ const UnauthorizedPage = () => (
 // Protected Route Component
 function PrivateRoute({ children, allowedRoles = [] }) {
   const { isAuthenticated, user, isLoading } = useAuth();
+
   if (isLoading) return <div>Loading...</div>;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) return <Navigate to="/unauthorized" replace />;
+
+  if (!isAuthenticated) {
+    if (isDesktop) {
+      if (allowedRoles.includes('security')) return <Navigate to="/security-login" replace />;
+      return <Navigate to="/admin-login" replace />;
+    }
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
   return children;
 }
 
@@ -106,14 +125,14 @@ function PublicRoute({ children }) {
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Public Routes */}
+      {/* Public Routes — available in all environments for testing */}
       <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
       <Route path="/admin-login" element={<PublicRoute><AdminLogin /></PublicRoute>} />
       <Route path="/security-login" element={<PublicRoute><SecurityLogin /></PublicRoute>} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
-      {/* Admin Routes - Nested under AdminLayout */}
+      {/* Admin Routes */}
       <Route
         path="/admin"
         element={
@@ -130,10 +149,14 @@ export default function AppRoutes() {
         <Route path="security-staff" element={<SecurityStaff />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="logs" element={<Logs />} />
+        <Route path="entry-logs" element={<AdminEntryLogs />} />
+        <Route path="anomalies" element={<AdminAnomalies />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="profile" element={<AdminProfile />} />
+        <Route path="report-preview" element={<ReportPreview />} />
       </Route>
 
-      {/* Student Routes - Nested under StudentLayout */}
+      {/* Student Routes */}
       <Route
         path="/"
         element={
@@ -193,8 +216,8 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Default Redirect */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      {/* Default Redirect — desktop goes to admin-login, web goes to login */}
+      <Route path="/" element={<Navigate to={isDesktop ? '/admin-login' : '/login'} replace />} />
 
       {/* Unauthorized */}
       <Route path="/unauthorized" element={<UnauthorizedPage />} />

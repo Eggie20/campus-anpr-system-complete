@@ -73,7 +73,11 @@ export default function StaffLayout() {
             {/* Main Content */}
             <main className="dashboard-main">
                 <Header
-                    user={{ name: user?.full_name || 'Staff Member' }}
+                    user={{
+                        name: user?.full_name || 'Staff Member',
+                        email: user?.email,
+                        id: user?.staff_id || user?.id
+                    }}
                     role="staff"
                     onMenuToggle={toggleSidebar}
                     isSidebarCollapsed={sidebarCollapsed}

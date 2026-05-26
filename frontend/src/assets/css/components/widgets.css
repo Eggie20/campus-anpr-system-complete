@@ -244,6 +244,15 @@
   padding: 0;
 }
 
+/* ===== WIDGET EMPTY STATES ===== */
+.widget-no-data {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+  font-style: italic;
+}
+
 /* ===== MINI TABLE ===== */
 .mini-table {
   width: 100%;

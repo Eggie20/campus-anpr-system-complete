@@ -1,0 +1,146 @@
+erDiagram
+    USERS ||--o{ VEHICLES : "vehicles.user_id"
+    USERS ||--o{ VEHICLES : "vehicles.approved_by"
+    VEHICLES ||--o{ ENTRY_LOGS : "entry_logs.vehicle_id"
+    USERS ||--o{ ENTRY_LOGS : "entry_logs.user_id"
+    CAMERAS ||--o{ ENTRY_LOGS : "entry_logs.camera_id"
+    GATES ||--o{ ENTRY_LOGS : "entry_logs.gate_id"
+    ENTRY_LOGS ||--o{ ANPR_PLATE_CAPTURES : "anpr_plate_captures.entry_log_id"
+    VEHICLES ||--o{ ANPR_PLATE_CAPTURES : "anpr_plate_captures.vehicle_id"
+    USERS ||--o{ ANPR_PLATE_CAPTURES : "anpr_plate_captures.recorded_by"
+    CAMERAS ||--o{ ANPR_PLATE_CAPTURES : "anpr_plate_captures.camera_id"
+    GATES ||--o{ ANPR_PLATE_CAPTURES : "anpr_plate_captures.gate_id"
+    ANPR_PLATE_CAPTURES ||--o{ ANPR_ANOMALY_EVENTS : "anpr_anomaly_events.capture_id"
+    ENTRY_LOGS ||--o{ VIOLATIONS : "violations.entry_log_id"
+    VEHICLES ||--o{ VIOLATIONS : "violations.vehicle_id"
+    USERS ||--o{ VIOLATIONS : "violations.resolved_by"
+    VEHICLES ||--o{ BLACKLIST_RECORDS : "blacklist_records.vehicle_id"
+    USERS ||--o{ BLACKLIST_RECORDS : "blacklist_records.added_by"
+    GATES ||--o{ CAMERAS : "cameras.gate_id"
+    CAMERAS ||--o| CAMERA_SETTINGS : "camera_settings.camera_id"
+    USERS ||--o{ NOTIFICATIONS : "notifications.user_id"
+    USERS ||--o{ OCR_SCANS : "ocr_scans.user_id"
+    USERS ||--o{ OCR_SCANS : "ocr_scans.verified_by"
+
+    VEHICLES {
+        uuid id PK
+        uuid user_id FK
+        uuid approved_by FK
+        varchar plate_number UK
+        varchar type
+        varchar brand
+        varchar color
+        varchar status
+        varchar is_on_campus
+    }
+
+    ENTRY_LOGS {
+        uuid id PK
+        uuid vehicle_id FK
+        uuid user_id FK
+        uuid camera_id FK
+        uuid gate_id FK
+        varchar detected_plate_number
+        varchar direction
+        varchar timestamp
+        varchar authorization_status
+    }
+
+    ANPR_PLATE_CAPTURES {
+        uuid id PK
+        uuid entry_log_id FK
+        uuid vehicle_id FK
+        uuid recorded_by FK
+        uuid camera_id FK
+        uuid gate_id FK
+        varchar plate_normalized
+        varchar confidence_score
+        varchar alert_kind
+    }
+
+    ANPR_ANOMALY_EVENTS {
+        uuid id PK
+        uuid capture_id FK
+        varchar kind
+        varchar status
+        varchar notes
+        varchar created_at
+    }
+
+    BLACKLIST_RECORDS {
+        uuid id PK
+        uuid vehicle_id FK
+        uuid added_by FK
+        varchar reason
+        varchar is_active
+        varchar start_date
+    }
+
+    USERS {
+        uuid id PK
+        varchar email UK
+        varchar username UK
+        varchar role
+        varchar status
+        varchar full_name
+        varchar phone_number
+        varchar license_expiry_date
+    }
+
+    GATES {
+        uuid id PK
+        varchar name
+        varchar location_description
+        varchar status
+    }
+
+    CAMERAS {
+        uuid id PK
+        uuid gate_id FK
+        varchar name
+        varchar direction
+        varchar ip_address
+        varchar is_active
+    }
+
+    CAMERA_SETTINGS {
+        uuid id PK
+        uuid camera_id FK/UK
+        varchar detection_threshold
+        varchar recording_mode
+        varchar ai_night_vision
+    }
+
+    VIOLATIONS {
+        uuid id PK
+        uuid entry_log_id FK
+        uuid vehicle_id FK
+        uuid resolved_by FK
+        varchar type
+        varchar status
+    }
+
+    NOTIFICATIONS {
+        uuid id PK
+        uuid user_id FK
+        varchar title
+        varchar message
+        varchar type
+        varchar is_read
+    }
+
+    OCR_SCANS {
+        uuid id PK
+        uuid user_id FK
+        uuid verified_by FK
+        varchar scan_type
+        varchar is_verified
+        varchar confidence_score
+    }
+
+    SETTINGS {
+        varchar key PK
+        varchar value
+        varchar description
+        varchar updated_at
+    }

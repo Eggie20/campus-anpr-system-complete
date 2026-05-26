@@ -4,6 +4,7 @@ import { useTheme } from '../../../../contexts/ThemeContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { useNotification } from '../../../../contexts/NotificationContext';
 import { LoadingOverlay } from '../../../common/Loading/Loading';
+import isElectron from '../../../../utils/isElectron';
 
 const SunIcon = () => (
   <svg className="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -82,12 +83,12 @@ export default function SecurityLogin() {
     e.preventDefault();
 
     if (!formData.email) {
-      setLocalError('Email is required.');
+      setLocalError('Officer ID / Email is required.');
       return;
     }
 
     if (!formData.password) {
-      setLocalError('Password is required.');
+      setLocalError('Security Key / Password is required.');
       return;
     }
 
@@ -109,10 +110,10 @@ export default function SecurityLogin() {
           navigate('/security/dashboard', { replace: true });
         }, 1500);
       } else {
-        setLocalError(result.error || 'Access denied');
+        setLocalError(result.error || 'Access denied. Incorrect credentials.');
       }
     } catch (err) {
-      setLocalError('Connection error. Please try again.');
+      setLocalError('Connection error. Please check if the server is running.');
     } finally {
       setIsLoading(false);
     }
@@ -217,9 +218,11 @@ export default function SecurityLogin() {
             </button>
           </form>
 
-          <div className="footer-nav">
-            <Link to="/login">← Back to Main Portal</Link>
-          </div>
+          {!isElectron() && (
+            <div className="footer-nav">
+              <Link to="/login">← Back to Main Portal</Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

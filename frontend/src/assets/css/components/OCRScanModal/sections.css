@@ -1,0 +1,534 @@
+/* OCR Scan Modal Panels & Sections */
+.proc-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+.proc-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.proc-body::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 999px;
+}
+
+.proc-panel {
+    padding: 22px 20px;
+    animation: fadeIn 0.3s ease both;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Upload Styles */
+.upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.upload-slot {
+    border: 1.5px dashed var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg-secondary, #111827);
+    position: relative;
+    min-height: 160px;
+    justify-content: center;
+}
+
+.upload-slot:hover {
+    border-color: rgba(59, 158, 255, 0.5);
+    background: rgba(59, 158, 255, 0.04);
+}
+
+.upload-slot.is-dragging {
+    border-color: var(--blue, #3b82f6);
+    background: rgba(59, 130, 246, 0.08);
+    border-style: solid;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+.upload-slot.has-file {
+    border-style: solid;
+    border-color: rgba(0, 212, 170, 0.4);
+    background: rgba(0, 212, 170, 0.03);
+}
+
+.slot-check {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 212, 170, 0.15);
+    border: 1px solid rgba(0, 212, 170, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--green);
+}
+
+.slot-preview {
+    width: 100%;
+    max-height: 110px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Scanning Step */
+.scan-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.scan-slot-lbl {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.sbadge {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 700;
+}
+
+.sb-done {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.sb-scan {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    animation: sbPulse 1.5s ease-in-out infinite;
+}
+
+.sb-wait {
+    background: rgba(148, 163, 184, 0.08);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.id-frame {
+    border-radius: 12px;
+    border: 1.5px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-tertiary, #161e2e);
+    transition: all 0.3s ease;
+}
+
+.id-frame.done-frame {
+    border-color: rgba(34, 197, 94, 0.4);
+    box-shadow: inset 0 0 12px rgba(34, 197, 94, 0.05);
+}
+
+.id-frame.scan-frame {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12), inset 0 0 15px rgba(59, 130, 246, 0.08);
+}
+
+.id-frame.wait-frame {
+    opacity: 0.6;
+    filter: grayscale(0.4);
+}
+
+.scan-line-anim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+    box-shadow: 0 0 10px #3b82f6;
+    z-index: 5;
+    animation: scanMove 2s ease-in-out infinite;
+}
+
+.id-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+    font-weight: 800;
+}
+
+@keyframes sbPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(0.96);
+    }
+}
+
+@keyframes scanMove {
+    0% {
+        top: 0%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* Status & Checklist */
+.sbox {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.sbox-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.prog-wrap {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    height: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.prog-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    transition: width 0.4s;
+}
+
+.prog-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    margin-bottom: 12px;
+}
+
+.prog-step {
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.prog-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--green);
+}
+
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.crow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+}
+
+.cico {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.ci-d {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.ci-s {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.ci-w {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.ctxt {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.ctxt.mu {
+    color: var(--text-tertiary);
+}
+
+.cbadge {
+    font-size: 9px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.cb-d {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+.cb-s {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+}
+
+/* Review States */
+.fr {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+}
+
+.fk {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.fv {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.fv.hi {
+    font-size: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+}
+
+.chi {
+    background: rgba(0, 212, 170, 0.1);
+    color: var(--green);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+}
+
+/* Confirm Card */
+.confirm-card {
+    background: var(--bg-secondary);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+}
+
+.confirm-plate {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 20px;
+    display: inline-block;
+    margin: 14px 0;
+    letter-spacing: .12em;
+}
+
+.confirm-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    text-align: left;
+}
+
+.cd-box {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.cd-label {
+    font-size: 9px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.cd-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Role Selection Step */
+.role-selection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.role-card {
+    background: var(--bg-secondary, #111827);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.role-card:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.03);
+    transform: translateY(-2px);
+}
+
+.role-card.active {
+    border-color: var(--green, #10b981);
+    background: rgba(16, 185, 129, 0.08);
+    box-shadow: 0 0 0 1px var(--green);
+}
+
+.role-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+}
+
+.role-card.active .role-icon-wrap {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.role-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.role-card.active .role-name {
+    color: var(--green);
+}
+
+.role-desc {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+}
+
+.role-tip {
+    background: rgba(251, 191, 36, 0.06);
+    border: 1px solid rgba(251, 191, 36, 0.15);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.role-tip-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.role-tip-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}

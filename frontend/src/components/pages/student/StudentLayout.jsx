@@ -75,7 +75,11 @@ export default function StudentLayout() {
       {/* Main Content */}
       <main className="dashboard-main">
         <Header
-          user={{ name: user?.full_name || 'User' }}
+          user={{
+            name: user?.full_name || 'User',
+            email: user?.email,
+            id: user?.student_id || user?.id,
+          }}
           role={user?.role || 'student'}
           onMenuToggle={toggleSidebar}
           isSidebarCollapsed={sidebarCollapsed}

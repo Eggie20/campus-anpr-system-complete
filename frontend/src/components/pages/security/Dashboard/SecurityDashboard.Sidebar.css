@@ -1,0 +1,222 @@
+/* ═══════════════════════
+   CAMERA PANEL (RELOCATED TO BOTTOM)
+   ═══════════════════════ */
+.cam-panel {
+    background: var(--bg-side);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    width: 200px;
+    /* Width in the bottom strip */
+    overflow-y: auto;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.sb-section-label {
+    font-size: 8px;
+    font-weight: 800;
+    color: var(--accent);
+    /* Teal/Cyan */
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.cam-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.cam-tile {
+    position: relative;
+    background: var(--card);
+    aspect-ratio: 4/3;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cam-webcam-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+}
+
+.cam-tile .cam-icon-svg,
+.cam-tile .cam-pos-label {
+    position: relative;
+    z-index: 3;
+}
+
+.cam-tile:hover,
+.cam-tile.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+}
+
+.cam-tile.active {
+    background: var(--bg-side);
+}
+
+/* Camera Icon Style */
+.cam-icon-svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--muted);
+    margin-bottom: 4px;
+    transition: fill 0.2s;
+}
+
+.cam-tile:hover .cam-icon-svg,
+.cam-tile.active .cam-icon-svg {
+    fill: var(--accent);
+}
+
+.cam-pos-label {
+    font-size: 7px;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Status Badges - Top Right */
+.cam-status-badge {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 5px;
+    font-weight: 800;
+    padding: 1px 3px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    line-height: 1;
+    z-index: 5;
+}
+
+.cam-status-badge.live {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--green);
+    border: 1px solid rgba(0, 255, 136, 0.25);
+}
+
+.cam-status-badge.pulse.live {
+    animation: livePulse 1.3s ease-in-out infinite;
+}
+
+.cam-status-badge.offline {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cam-webcam-status {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 3px;
+    z-index: 4;
+    font-size: 5px;
+    line-height: 1.2;
+    color: var(--accent);
+    font-family: var(--mono);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-radius: 2px;
+    padding: 1px 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cam-webcam-status.ready {
+    color: var(--green);
+    border-color: rgba(0, 255, 136, 0.25);
+}
+
+/* scan line animation */
+.scan-line {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+    box-shadow: 0 0 8px var(--accent);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 2;
+    animation: scanAnimation 3s linear infinite;
+}
+
+@keyframes scanAnimation {
+    0% {
+        top: 0%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.5;
+    }
+
+    90% {
+        opacity: 0.5;
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; }
+}
+
+.sb-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: auto;
+}
+
+.sb-gate-name {
+    color: var(--accent);
+    /* Teal/Cyan */
+    font-size: 9px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.sb-ip-addr {
+    color: var(--muted);
+    font-size: 7px;
+    font-family: var(--mono);
+}
+
+/* Hide legacy elements if still present */
+.sidebar,
+.cam-card,
+.cam-thumb,
+.cam-foot,
+.cam-lbl {
+    display: none;
+}

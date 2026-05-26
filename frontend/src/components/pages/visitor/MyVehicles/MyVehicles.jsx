@@ -1,19 +1,25 @@
 import { useState, useEffect } from 'react';
 import api from '../../../../services/api';
+import { useAuth } from '../../../../contexts/AuthContext';
 import { useNotification } from '../../../../contexts/NotificationContext';
+import { VEHICLE_TYPES, VEHICLE_BRANDS, VEHICLE_COLORS, getVehicleIcon } from '../../../../constants/vehicleConstants';
 
 export default function VisitorVehicles() {
+    const { user } = useAuth();
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [editingVehicle, setEditingVehicle] = useState(null);
+    const [removingVehicle, setRemovingVehicle] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const { success, error } = useNotification();
 
     const [formData, setFormData] = useState({
         plateNumber: '',
         type: '',
-        make: '',
-        model: '',
+        brand: '',
         color: ''
     });
 
@@ -45,17 +51,71 @@ export default function VisitorVehicles() {
             await api.post('/vehicles/', {
                 plate_number: formData.plateNumber,
                 type: formData.type,
-                make: formData.make,
-                model: formData.model,
+                brand: formData.brand,
                 color: formData.color
             });
             success("Vehicle registered successfully! Pending approval.");
             setShowModal(false);
-            setFormData({ plateNumber: '', type: '', make: '', model: '', color: '' });
+            setFormData({ plateNumber: '', type: '', brand: '', color: '' });
             fetchVehicles();
         } catch (err) {
             console.error(err);
             error(err.response?.data?.detail || "Failed to register vehicle.");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleEditClick = (vehicle) => {
+        setEditingVehicle(vehicle);
+        setFormData({
+            plateNumber: vehicle.plate_number,
+            type: vehicle.type,
+            brand: vehicle.brand,
+            color: vehicle.color || ''
+        });
+        setShowEditModal(true);
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            await api.patch(`/vehicles/${editingVehicle.id}`, {
+                plate_number: formData.plateNumber,
+                type: formData.type,
+                brand: formData.brand,
+                color: formData.color
+            });
+            success("Vehicle updated successfully!");
+            setShowEditModal(false);
+            setEditingVehicle(null);
+            setFormData({ plateNumber: '', type: '', brand: '', color: '' });
+            fetchVehicles();
+        } catch (err) {
+            console.error(err);
+            error(err.response?.data?.detail || "Failed to update vehicle.");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleRemoveClick = (vehicle) => {
+        setRemovingVehicle(vehicle);
+        setShowDeleteModal(true);
+    };
+
+    const handleRemoveConfirm = async () => {
+        setSubmitting(true);
+        try {
+            await api.delete(`/vehicles/${removingVehicle.id}`);
+            success("Vehicle removed successfully.");
+            setShowDeleteModal(false);
+            setRemovingVehicle(null);
+            fetchVehicles();
+        } catch (err) {
+            console.error(err);
+            error("Failed to remove vehicle.");
         } finally {
             setSubmitting(false);
         }
@@ -66,14 +126,8 @@ export default function VisitorVehicles() {
     const activeVehicles = vehicles.filter(v => v.status === 'approved').length;
     const pendingVehicles = vehicles.filter(v => v.status === 'pending').length;
 
-    const getVehicleIcon = (type) => {
-        switch (type?.toLowerCase()) {
-            case 'motorcycle': return '🏍️';
-            case 'car': return '🚗';
-            case 'van': return '🚐';
-            case 'truck': return '🚚';
-            default: return '🚘';
-        }
+    const getRoleID = () => {
+        return user?.visitor_id || user?.student_id || user?.staff_id || 'N/A';
     };
 
     return (
@@ -85,7 +139,7 @@ export default function VisitorVehicles() {
                     <p>Manage your registered vehicles and campus access permissions.</p>
                 </div>
                 <div className="premium-header-meta">
-                    <div className="premium-id-badge">ID: <strong>{vehicles.length > 0 ? vehicles[0].plate_number : 'System Ready'}</strong></div>
+                    <div className="premium-id-badge">ID: <strong>{getRoleID()}</strong></div>
                     <div className="premium-status-active">System Connected</div>
                 </div>
             </div>
@@ -160,7 +214,7 @@ export default function VisitorVehicles() {
 
                         <div className="premium-v2-plate">{vehicle.plate_number}</div>
                         <div className="premium-v2-info">
-                            {vehicle.make} {vehicle.model} • {vehicle.color}
+                            {vehicle.brand} • {vehicle.color}
                         </div>
 
                         <div className="premium-v2-grid">
@@ -175,11 +229,11 @@ export default function VisitorVehicles() {
                         </div>
 
                         <div className="premium-v2-actions">
-                            <button className="premium-v2-btn edit">
+                            <button className="premium-v2-btn edit" onClick={() => handleEditClick(vehicle)}>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 Edit
                             </button>
-                            <button className="premium-v2-btn remove">
+                            <button className="premium-v2-btn remove" onClick={() => handleRemoveClick(vehicle)}>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                 Remove
                             </button>
@@ -189,7 +243,10 @@ export default function VisitorVehicles() {
 
                 {/* Add New Vehicle Premium Card */}
                 {remainingSlots > 0 && (
-                    <div className="premium-v2-add-card" onClick={() => setShowModal(true)}>
+                    <div className="premium-v2-add-card" onClick={() => {
+                        setFormData({ plateNumber: '', type: '', brand: '', color: '' });
+                        setShowModal(true);
+                    }}>
                         <div className="premium-v2-add-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14m-7-7h14"/></svg>
                         </div>
@@ -225,16 +282,16 @@ export default function VisitorVehicles() {
                 </div>
             </div>
 
-            {/* Add Vehicle Modal */}
-            {showModal && (
-                <div className="modal-backdrop active" onClick={() => setShowModal(false)}>
-                    <div className="modal" onClick={e => e.stopPropagation()}>
+            {/* Register/Edit Vehicle Modal */}
+            {(showModal || showEditModal) && (
+                <div className="modal-backdrop active" onClick={() => { setShowModal(false); setShowEditModal(false); }}>
+                    <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px', width: '95%' }}>
                         <header className="modal-header">
-                            <h2 className="modal-title">Register New Vehicle</h2>
-                            <button className="modal-close" onClick={() => setShowModal(false)}>✕</button>
+                            <h2 className="modal-title">{showEditModal ? 'Edit Vehicle Details' : 'Register New Vehicle'}</h2>
+                            <button className="modal-close" onClick={() => { setShowModal(false); setShowEditModal(false); }}>✕</button>
                         </header>
                         <div className="modal-body">
-                            <form id="addVehicleForm" onSubmit={handleSubmit}>
+                            <form id="vehicleForm" onSubmit={showEditModal ? handleEditSubmit : handleSubmit}>
                                 <div className="form-group">
                                     <label className="form-label">Plate Number</label>
                                     <input
@@ -249,62 +306,80 @@ export default function VisitorVehicles() {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Vehicle Type</label>
-                                    <select
-                                        name="type"
-                                        className="form-select"
-                                        value={formData.type}
-                                        onChange={handleInputChange}
-                                        required
-                                    >
-                                        <option value="">Select type</option>
-                                        <option value="car">Car</option>
-                                        <option value="motorcycle">Motorcycle</option>
-                                        <option value="van">Van</option>
-                                    </select>
+                                    <div className="vehicle-type-grid">
+                                      {VEHICLE_TYPES.map(v => (
+                                        <div
+                                          key={v.value}
+                                          className={`vehicle-opt ${formData.type === v.value ? 'active' : ''}`}
+                                          onClick={() => setFormData(prev => ({ ...prev, type: v.value }))}
+                                        >
+                                          <div className="v-icon">{v.icon}</div>
+                                          <div className="v-label">{v.label}</div>
+                                          <div className="v-check">✓</div>
+                                        </div>
+                                      ))}
+                                    </div>
                                 </div>
                                 <div className="dashboard-grid dashboard-grid--2col">
                                     <div className="form-group">
                                         <label className="form-label">Brand</label>
-                                        <input
-                                            type="text"
-                                            name="make"
+                                        <select
+                                            name="brand"
                                             className="form-input"
-                                            placeholder="Honda"
-                                            value={formData.make}
+                                            value={formData.brand}
                                             onChange={handleInputChange}
                                             required
-                                        />
+                                        >
+                                            <option value="">Select Brand</option>
+                                            {VEHICLE_BRANDS.map(b => <option key={b} value={b}>{b}</option>)}
+                                            <option value="Other">Other (not listed)</option>
+                                        </select>
                                     </div>
                                     <div className="form-group">
-                                        <label className="form-label">Model</label>
-                                        <input
-                                            type="text"
-                                            name="model"
+                                        <label className="form-label">Color</label>
+                                        <select
+                                            name="color"
                                             className="form-input"
-                                            placeholder="Click 125i"
-                                            value={formData.model}
+                                            value={formData.color}
                                             onChange={handleInputChange}
-                                            required
-                                        />
+                                        >
+                                            <option value="">Select Color</option>
+                                            {VEHICLE_COLORS.map(c => <option key={c} value={c}>{c}</option>)}
+                                            <option value="Other">Other (not listed)</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <div className="form-group">
-                                    <label className="form-label">Color</label>
-                                    <input
-                                        type="text"
-                                        name="color"
-                                        className="form-input"
-                                        placeholder="Black"
-                                        value={formData.color}
-                                        onChange={handleInputChange}
-                                    />
                                 </div>
                             </form>
                         </div>
-                        <footer className="modal-footer">
-                            <button className="btn btn-outline" onClick={() => setShowModal(false)} type="button">Cancel</button>
-                            <button className="btn btn-primary" type="submit" form="addVehicleForm" disabled={submitting}>
-                                {submitting ? 'Submitting...' : 'Submit for Approval'}
+                        <footer className="modal-footer" style={{ background: 'transparent', borderTop: 'none', padding: '1.5rem 0 0', display: 'flex', gap: '1rem' }}>
+                            <button type="button" className="premium-page-btn" onClick={() => { setShowModal(false); setShowEditModal(false); }} style={{ flex: 1, padding: '12px', justifyContent: 'center' }}>Cancel</button>
+                            <button className="premium-page-btn active" type="submit" form="vehicleForm" disabled={submitting} style={{ flex: 1, padding: '12px', justifyContent: 'center' }}>
+                                {submitting ? 'Processing...' : (showEditModal ? 'Save Changes' : 'Submit for Approval')}
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="modal-backdrop active" onClick={() => setShowDeleteModal(false)}>
+                    <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px', width: '90%' }}>
+                        <header className="modal-header">
+                            <h2 className="modal-title">Remove Vehicle</h2>
+                            <button className="modal-close" onClick={() => setShowDeleteModal(false)}>✕</button>
+                        </header>
+                        <div className="modal-body">
+                            <p style={{ color: 'var(--t-2)', textAlign: 'center', margin: '1rem 0' }}>
+                                Are you sure you want to remove vehicle <strong style={{ color: 'var(--t-1)' }}>{removingVehicle?.plate_number}</strong>?
+                                <br /><br />
+                                This action cannot be undone and will revoke campus access for this vehicle.
+                            </p>
+                        </div>
+                        <footer className="modal-footer" style={{ background: 'transparent', borderTop: 'none', padding: '1rem 0 0', display: 'flex', gap: '1rem' }}>
+                            <button className="premium-page-btn" onClick={() => setShowDeleteModal(false)} style={{ flex: 1, justifyContent: 'center' }}>Cancel</button>
+                            <button className="premium-page-btn danger active" onClick={handleRemoveConfirm} disabled={submitting} style={{ flex: 1, justifyContent: 'center', background: '#ef4444', color: 'white', borderColor: 'transparent' }}>
+                                {submitting ? 'Removing...' : 'Confirm Remove'}
                             </button>
                         </footer>
                     </div>

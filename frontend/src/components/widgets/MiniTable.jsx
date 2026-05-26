@@ -9,9 +9,7 @@ import PropTypes from 'prop-types';
 export default function MiniTable({ rows = [] }) {
   if (rows.length === 0) {
     return (
-      <div className="mini-table mini-table--empty">
-        <p>No data available</p>
-      </div>
+      <div className="widget-no-data">No data available</div>
     );
   }
 

@@ -1,0 +1,314 @@
+/* ═══════════════════════
+   ANPR ENGINE CONTROLS PANEL
+   ═══════════════════════ */
+
+/* Toggle Button (floating on the feed) */
+.anpr-ctrl-toggle {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    z-index: 25;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 9px;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.anpr-ctrl-toggle:hover {
+    background: rgba(0, 229, 255, 0.12);
+    border-color: var(--accent);
+}
+
+.anpr-ctrl-toggle .ctrl-gear {
+    font-size: 12px;
+    transition: transform 0.4s;
+}
+
+.anpr-ctrl-toggle.open .ctrl-gear {
+    transform: rotate(90deg);
+}
+
+/* The Engine Status Indicator on the toggle */
+.anpr-engine-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: livePulse 1.3s ease-in-out infinite;
+}
+
+.anpr-engine-dot.offline {
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    animation: none;
+}
+
+/* Slide-in Controls Panel */
+.anpr-controls-panel {
+    position: absolute;
+    top: 36px;
+    right: 10px;
+    z-index: 1000;
+    width: 260px;
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+    background: rgba(8, 12, 22, 0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 229, 255, 0.15);
+    border-radius: 8px;
+    padding: 0;
+    pointer-events: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transform: translateX(110%);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+}
+
+.anpr-controls-panel.visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+[data-theme="light"] .anpr-controls-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Panel Header */
+.acp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+.acp-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.acp-engine-tag {
+    font-size: 7px;
+    font-family: var(--mono);
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--green);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.acp-engine-tag.offline {
+    background: rgba(255, 60, 60, 0.1);
+    color: var(--red);
+    border-color: rgba(255, 60, 60, 0.2);
+}
+
+/* Control Sections */
+.acp-section {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.acp-section:last-child {
+    border-bottom: none;
+}
+
+.acp-label {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+/* Select Dropdowns */
+.acp-select {
+    width: 100%;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 10px;
+    font-family: var(--mono);
+    outline: none;
+    cursor: pointer;
+}
+
+.acp-select:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+[data-theme="light"] .acp-select {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--text);
+}
+
+.acp-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.15);
+}
+
+/* Two-column row for smaller selects */
+.acp-row {
+    display: flex;
+    gap: 8px;
+}
+
+.acp-row > .acp-col {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Slider */
+.acp-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.acp-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+.acp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+    transition: box-shadow 0.2s;
+}
+
+.acp-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+}
+
+.acp-slider-val {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--accent);
+    min-width: 32px;
+    text-align: right;
+}
+
+.acp-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+}
+
+.acp-slider-labels span {
+    font-size: 7px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 0.3px;
+}
+
+/* Detection Zone Buttons */
+.acp-zone-btns {
+    display: flex;
+    gap: 6px;
+}
+
+.acp-zone-btn {
+    flex: 1;
+    padding: 5px 0;
+    font-size: 8px;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+}
+
+.acp-zone-btn:hover {
+    background: rgba(0, 229, 255, 0.08);
+    border-color: rgba(0, 229, 255, 0.3);
+    color: var(--accent);
+}
+
+.acp-zone-btn.clear {
+    color: var(--red);
+}
+
+.acp-zone-btn.clear:hover {
+    background: rgba(255, 60, 60, 0.08);
+    border-color: rgba(255, 60, 60, 0.3);
+}
+
+/* Reset OCR button */
+.acp-reset-btn {
+    width: 100%;
+    padding: 6px 0;
+    font-size: 8px;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.acp-reset-btn:hover {
+    background: rgba(255, 170, 50, 0.08);
+    border-color: rgba(255, 170, 50, 0.3);
+    color: var(--amber);
+}
+
+/* Scrollbar for the panel */
+.anpr-controls-panel::-webkit-scrollbar {
+    width: 3px;
+}
+
+.anpr-controls-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 229, 255, 0.15);
+    border-radius: 2px;
+}
+
+/* Engine button spinner */
+@keyframes anpr-spin {
+    to { transform: rotate(360deg); }
+}

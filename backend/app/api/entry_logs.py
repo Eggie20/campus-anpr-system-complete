@@ -16,18 +16,19 @@ router = APIRouter()
 # --- Schemas ---
 class EntryLogResponse(BaseModel):
     id: UUID4
-    plate_number: str
+    detected_plate_number: str
     direction: str
-    gate_name: str
+    gate_name: Optional[str] = None
     timestamp: datetime
-    confidence_score: Optional[float]
+    confidence_score: Optional[float] = None
+    authorization_status: Optional[str] = None
     
     class Config:
         from_attributes = True
 
 # --- Endpoints ---
 
-@router.get("/me", response_model=List[EntryLogResponse])
+@router.get("/me")
 def get_my_logs(
     limit: int = 50,
     direction: Optional[str] = None,
@@ -46,7 +47,24 @@ def get_my_logs(
     if direction:
         query = query.filter(EntryLog.direction == direction)
         
-    return query.order_by(desc(EntryLog.timestamp)).limit(limit).all()
+    logs = query.order_by(desc(EntryLog.timestamp)).limit(limit).all()
+
+    
+    results = []
+    for log in logs:
+        gate_name = None
+        if log.gate:
+            gate_name = getattr(log.gate, 'name', None) or getattr(log.gate, 'gate_name', None)
+        results.append({
+            "id": str(log.id),
+            "detected_plate_number": log.detected_plate_number,
+            "direction": log.direction.value if hasattr(log.direction, 'value') else str(log.direction),
+            "gate_name": gate_name or "Unknown Gate",
+            "timestamp": log.timestamp.isoformat() if log.timestamp else None,
+            "confidence_score": float(log.confidence_score) if log.confidence_score is not None else None,
+            "authorization_status": log.authorization_status,
+        })
+    return results
 
 def user_vehicles(user: User, db: Session):
     return db.query(Vehicle).filter(Vehicle.user_id == user.id).all()

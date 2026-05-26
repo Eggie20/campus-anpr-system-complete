@@ -1,0 +1,170 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   SECURITY MONITOR - BASE STYLES & VARIABLES
+   ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Default Dark (Legacy/Sample) */
+    --bg: #060d1a;
+    --bg-side: #0b1424;
+    --panel: #0b1628;
+    --card: #0f1e35;
+    --border: #162840;
+    --accent: #00e5ff;
+    --green: #00ff88;
+    --amber: #ffb700;
+    --red: #ff3c3c;
+    --purple: #a855f7;
+    --text: #c8daf0;
+    --text-brand: #00e5ff;
+    --muted: #4a6a8a;
+    --panel-hdr: rgba(4, 10, 22, .9);
+    --feed-bg: linear-gradient(150deg, #030c1a, #050f1f);
+    --grid-op: 0.03;
+    --font: 'Exo 2', sans-serif;
+    --mono: 'Share Tech Mono', monospace;
+}
+
+[data-theme="light"] {
+    --bg: #f8fafc;
+    --bg-side: #f1f5f9;
+    --panel: #ffffff;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --accent: #0ea5e9;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --text: #0f172a;
+    --text-brand: #0ea5e9;
+    --muted: #64748b;
+    --panel-hdr: #f1f5f9;
+    --feed-bg: #f3f4f6;
+    --grid-op: 0.08;
+}
+
+.security-dashboard-container {
+    height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.security-dashboard-container::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 229, 255, .01) 2px, rgba(0, 229, 255, .01) 4px);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* ═══════════════════════
+   GLOBAL ANIMATIONS
+   ═══════════════════════ */
+@keyframes pdot {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 136, .5)
+    }
+
+    60% {
+        box-shadow: 0 0 0 5px rgba(0, 255, 136, 0)
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: .35
+    }
+}
+
+@keyframes pfade {
+    from {
+        transform: scale(.78);
+        opacity: 0
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1
+    }
+}
+
+@keyframes itin {
+    from {
+        transform: translateX(18px);
+        opacity: 0
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1
+    }
+}
+
+@keyframes itout {
+    from {
+        opacity: 1;
+        transform: translateX(0)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(18px)
+    }
+}
+
+@keyframes tshrink {
+    from {
+        width: 100%
+    }
+
+    to {
+        width: 0
+    }
+}
+
+@keyframes sldin {
+    from {
+        transform: translateX(-6px);
+        opacity: 0
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1
+    }
+}
+
+@keyframes scrollx {
+    from {
+        transform: translateX(0)
+    }
+
+    to {
+        transform: translateX(-50%)
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, -20%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}

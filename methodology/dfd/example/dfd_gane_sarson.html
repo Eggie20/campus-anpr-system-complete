@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DFD – Gane & Sarson | Biometric Payroll System</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#f4f5f7;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+.bar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:#fff;border-bottom:1px solid #dde3ee;flex-shrink:0;flex-wrap:wrap}
+.bar-title{font-size:13px;font-weight:700;color:#1a2540;margin-right:4px}
+.badge{font-size:10px;padding:2px 9px;border-radius:20px;background:#eef2ff;border:1px solid #c7d2fe;color:#4338ca;font-weight:600}
+.sep{width:1px;height:20px;background:#e2e8f0;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-o{background:#fff;border-color:#dde3ee;color:#374151}.btn-o:hover{background:#f8fafc}
+.btn-g{background:#16a34a;color:#fff}.btn-g:hover{background:#15803d}
+.btn-e{background:#ea580c;color:#fff}.btn-e:hover{background:#c2410c}
+.btn-b{background:#2563eb;color:#fff}.btn-b:hover{background:#1d4ed8}
+
+.tabs{display:flex;gap:1px;padding:0 14px;background:#fff;border-bottom:1px solid #dde3ee;flex-shrink:0}
+.tab{padding:7px 16px;font-size:11px;font-weight:600;cursor:pointer;border-radius:7px 7px 0 0;color:#64748b;border:1px solid transparent;border-bottom:none;transition:all .15s;user-select:none}
+.tab.active{background:#f4f5f7;border-color:#dde3ee;color:#2563eb}
+.tab:hover:not(.active){color:#334155}
+
+.ws{flex:1;display:flex;overflow:hidden}
+
+.cw{flex:1;position:relative;overflow:hidden;cursor:grab;background:#f4f5f7}
+.cw:active{cursor:grabbing}
+.cw::before{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(148,163,184,.22) 1px,transparent 1px);
+  background-size:24px 24px;pointer-events:none;z-index:0}
+#cv{position:absolute;top:0;left:0;z-index:1}
+
+.lvlb{position:absolute;top:12px;left:12px;background:#fff;border:1px solid #dde3ee;border-radius:6px;padding:4px 12px;font-size:10px;font-weight:700;color:#2563eb;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.07);pointer-events:none}
+
+.zc{position:absolute;bottom:14px;right:14px;display:flex;flex-direction:column;gap:3px;z-index:10}
+.zb{width:28px;height:28px;background:#fff;border:1px solid #dde3ee;border-radius:6px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#374151;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.zb:hover{border-color:#93c5fd;color:#2563eb}
+
+.sb{display:flex;align-items:center;gap:14px;padding:5px 14px;background:#fff;border-top:1px solid #dde3ee;font-size:10px;color:#64748b;flex-shrink:0;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:5px}
+.le{width:14px;height:10px;background:#fff;border:1.5px solid #374151;border-radius:1px}
+.lp{width:14px;height:14px;background:#fff;border:1.5px solid #374151;border-radius:3px}
+.ls{width:14px;height:8px;background:#fff;border-top:1.5px solid #374151;border-bottom:1.5px solid #374151}
+
+#toast{position:fixed;bottom:50px;left:50%;transform:translateX(-50%) translateY(10px);background:#1e293b;color:#fff;padding:6px 18px;border-radius:20px;font-size:11px;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:9999}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10000;display:none;align-items:center;justify-content:center}
+.md{background:#fff;border-radius:14px;padding:24px;width:400px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.md h2{font-size:14px;font-weight:700;color:#1a2540;margin-bottom:10px}
+.md p{font-size:11px;color:#64748b;line-height:1.7;margin-bottom:6px}
+.mda{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar-title">📊 DFD — Biometric Payroll System</span>
+  <span class="badge">Gane &amp; Sarson Notation</span>
+  <div class="sep"></div>
+  <button class="btn btn-g" onclick="exportPNG()">📷 Export PNG (Transparent)</button>
+  <button class="btn btn-e" onclick="exportSVG()">⬇ Export SVG</button>
+  <div class="sep"></div>
+  <button class="btn btn-o" onclick="rv()">⊡ Fit View</button>
+  <button class="btn btn-o" onclick="resetLayout()" title="Restore original node positions">↺ Reset Layout</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" id="tab-ctx"  onclick="sw('ctx')">Context (Level 0)</div>
+  <div class="tab" id="tab-l1"   onclick="sw('l1')">Level 1 – Main Processes</div>
+  <div class="tab" id="tab-l2"   onclick="sw('l2')">Level 2 – Payroll Run</div>
+  <div class="tab" id="tab-l2b"  onclick="sw('l2b')">Level 2 – Attendance</div>
+</div>
+
+<div class="ws">
+  <div class="cw" id="cw"
+    onmousedown="cMD(event)" onmousemove="cMM(event)" onmouseup="cMU(event)"
+    onwheel="cW(event)" oncontextmenu="return false">
+    <div class="lvlb" id="lvlb">Context Diagram – Level 0</div>
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="zc">
+      <button class="zb" onclick="dz(1.15)">+</button>
+      <button class="zb" onclick="dz(0.87)">−</button>
+      <button class="zb" onclick="rv()">⊡</button>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <b style="color:#374151">Legend:</b>
+  <div class="li"><div class="le"></div>External Entity</div>
+  <div class="li"><div class="lp"></div>Process</div>
+  <div class="li"><div class="ls"></div>Data Store</div>
+  <div class="li"><span style="font-size:14px">→</span>Data Flow (one-way)</div>
+  <div class="li"><span style="font-size:14px">↔</span>Data Flow (two-way)</div>
+  <div class="li" style="color:#2563eb;font-weight:600">✥ Drag any node to reposition</div>
+  <span style="margin-left:auto;color:#94a3b8">Scroll to zoom · Drag background to pan · Drag nodes to adjust spacing · 📷 Export PNG when ready</span>
+</div>
+
+<div id="toast"></div>
+
+<div class="mbg" id="pngMod">
+  <div class="md">
+    <h2>📷 Export PNG – Transparent Background</h2>
+    <p>Exports the current diagram at <strong>2× resolution</strong> with a transparent background.</p>
+    <p>Paste directly into Word, PowerPoint, Photoshop, or any document. The background will be clear.</p>
+    <div class="mda">
+      <button class="btn btn-o" onclick="closeMod()">Cancel</button>
+      <button class="btn btn-g" onclick="doPNG()">⬇ Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// CANVAS STATE
+// ═══════════════════════════════════════════
+const svg = document.getElementById('cv');
+const cw  = document.getElementById('cw');
+let vx=40, vy=40, vs=1;
+let panS = null;
+let curTab = 'ctx';
+let dragNode = null, dragOff = {x:0, y:0};
+
+// Convert screen coords → diagram coords
+function canvasPoint(sx, sy) {
+  const r = cw.getBoundingClientRect();
+  return { x: (sx - r.left - vx) / vs, y: (sy - r.top - vy) / vs };
+}
+
+// Store original positions so Reset Layout works
+const ORIG_POS = {};
+function saveOrigPositions() {
+  for (const key of Object.keys(TABS)) {
+    ORIG_POS[key] = TABS[key].nodes.map(n => ({id:n.id, x:n.x, y:n.y}));
+  }
+}
+function resetLayout() {
+  if (!ORIG_POS[curTab]) return;
+  const map = {};
+  ORIG_POS[curTab].forEach(p => map[p.id]=p);
+  TABS[curTab].nodes.forEach(n => { if(map[n.id]){n.x=map[n.id].x; n.y=map[n.id].y;} });
+  render(curTab); fitView(); toast('Layout reset!');
+}
+
+const TAB_LABELS = {
+  ctx: 'Context Diagram – Level 0',
+  l1:  'Level 1 – Main Processes',
+  l2:  'Level 2 – Payroll Run (Process 4.0)',
+  l2b: 'Level 2 – Attendance (Process 2.0)'
+};
+
+// ═══════════════════════════════════════════
+// DIAGRAM DATA
+// Each node: {id, type, x, y, w, h, label, pid}
+// Each arrow: {from, to, label, label2, bi}
+//   bi=true  → double-headed (use label above, label2 below)
+// ═══════════════════════════════════════════
+
+// ── SHARED SIZES ──────────────────────────
+const EW=128, EH=46;   // external entity
+const PW=158, PH=68;   // process  
+const SW=172, SH=36;   // data store
+const PHDR=20;         // process header height
+
+// ── HELPER ────────────────────────────────
+let _uid = 1;
+function mkE(id,x,y,label){return{id,type:'ext',x,y,w:EW,h:EH,label};}
+function mkP(id,x,y,label,pid){return{id,type:'proc',x,y,w:PW,h:PH,label,pid};}
+function mkS(id,x,y,label){return{id,type:'store',x,y,w:SW,h:SH,label};}
+function mkA(from,to,label,label2=''){return{from,to,label,label2,bi:label2!==''};}
+
+// ═══════════════════════════════════════════
+// DIAGRAM DEFINITIONS
+// ═══════════════════════════════════════════
+
+// ── CONTEXT LEVEL 0 ───────────────────────
+// Layout: left entities → central process → right entities
+// Positions designed for clean hub-and-spoke
+const CTX = {
+  nodes: [
+    // Left external entities (x=20)
+    mkE('e1', 20,  50, 'ZKTeco\nDevice'),
+    mkE('e2', 20, 145, 'Employee'),
+    mkE('e3', 20, 240, 'HR Officer'),
+    mkE('e4', 20, 335, 'Administrator'),
+    // Central process
+    mkP('p0', 295, 160, 'Biometric\nPayroll\nSystem', '0'),
+    // Right external entities (x=580)
+    mkE('e5', 580, 75,  'Accounting\nDept'),
+    mkE('e6', 580, 175, 'Bank /\nPaymaster'),
+    mkE('e7', 580, 275, 'Gov\'t Agencies\n(SSS/PhilHealth)'),
+  ],
+  arrows: [
+    mkA('e1','p0','Biometric Punch Data'),
+    mkA('e2','p0','Leave / Attendance Info','Payslip'),
+    mkA('e3','p0','Payroll Adjustments'),
+    mkA('e4','p0','Config / Settings'),
+    mkA('p0','e5','Payroll Reports','Approval / Review'),
+    mkA('p0','e6','Net Pay Summary'),
+    mkA('p0','e7','Deduction Reports'),
+  ]
+};
+
+// ── LEVEL 1 ────────────────────────────────
+// Layout: 3 columns – External (x=20) | Process (x=215) | Data Stores (x=440)
+// Rows go top to bottom, one process per row
+// Only PRIMARY flows shown to keep diagram clean
+const L1 = {
+  nodes: [
+    // External entities (col 1, x=20)
+    mkE('e1',  20,  40, 'ZKTeco\nDevice'),
+    mkE('e2',  20, 150, 'Employee'),
+    mkE('e3',  20, 250, 'HR Officer'),
+    mkE('e4',  20, 350, 'Administrator'),
+    mkE('e5',  20, 460, 'Accounting\nDept'),
+
+    // Processes (col 2, x=215)
+    mkP('p1', 215,  30, '1.0\nSync Biometric Data',   '1.0'),
+    mkP('p2', 215, 140, '2.0\nManage Attendance',      '2.0'),
+    mkP('p3', 215, 240, '3.0\nManage Employees',       '3.0'),
+    mkP('p4', 215, 340, '4.0\nProcess Payroll Run',    '4.0'),
+    mkP('p5', 215, 450, '5.0\nGenerate Reports',       '5.0'),
+    mkP('p6', 215, 560, '6.0\nSystem Admin /\nSettings','6.0'),
+
+    // Data stores (col 3, x=440)
+    mkS('d1', 440,  32, 'D1 – Attendance Punches'),
+    mkS('d2', 440,  82, 'D2 – Employees'),
+    mkS('d3', 440, 148, 'D3 – Attendance Records'),
+    mkS('d4', 440, 248, 'D4 – Departments'),
+    mkS('d5', 440, 340, 'D5 – Payroll Runs'),
+    mkS('d6', 440, 390, 'D6 – Payroll Items'),
+    mkS('d7', 440, 440, 'D7 – Deduction Types'),
+    mkS('d8', 440, 490, 'D8 – Holidays'),
+    mkS('d9', 440, 562, 'D9 – Audit Logs'),
+  ],
+  arrows: [
+    // Row 0: ZKTeco → 1.0 Sync → D1
+    mkA('e1','p1','Raw Punch Data'),
+    mkA('p1','d1','Store Punches'),
+    mkA('p1','d2','(Creates D2 if new)'),
+
+    // Row 1: Employee ↔ 2.0 Attendance → D3
+    mkA('e2','p2','Leave / Correction','Attendance Sheet'),
+    mkA('p2','d3','Computed Attendance'),
+
+    // Row 2: HR → 3.0 Employees → D2, D4
+    mkA('e3','p3','Employee Data'),
+    mkA('p3','d2','Employee Record'),
+    mkA('p3','d4','Department Info'),
+
+    // Row 3: Admin → 4.0 Payroll → D5, D6, D7, D8
+    mkA('e4','p4','Adjustments'),
+    mkA('p4','d5','Payroll Run'),
+    mkA('p4','d6','Line Items'),
+    mkA('p4','d7','Deduction Config'),
+    mkA('p4','d8','Holiday Ref.'),
+
+    // Row 4: Accounting ↔ 5.0 Reports
+    mkA('e5','p5','Approve / Review','Reports & Payslips'),
+
+    // Row 5: Admin → 6.0 Settings → D9
+    mkA('e4','p6','System Config'),
+    mkA('p6','d9','Audit Entry'),
+    mkA('p6','d7','Deduction Rules'),
+  ]
+};
+
+// ── LEVEL 2 – PAYROLL RUN ──────────────────
+// Sequential VERTICAL pipeline: create → compute → deduct → adjust → submit → release
+// Left: inputs/external, Middle: process chain, Right: data stores
+const PW2=165, PH2=66;
+const L2 = {
+  nodes: [
+    mkE('hr',  20,  60, 'HR Officer'),
+    mkE('ac',  20, 185, 'Accounting\nDept'),
+
+    // Process chain (sequential, top to bottom)
+    mkP('p41', 215,  42, '4.1\nCreate Payroll Run',    '4.1'),
+    mkP('p42', 215, 140, '4.2\nCompute Earnings',       '4.2'),
+    mkP('p43', 215, 238, '4.3\nCompute Deductions',     '4.3'),
+    mkP('p44', 215, 336, '4.4\nApply Adjustments',      '4.4'),
+    mkP('p45', 215, 434, '4.5\nHR Submit &\nAcctg Approval','4.5'),
+    mkP('p46', 215, 540, '4.6\nRelease Payroll',        '4.6'),
+
+    // Data stores
+    mkS('d5',  450,  42, 'D5 – Payroll Runs'),
+    mkS('d2',  450,  92, 'D2 – Employees'),
+    mkS('d3',  450, 142, 'D3 – Attendance Records'),
+    mkS('d6',  450, 192, 'D6 – Payroll Items'),
+    mkS('d7',  450, 242, 'D7 – Deduction Types'),
+    mkS('d8',  450, 292, 'D8 – Holidays'),
+    mkS('d10', 450, 342, 'D10 – Custom Adjustments'),
+  ],
+  arrows: [
+    // Create run
+    mkA('hr','p41','Start New Run'),
+    mkA('p41','d5','Create Run Record'),
+
+    // Compute earnings
+    mkA('d2','p42','Employee Rates'),
+    mkA('d3','p42','Attendance Data'),
+    mkA('d8','p42','Holiday Pay Rules'),
+    mkA('p42','d6','Earnings Line Items'),
+
+    // Compute deductions
+    mkA('d7','p43','Deduction Rates'),
+    mkA('p43','d6','Deduction Line Items'),
+
+    // Apply adjustments
+    mkA('hr','p44','Custom Adjustments'),
+    mkA('d10','p44','Adj. Records'),
+    mkA('p44','d6','Adjusted Items'),
+
+    // Submit & approve
+    mkA('hr','p45','Submit for Approval'),
+    mkA('ac','p45','Approve / Reject'),
+    mkA('p45','d5','Update Run Status'),
+
+    // Release
+    mkA('hr','p46','HR Review & Release'),
+    mkA('d5','p46','Approved Run'),
+    mkA('p46','d5','Status = RELEASED'),
+  ]
+};
+
+// ── LEVEL 2b – ATTENDANCE ──────────────────
+const L2B = {
+  nodes: [
+    mkE('zk', 20,  55, 'ZKTeco Device'),
+    mkE('em', 20, 170, 'Employee'),
+    mkE('hr', 20, 280, 'HR Officer'),
+
+    mkP('p21', 215,  38, '2.1\nSync Punches\nfrom ZLink', '2.1'),
+    mkP('p22', 215, 150, '2.2\nMatch Punch\nto Employee',  '2.2'),
+    mkP('p23', 215, 256, '2.3\nCompute Present\n/ Absent', '2.3'),
+    mkP('p24', 215, 362, '2.4\nHandle Late /\nUndertime',  '2.4'),
+    mkP('p25', 215, 468, '2.5\nProcess Overtime',          '2.5'),
+    mkP('p26', 215, 568, '2.6\nView / Export\nAttendance', '2.6'),
+
+    mkS('d1', 450,  38, 'D1 – Attendance Punches'),
+    mkS('d2', 450,  90, 'D2 – Employees'),
+    mkS('d3', 450, 148, 'D3 – Attendance Records'),
+    mkS('d8', 450, 210, 'D8 – Holidays'),
+    mkS('d9', 450, 270, 'D9 – Audit Logs'),
+  ],
+  arrows: [
+    mkA('zk','p21','Raw Punch Stream'),
+    mkA('p21','d1','Store Raw Punches'),
+    mkA('p21','d9','Sync Log'),
+
+    mkA('d1','p22','Punch Records'),
+    mkA('d2','p22','Employee Biometric IDs'),
+    mkA('p22','d3','Matched Attendance'),
+
+    mkA('d3','p23','Raw Attendance'),
+    mkA('d8','p23','Holiday List'),
+    mkA('p23','d3','Present/Absent Status'),
+
+    mkA('d2','p24','Schedule / Rules'),
+    mkA('p24','d3','Late/UT Minutes'),
+
+    mkA('em','p25','OT Request'),
+    mkA('hr','p25','OT Approval'),
+    mkA('p25','d3','OT Hours'),
+
+    mkA('hr','p26','Generate Report'),
+    mkA('d3','p26','Attendance Data'),
+    mkA('p26','em','Attendance Report'),
+  ]
+};
+
+const TABS = { ctx: CTX, l1: L1, l2: L2, l2b: L2B };
+
+// ═══════════════════════════════════════════
+// RENDER ENGINE
+// ═══════════════════════════════════════════
+function svgEl(tag, attrs={}) {
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
+}
+
+function nodeCenter(n) { return { x: n.x + n.w/2, y: n.y + n.h/2 }; }
+
+function edgePt(n, tx, ty) {
+  const cx = n.x + n.w/2, cy = n.y + n.h/2;
+  const dx = tx - cx, dy = ty - cy;
+  if (!dx && !dy) return {x:cx, y:cy};
+  // Snap to nearest face
+  const scaleX = n.w/2 / Math.abs(dx), scaleY = n.h/2 / Math.abs(dy);
+  const s = Math.min(scaleX, scaleY);
+  return { x: cx + dx*s, y: cy + dy*s };
+}
+
+function drawNode(g, n) {
+  if (n.type === 'ext') {
+    // External entity: plain rectangle
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:n.h, rx:2,
+      fill:'#ffffff', stroke:'#374151', 'stroke-width':'1.5', filter:'url(#nsh)'}));
+    textBlock(g, n.x+n.w/2, n.y+n.h/2, n.label, '#1e293b', '10.5');
+
+  } else if (n.type === 'proc') {
+    // Process: rounded rect with header strip
+    const HH = PHDR;
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:n.h, rx:5,
+      fill:'#ffffff', stroke:'#374151', 'stroke-width':'1.5', filter:'url(#nsh)'}));
+    // Header strip
+    const cid = 'cl' + n.id;
+    const cp = svgEl('clipPath', {id:cid});
+    cp.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:HH+4}));
+    svg.querySelector('defs').appendChild(cp);
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:HH, rx:5,
+      fill:'#dde3ee', 'clip-path':`url(#${cid})`}));
+    // Bottom half of header (no rounded corners at bottom)
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y+5, width:n.w, height:HH-5, fill:'#dde3ee'}));
+    g.appendChild(svgEl('line', {x1:n.x, y1:n.y+HH, x2:n.x+n.w, y2:n.y+HH,
+      stroke:'#374151', 'stroke-width':'1'}));
+    // PID
+    if (n.pid) {
+      const t = svgEl('text', {x:n.x+n.w/2, y:n.y+HH/2,
+        'text-anchor':'middle', 'dominant-baseline':'central',
+        fill:'#374151', 'font-size':'9.5', 'font-weight':'700', 'font-family':'Inter,Arial,sans-serif'});
+      t.textContent = n.pid;
+      g.appendChild(t);
+    }
+    // Label (strip pid\n prefix)
+    const lbl = n.label.replace(/^\d+\.\d+\n/, '');
+    textBlock(g, n.x+n.w/2, n.y+HH+(n.h-HH)/2, lbl, '#1e293b', '10.5');
+
+  } else if (n.type === 'store') {
+    // Data Store: open-ended rectangle with left strip
+    const sw2 = n.w * 0.13;
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:n.w, height:n.h,
+      fill:'#ffffff', stroke:'#374151', 'stroke-width':'1.5', filter:'url(#nsh)'}));
+    g.appendChild(svgEl('rect', {x:n.x, y:n.y, width:sw2, height:n.h, fill:'#dde3ee'}));
+    g.appendChild(svgEl('line', {x1:n.x+sw2, y1:n.y, x2:n.x+sw2, y2:n.y+n.h,
+      stroke:'#374151', 'stroke-width':'1.5'}));
+    // D# label in strip
+    const dm = n.label.match(/^(D\d+)/);
+    if (dm) {
+      const t = svgEl('text', {x:n.x+sw2/2, y:n.y+n.h/2,
+        'text-anchor':'middle', 'dominant-baseline':'central',
+        fill:'#374151', 'font-size':'8.5', 'font-weight':'700', 'font-family':'Inter,Arial,sans-serif'});
+      t.textContent = dm[1]; g.appendChild(t);
+    }
+    textBlock(g, n.x+sw2+(n.w-sw2)/2, n.y+n.h/2,
+      n.label.replace(/^D\d+\s*[–-]\s*/, ''), '#1e293b', '9.5');
+  }
+}
+
+function textBlock(g, cx, cy, text, color, fs='10.5') {
+  const lines = text.split('\n');
+  const lh = 13.5, tot = (lines.length-1)*lh;
+  lines.forEach((ln, i) => {
+    const t = svgEl('text', {x:cx, y:cy - tot/2 + i*lh,
+      'text-anchor':'middle', 'dominant-baseline':'central',
+      fill:color, 'font-size':fs, 'font-weight':'600', 'font-family':'Inter,Arial,sans-serif'});
+    t.textContent = ln;
+    g.appendChild(t);
+  });
+}
+
+
+// ─── drawArrow: LINES only (pass=1) or LABELS only (pass=2) ─────────────────
+
+function drawArrow(g, arr, nodeMap, pass) {
+  const from = nodeMap[arr.from], to = nodeMap[arr.to];
+  if (!from || !to) return;
+
+  const fc = nodeCenter(from), tc = nodeCenter(to);
+  let sp = edgePt(from, tc.x, tc.y);
+  let ep = edgePt(to, fc.x, fc.y);
+
+  const col = '#374151';
+  const dx = ep.x-sp.x, dy = ep.y-sp.y;
+  const len = Math.sqrt(dx*dx+dy*dy) || 1;
+  const nx = -dy/len, ny = dx/len;
+
+  if (arr.bi) {
+    const off = 5;
+    const fsx=sp.x+nx*off, fsy=sp.y+ny*off, fex=ep.x+nx*off, fey=ep.y+ny*off;
+    const rsx=ep.x-nx*off, rsy=ep.y-ny*off, rex=sp.x-nx*off, rey=sp.y-ny*off;
+
+    if (pass !== 2) {
+      g.appendChild(svgEl('line', {x1:fsx, y1:fsy, x2:fex, y2:fey,
+        stroke:col, 'stroke-width':'1.4', 'marker-end':'url(#ah)'}));
+      g.appendChild(svgEl('line', {x1:rsx, y1:rsy, x2:rex, y2:rey,
+        stroke:col, 'stroke-width':'1.4', 'marker-end':'url(#ah)'}));
+    }
+    if (pass !== 1) {
+      const fmx=(fsx+fex)/2+nx*10, fmy=(fsy+fey)/2+ny*10;
+      drawLabel(g, fmx, fmy, arr.label, col);
+      if (arr.label2) {
+        const rmx=(rsx+rex)/2-nx*10, rmy=(rsy+rey)/2-ny*10;
+        drawLabel(g, rmx, rmy, arr.label2, col);
+      }
+    }
+  } else {
+    if (pass !== 2) {
+      g.appendChild(svgEl('line', {x1:sp.x, y1:sp.y, x2:ep.x, y2:ep.y,
+        stroke:col, 'stroke-width':'1.4', 'marker-end':'url(#ah)'}));
+    }
+    if (pass !== 1) {
+      const lx = (sp.x+ep.x)/2 + nx*11;
+      const ly = (sp.y+ep.y)/2 + ny*11;
+      drawLabel(g, lx, ly, arr.label, col);
+    }
+  }
+}
+
+// Label rendering – solid white pill so it reads clearly over lines/nodes
+function drawLabel(g, x, y, text, col) {
+  if (!text) return;
+  const bw = text.length * 4.8 + 8, bh = 13;
+  // Solid white fill so arrow lines don't bleed through
+  g.appendChild(svgEl('rect', {x:x-bw/2, y:y-bh/2, width:bw, height:bh, rx:3,
+    fill:'#ffffff', stroke:'#c9d4e8', 'stroke-width':'0.7'}));
+  const t = svgEl('text', {x, y, 'text-anchor':'middle', 'dominant-baseline':'central',
+    fill:col, 'font-size':'8', 'font-weight':'700', 'font-family':'Inter,Arial,sans-serif'});
+  t.textContent = text;
+  g.appendChild(t);
+}
+
+function render(tabKey) {
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  const defs = svgEl('defs');
+  defs.innerHTML = `
+    <marker id="ah" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#374151"/>
+    </marker>
+    <filter id="nsh" x="-8%" y="-12%" width="116%" height="124%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.11)"/>
+    </filter>
+  `;
+  svg.appendChild(defs);
+
+  const diag = TABS[tabKey];
+
+  // Build node map for arrow lookup
+  const nodeMap = {};
+  diag.nodes.forEach(n => nodeMap[n.id] = n);
+
+  // ── LAYER 1: arrow LINES (behind everything) ──
+  const arrowLinesG = svgEl('g');
+  diag.arrows.forEach(a => drawArrow(arrowLinesG, a, nodeMap, 1));
+  svg.appendChild(arrowLinesG);
+
+  // ── LAYER 2: nodes (on top of lines, behind labels) ──
+  diag.nodes.forEach(n => {
+    const g = svgEl('g', {cursor:'grab', style:'cursor:grab'});
+    drawNode(g, n);
+    g.addEventListener('mousedown', e => {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      dragNode = n;
+      const pt = canvasPoint(e.clientX, e.clientY);
+      dragOff = { x: pt.x - n.x, y: pt.y - n.y };
+      cw.style.cursor = 'grabbing';
+    });
+    svg.appendChild(g);
+  });
+
+  // ── LAYER 3: arrow LABELS (front — clearly readable) ──
+  const arrowLabelsG = svgEl('g');
+  diag.arrows.forEach(a => drawArrow(arrowLabelsG, a, nodeMap, 2));
+  svg.appendChild(arrowLabelsG);
+}
+
+// ═══════════════════════════════════════════
+// TAB + VIEW
+// ═══════════════════════════════════════════
+function sw(tab) {
+  curTab = tab;
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('lvlb').textContent = TAB_LABELS[tab];
+  render(tab);
+  fitView();
+}
+
+function getDiagBounds(diag) {
+  let mnx=Infinity, mny=Infinity, mxx=-Infinity, mxy=-Infinity;
+  diag.nodes.forEach(n => {
+    mnx = Math.min(mnx, n.x-10); mny = Math.min(mny, n.y-10);
+    mxx = Math.max(mxx, n.x+n.w+10); mxy = Math.max(mxy, n.y+n.h+10);
+  });
+  return {mnx, mny, W: mxx-mnx, H: mxy-mny};
+}
+
+function fitView() {
+  const diag = TABS[curTab];
+  const {mnx, mny, W, H} = getDiagBounds(diag);
+  const pad = 50;
+  const scaleX = (cw.clientWidth  - pad*2) / W;
+  const scaleY = (cw.clientHeight - pad*2) / H;
+  vs = Math.min(scaleX, scaleY, 1.4);
+  vx = (cw.clientWidth  - W*vs) / 2 - mnx*vs;
+  vy = (cw.clientHeight - H*vs) / 2 - mny*vs;
+  tf();
+}
+
+function rv() { fitView(); }
+function tf() {
+  svg.style.transform = `translate(${vx}px,${vy}px) scale(${vs})`;
+  svg.style.transformOrigin = '0 0';
+  // Give SVG enough room so nothing is clipped
+  svg.setAttribute('width', 4000);
+  svg.setAttribute('height', 4000);
+}
+function dz(f) {
+  const cx = cw.clientWidth/2, cy = cw.clientHeight/2;
+  vx = cx-(cx-vx)*f; vy = cy-(cy-vy)*f; vs*=f; tf();
+}
+
+// ═══════════════════════════════════════════
+// PAN + NODE DRAG
+// ═══════════════════════════════════════════
+function cMD(e) {
+  if (e.button !== 0 || dragNode) return;
+  cw.style.cursor = 'grabbing';
+  panS = {sx:e.clientX, sy:e.clientY, vx, vy};
+}
+function cMM(e) {
+  if (dragNode) {
+    const pt = canvasPoint(e.clientX, e.clientY);
+    dragNode.x = pt.x - dragOff.x;
+    dragNode.y = pt.y - dragOff.y;
+    render(curTab);  // re-render with updated positions
+    return;
+  }
+  if (!panS) return;
+  vx = panS.vx + (e.clientX - panS.sx);
+  vy = panS.vy + (e.clientY - panS.sy);
+  tf();
+}
+function cMU() {
+  dragNode = null;
+  panS = null;
+  cw.style.cursor = 'grab';
+}
+function cW(e) {
+  e.preventDefault();
+  const f = e.deltaY<0?1.12:0.89;
+  const r = cw.getBoundingClientRect();
+  const ex=e.clientX-r.left, ey=e.clientY-r.top;
+  vx=ex-(ex-vx)*f; vy=ey-(ey-vy)*f; vs*=f; tf();
+}
+
+// ═══════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════
+function exportSVG() {
+  const diag = TABS[curTab];
+  let mnx=Infinity, mny=Infinity, mxx=-Infinity, mxy=-Infinity;
+  diag.nodes.forEach(n=>{mnx=Math.min(mnx,n.x);mny=Math.min(mny,n.y);mxx=Math.max(mxx,n.x+n.w);mxy=Math.max(mxy,n.y+n.h);});
+  const pad=40, W=mxx-mnx+pad*2, H=mxy-mny+pad*2;
+  const clone = svg.cloneNode(true);
+  clone.setAttribute('viewBox',`${mnx-pad} ${mny-pad} ${W} ${H}`);
+  clone.setAttribute('width', W); clone.setAttribute('height', H);
+  clone.style.transform='';
+  const blob=new Blob(['<?xml version="1.0" encoding="UTF-8"?>'+clone.outerHTML],{type:'image/svg+xml'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`dfd_${curTab}_biometric_payroll.svg`; a.click();
+  toast('SVG exported!');
+}
+
+function exportPNG() { document.getElementById('pngMod').style.display='flex'; }
+function closeMod()  { document.getElementById('pngMod').style.display='none'; }
+
+function doPNG() {
+  closeMod();
+  const diag = TABS[curTab];
+  let mnx=Infinity, mny=Infinity, mxx=-Infinity, mxy=-Infinity;
+  diag.nodes.forEach(n=>{mnx=Math.min(mnx,n.x);mny=Math.min(mny,n.y);mxx=Math.max(mxx,n.x+n.w);mxy=Math.max(mxy,n.y+n.h);});
+  const PAD=50, W=mxx-mnx+PAD*2, H=mxy-mny+PAD*2, SC=2.5;
+
+  // Build self-contained SVG string for rasterization
+  const svgContent = buildStaticSVG(diag, mnx-PAD, mny-PAD, W, H);
+  const blob=new Blob([svgContent],{type:'image/svg+xml;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const img=new Image();
+  img.onload=function(){
+    const c=document.createElement('canvas');
+    c.width=W*SC; c.height=H*SC;
+    const ctx2=c.getContext('2d');
+    // NO background fill = transparent
+    ctx2.save();
+    ctx2.scale(SC, SC);
+    ctx2.drawImage(img, 0, 0);
+    ctx2.restore();
+    URL.revokeObjectURL(url);
+    const lnk=document.createElement('a');
+    lnk.download=`dfd_${curTab}_transparent.png`;
+    lnk.href=c.toDataURL('image/png'); lnk.click();
+    toast('PNG exported (transparent)!');
+  };
+  img.onerror=()=>toast('Export failed – try SVG instead');
+  img.src=url;
+}
+
+function buildStaticSVG(diag, ox, oy, W, H) {
+  const nodeMap={};
+  diag.nodes.forEach(n=>nodeMap[n.id]=n);
+
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${ox} ${oy} ${W} ${H}">
+<defs>
+  <marker id="ah" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+    <polygon points="0 0,9 3.5,0 7" fill="#374151"/>
+  </marker>
+  <filter id="nsh" x="-8%" y="-12%" width="116%" height="124%">
+    <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.11)"/>
+  </filter>
+</defs>`;
+
+  // Arrows – LAYER 1: lines only
+  diag.arrows.forEach(a => {
+    const from=nodeMap[a.from], to=nodeMap[a.to];
+    if(!from||!to)return;
+    const fc=nodeCenter(from), tc=nodeCenter(to);
+    let sp=edgePt(from,tc.x,tc.y), ep=edgePt(to,fc.x,fc.y);
+    const dx=ep.x-sp.x, dy=ep.y-sp.y, len=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=-dy/len, ny=dx/len;
+    const col='#374151';
+
+    if(a.bi){
+      const off=5;
+      const fsx=sp.x+nx*off,fsy=sp.y+ny*off,fex=ep.x+nx*off,fey=ep.y+ny*off;
+      const rsx=ep.x-nx*off,rsy=ep.y-ny*off,rex=sp.x-nx*off,rey=sp.y-ny*off;
+      s+=`<line x1="${fsx}" y1="${fsy}" x2="${fex}" y2="${fey}" stroke="${col}" stroke-width="1.4" marker-end="url(#ah)"/>`;
+      s+=`<line x1="${rsx}" y1="${rsy}" x2="${rex}" y2="${rey}" stroke="${col}" stroke-width="1.4" marker-end="url(#ah)"/>`;
+    } else {
+      s+=`<line x1="${sp.x}" y1="${sp.y}" x2="${ep.x}" y2="${ep.y}" stroke="${col}" stroke-width="1.4" marker-end="url(#ah)"/>`;
+    }
+  });
+
+  // Nodes – LAYER 2
+  diag.nodes.forEach(n=>{
+    if(n.type==='ext'){
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="2" fill="#ffffff" stroke="#374151" stroke-width="1.5" filter="url(#nsh)"/>`;
+      s+=staticTextBlock(n.x+n.w/2,n.y+n.h/2,n.label,'#1e293b','10.5');
+    } else if(n.type==='proc'){
+      const HH=PHDR;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="5" fill="#ffffff" stroke="#374151" stroke-width="1.5" filter="url(#nsh)"/>`;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${HH}" rx="5" fill="#dde3ee"/>`;
+      s+=`<rect x="${n.x}" y="${n.y+5}" width="${n.w}" height="${HH-5}" fill="#dde3ee"/>`;
+      s+=`<line x1="${n.x}" y1="${n.y+HH}" x2="${n.x+n.w}" y2="${n.y+HH}" stroke="#374151" stroke-width="1"/>`;
+      if(n.pid) s+=`<text x="${n.x+n.w/2}" y="${n.y+HH/2}" text-anchor="middle" dominant-baseline="central" fill="#374151" font-size="9.5" font-weight="700" font-family="Inter,Arial,sans-serif">${ex(n.pid)}</text>`;
+      s+=staticTextBlock(n.x+n.w/2,n.y+HH+(n.h-HH)/2,n.label.replace(/^\d+\.\d+\n/,''),'#1e293b','10.5');
+    } else if(n.type==='store'){
+      const sw2=n.w*0.13;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" fill="#ffffff" stroke="#374151" stroke-width="1.5" filter="url(#nsh)"/>`;
+      s+=`<rect x="${n.x}" y="${n.y}" width="${sw2}" height="${n.h}" fill="#dde3ee"/>`;
+      s+=`<line x1="${n.x+sw2}" y1="${n.y}" x2="${n.x+sw2}" y2="${n.y+n.h}" stroke="#374151" stroke-width="1.5"/>`;
+      const dm=n.label.match(/^(D\d+)/);
+      if(dm) s+=`<text x="${n.x+sw2/2}" y="${n.y+n.h/2}" text-anchor="middle" dominant-baseline="central" fill="#374151" font-size="8.5" font-weight="700" font-family="Inter,Arial,sans-serif">${dm[1]}</text>`;
+      s+=staticTextBlock(n.x+sw2+(n.w-sw2)/2,n.y+n.h/2,n.label.replace(/^D\d+\s*[–-]\s*/,''),'#1e293b','9.5');
+    }
+  });
+
+  // Arrow LABELS – LAYER 3 (front – drawn last so fully readable)
+  diag.arrows.forEach(a => {
+    const from=nodeMap[a.from], to=nodeMap[a.to];
+    if(!from||!to)return;
+    const fc=nodeCenter(from), tc=nodeCenter(to);
+    let sp=edgePt(from,tc.x,tc.y), ep=edgePt(to,fc.x,fc.y);
+    const dx=ep.x-sp.x, dy=ep.y-sp.y, len=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=-dy/len, ny=dx/len;
+    const col='#374151';
+    if(a.bi){
+      const off=5;
+      const fsx=sp.x+nx*off,fsy=sp.y+ny*off,fex=ep.x+nx*off,fey=ep.y+ny*off;
+      const rsx=ep.x-nx*off,rsy=ep.y-ny*off,rex=sp.x-nx*off,rey=sp.y-ny*off;
+      if(a.label) s+=staticLabel((fsx+fex)/2+nx*10,(fsy+fey)/2+ny*10,a.label,col);
+      if(a.label2) s+=staticLabel((rsx+rex)/2-nx*10,(rsy+rey)/2-ny*10,a.label2,col);
+    } else {
+      if(a.label) s+=staticLabel((sp.x+ep.x)/2+nx*11,(sp.y+ep.y)/2+ny*11,a.label,col);
+    }
+  });
+
+  s+='</svg>';
+  return s;
+}
+
+function staticLabel(x,y,text,col){
+  const bw=text.length*4.8+8, bh=12;
+  return `<rect x="${x-bw/2}" y="${y-bh/2}" width="${bw}" height="${bh}" rx="2" fill="rgba(255,255,255,0.95)" stroke="rgba(200,208,224,0.5)" stroke-width="0.5"/>
+<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" fill="${col}" font-size="8" font-weight="600" font-family="Inter,Arial,sans-serif">${ex(text)}</text>`;
+}
+
+function staticTextBlock(cx,cy,text,color,fs){
+  const lines=text.split('\n'), lh=13.5, tot=(lines.length-1)*lh;
+  return lines.map((ln,i)=>`<text x="${cx}" y="${cy-tot/2+i*lh}" text-anchor="middle" dominant-baseline="central" fill="${color}" font-size="${fs}" font-weight="600" font-family="Inter,Arial,sans-serif">${ex(ln)}</text>`).join('');
+}
+
+function ex(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e=>{
+  if(e.key==='=') dz(1.12);
+  if(e.key==='-') dz(0.89);
+  if(e.key==='0') rv();
+});
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+render('ctx');
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  saveOrigPositions(); // snapshot default positions for Reset Layout
+  fitView();
+}));
+</script>
+</body>
+</html>
